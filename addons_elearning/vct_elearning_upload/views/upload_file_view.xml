@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="slide_inherit_view_form" model="ir.ui.view">
+        <field name="name">Slide inherit view form</field>
+        <field name="model">slide.slide</field>
+        <field name="inherit_id" ref="website_slides.view_slide_slide_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='document_id']" position="after">
+                <field name="file_slide"/>
+                <field name="test"/>
+            </xpath>
+            <xpath expr="//form" position="inside">
+                <header>
+                    <button name="check_bucket_exist"
+                            type="object"
+                            string="Check"
+                            class="oe_highlight" />
+                    <button name="create_new_bucket"
+                            type="object"
+                            string="Bucket"
+                            class="oe_highlight" />
+                    <button name="upload_file_to_s3"
+                            type="object"
+                            string="Upload"
+                            class="oe_highlight" />
+                    <button name="get_file_from_s3"
+                            type="object"
+                            string="Get URL"
+                            class="oe_highlight" />
+                </header>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

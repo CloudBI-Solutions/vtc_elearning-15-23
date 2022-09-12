@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="lecturers_tree_view" model="ir.ui.view">
+         <field name="name">Lecturers view tree</field>
+        <field name="model">lecturers</field>
+         <field eval="8" name="priority"/>
+         <field name="arch" type="xml">
+             <tree string="Lecturers">
+                 <field name="name"/>
+                 <field name="phone" widget="phone"/>
+                 <field name="email"/>
+                 <field name="gender"/>
+                 <field name="birth"/>
+                 <field name="identity_card"/>
+                 <field name="address"/>
+             </tree>
+         </field>
+     </record>
+
+    <record model="ir.ui.view" id="lecturers_form_view">
+        <field name="name">lecturers form view</field>
+        <field name="model">lecturers</field>
+        <field name="arch" type="xml">
+            <form string="Lecturers">
+                <header>
+                </header>
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button class="oe_stat_button" name="%(comment_lecturers_action)d" type="action" icon="fa-bullhorn">
+                            <field string="Đánh giá" name="evaluate_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                        </group>
+                        <group>
+                            <field name="birth"/>
+                            <field name="identity_card"/>
+                            <field name="address"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Source">
+                            <field name="source_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="lecturers_view_action" model="ir.actions.act_window">
+        <field name="name">Lecturers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">lecturers</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="lecturers_menu_item" name="Lecturers" sequence="4" parent="website_slides.website_slides_menu_root" action="lecturers_view_action"/>
+
+</odoo>

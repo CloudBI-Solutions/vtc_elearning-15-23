@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="certificate_tree_view" model="ir.ui.view">
+         <field name="name">Certificate view tree</field>
+        <field name="model">certificate</field>
+         <field eval="8" name="priority"/>
+         <field name="arch" type="xml">
+             <tree>
+                 <field name="student_id"/>
+                 <field name="attachment_id"/>
+             </tree>
+         </field>
+     </record>
+
+    <record model="ir.ui.view" id="certificate_form_view">
+        <field name="name">Certificate form view</field>
+        <field name="model">certificate</field>
+        <field name="arch" type="xml">
+            <form string="Certificate">
+                <sheet>
+                    <group>
+                        <field name="student_id"/>
+                        <field name="attachment_id" widget="binary"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="certificate_view_action" model="ir.actions.act_window">
+        <field name="name">Certificate</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">certificate</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="certificate_student_view_action" model="ir.actions.act_window">
+        <field name="name">Certificate</field>
+        <field name="res_model">certificate</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('student_id', '=', active_id)]</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="comment_action" model="ir.actions.act_window">
+        <field name="name">Student Comment Course</field>
+        <field name="res_model">comment.course</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('course_id', '=', active_id)]</field>
+    </record>
+
+    <record id="comment_lecturers_action" model="ir.actions.act_window">
+        <field name="name">Student Comment Lecturers</field>
+        <field name="res_model">rat.lecturers</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('lecturers_id', '=', active_id)]</field>
+    </record>
+
+    <record id="comment_lecturers_action" model="ir.actions.act_window">
+        <field name="name">Student Comment Lecturers</field>
+        <field name="res_model">rat.lecturers</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

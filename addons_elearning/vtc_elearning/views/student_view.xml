@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="student_course_action" model="ir.actions.act_window">
+        <field name="name">Student Join Course</field>
+        <field name="res_model">slide.channel</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('student_ids', 'in', [active_id])]</field>
+    </record>
+
+    <record id="student_quiz_action" model="ir.actions.act_window">
+        <field name="name">Student Join Quiz</field>
+        <field name="res_model">op.quiz</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('student_ids', 'in', [active_id])]</field>
+    </record>
+
+    <record id="student_quiz_result_action" model="ir.actions.act_window">
+        <field name="name">Student Quiz result</field>
+        <field name="res_model">op.quiz.result</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('student_id', '=', active_id)]</field>
+    </record>
+
+    <record id="student_tree_view" model="ir.ui.view">
+         <field name="name">Student view tree</field>
+        <field name="model">student.student</field>
+         <field eval="8" name="priority"/>
+         <field name="arch" type="xml">
+             <tree>
+                 <field name="name"/>
+                 <field name="phone" widget="phone"/>
+                 <field name="email"/>
+                 <field name="gender"/>
+                 <field name="birth"/>
+                 <field name="identity_card"/>
+                 <field name="address"/>
+             </tree>
+         </field>
+     </record>
+
+    <record model="ir.ui.view" id="student_form_view">
+        <field name="name">Student form view</field>
+        <field name="model">student.student</field>
+        <field name="arch" type="xml">
+            <form string="Student">
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button name="%(student_course_action)d" type="action" string="Course" icon="fa-solid fa-graduation-cap"/>
+                        <button name="%(student_quiz_action)d" type="action" string="Quiz" icon="fa-regular fa-pen-paintbrush"/>
+                        <button name="%(student_quiz_result_action)d" type="action" string="Quiz result" icon="fa-regular fa-file-certificate"/>
+                        <button name="%(certificate_student_view_action)d" type="action" string="Certificate" icon="fa-regular fa-diploma"/>
+                    </div>
+                    <field name="avatar" widget="image" class="oe_avatar" options="{&quot;zoom&quot;: true, &quot;preview_image&quot;:&quot;avatar_128&quot;}"/>
+                    <div class="oe_title">
+                        <h1 class="d-flex">
+                            <field name="name" placeholder="Tên học viên" required="True"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="phone"/>
+                            <field name="email"/>
+                        </group>
+                        <group>
+                            <field name="birth"/>
+                            <field name="identity_card"/>
+                            <field name="address"/>
+                        </group>
+                        <group>
+                            <field name="position"/>
+                            <field name="work_unit"/>
+                            <field name="res_country_state"/>
+                            <field name="res_country_district"/>
+                            <field name="res_country_ward"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Source">
+                            <field name="source_ids"/>
+                        </page>
+                        <page string="Quiz and result">
+                            <field name="quiz_ids"/>
+                            <field name="quiz_result_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="student_view_action" model="ir.actions.act_window">
+        <field name="name">Student</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">student.student</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="student_menu_item" name="Student" parent="website_slides.website_slides_menu_root" sequence="3" action="student_view_action"/>
+
+</odoo>

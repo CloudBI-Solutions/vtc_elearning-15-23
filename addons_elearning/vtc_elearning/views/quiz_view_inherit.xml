@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="student_quiz_inherit_action" model="ir.actions.act_window">
+        <field name="name">Student Quiz</field>
+        <field name="res_model">op.quiz</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('lecturers_id', 'in', [active_id])]</field>
+    </record>
+
+    <record id="student_quiz_result_inherit_action" model="ir.actions.act_window">
+        <field name="name">Student Quiz Result</field>
+        <field name="res_model">op.quiz.result</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('student_ids', 'in', [active_id])]</field>
+    </record>
+
+</odoo>
