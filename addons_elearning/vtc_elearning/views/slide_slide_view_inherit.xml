@@ -12,7 +12,13 @@
         <field name="model">slide.channel</field>
         <field name="inherit_id" ref="website_slides.view_slide_channel_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='karma_rules']" position="after">
+            <xpath expr="//field[@name='tag_ids']" position="replace">
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" placeholder="Cấp độ học"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="replace">
+                <field name="type_course"/>
+            </xpath>
+            <xpath expr="//page[@name='karma_rules']" position="replace">
                 <page string="Student" name="students">
                      <field name="student_ids">
                          <tree>
@@ -32,10 +38,9 @@
                             <field name="name"/>
                              <field name="phone" widget="phone"/>
                              <field name="email"/>
-                             <field name="gender"/>
-                             <field name="birth"/>
-                             <field name="identity_card"/>
-                             <field name="address"/>
+<!--                             <field name="total_course"/>-->
+<!--                             <field name="total_student"/>-->
+<!--                             <field name="rating"/>-->
                         </tree>
                     </field>
                 </page>

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <record id="comment_lecturers_view_action" model="ir.actions.act_window">
+        <field name="name">Rating Lecturers</field>
+        <field name="res_model">rat.lecturers</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
     <record id="comment_action" model="ir.actions.act_window">
         <field name="name">Student Comment Course</field>
         <field name="res_model">comment.course</field>
@@ -14,10 +21,46 @@
         <field name="domain">[('lecturers_id', '=', active_id)]</field>
     </record>
 
-    <record id="comment_lecturers_action" model="ir.actions.act_window">
-        <field name="name">Student Comment Lecturers</field>
-        <field name="res_model">rat.lecturers</field>
-        <field name="view_mode">tree,form</field>
+    <record id="comment_lecturers_tree_view" model="ir.ui.view">
+         <field name="name">Rating Lecturers view tree</field>
+        <field name="model">rat.lecturers</field>
+         <field eval="8" name="priority"/>
+         <field name="arch" type="xml">
+             <tree string="rating lecturers">
+                 <field name="name"/>
+                 <field name="rating" widget="priority"/>
+                 <field name="lecturers_id"/>
+                 <field name="user_id"/>
+             </tree>
+         </field>
+     </record>
+
+    <record model="ir.ui.view" id="rat_lecturers_form_view">
+        <field name="name">Rat lecturers form view</field>
+        <field name="model">rat.lecturers</field>
+        <field name="arch" type="xml">
+            <form string="Rating lecturers">
+                <header>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="rating" widget="priority"/>
+                        </group>
+                        <group>
+                            <field name="lecturers_id"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
     </record>
+
+    <menuitem id="comment_lecturers_menu_item"
+              name="Comment lecturers"
+              parent="website_slides.website_slides_menu_configuration"
+              action="comment_lecturers_view_action"/>
 
 </odoo>

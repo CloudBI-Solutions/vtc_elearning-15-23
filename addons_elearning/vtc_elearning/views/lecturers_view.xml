@@ -13,6 +13,9 @@
                  <field name="gender"/>
                  <field name="birth"/>
                  <field name="identity_card"/>
+                 <field name="total_course"/>
+                 <field name="total_student"/>
+                 <field name="rating_text"/>
                  <field name="address"/>
              </tree>
          </field>
@@ -41,6 +44,9 @@
                             <field name="birth"/>
                             <field name="identity_card"/>
                             <field name="address"/>
+                            <field name="total_course"/>
+                            <field name="total_student"/>
+                            <field name="rating_text"/>
                         </group>
                     </group>
                     <notebook>
