@@ -22,13 +22,17 @@ class CourseByIdController(http.Controller):
             return config
         return 'https://test.diligo.vn:15000'
 
+    def get_url_attachment(self, attachment_id):
+        attachment = request.env['ir.attachment'].sudo().browse(attachment_id)
+        return "web/content2/?model=ir.attachment&id=" + str(attachment_id) + "&filename_field=name&field=datas&download=true&name=" + attachment.name
+
     @validate_token
     @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
     def get_course_by_id(self, **payload):
         values = []
         base_url = CourseByIdController.get_url_base(self)
         list_courses = request.env['slide.channel'].search(
-            [('id', '=', payload.get('course_id'))])
+            [('is_published', '=', True), ('id', '=', payload.get('course_id'))])
 
         for rec in list_courses:
             # cấp độ học
@@ -60,6 +64,26 @@ class CourseByIdController(http.Controller):
                 }
                 slides.append(slide_detail)
             dates['slide_ids'] = slides
+
+            # tổng học viên
+            total_students = len(rec.student_ids)
+            dates['total_students'] = total_students
+
+            # đánh giá
+            ratings = []
+            for rate in rec.rating_ids:
+                rating_detail = {
+                    'id': rate.id,
+                    'feedback': rate.feedback,
+                }
+                ratings.append(rating_detail)
+            dates['rating_ids'] = ratings
+
+            # tài liệu
+            list_attachment = [urls.url_join(base_url, self.get_url_attachment(att_id)) for att_id in
+                               rec.message_main_attachment_id]
+            # dates['files'] = list_attachment
+            print(list_attachment)
 
             values.append(dates)
         return valid_response(values)

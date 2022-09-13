@@ -13,7 +13,13 @@ With use of this module user can enable REST API in any Odoo applications/module
 For detailed example of REST API refer https://ajepe.github.io/restful-api-for-odoo
 """,
     "depends": ["web", "base_setup", 'website_ora_elearning'],
-    "data": ["views/ir_model.xml", "views/res_users.xml", "security/ir.model.access.csv", ],
+    "data": ["views/ir_model.xml", "views/res_users.xml",
+             "security/ir.model.access.csv",
+
+             ],
+    'demo': [
+        "demo/demo_student.xml",
+    ],
     "images": ["static/description/main_screenshot.png"],
     "license": "LGPL-3",
     "installable": True,

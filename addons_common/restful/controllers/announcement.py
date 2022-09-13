@@ -55,6 +55,7 @@ class AnnouncementController(http.Controller):
             # Có thể có nhiều hơn 1 file đính kèm.
             list_attachment = [urls.url_join(base_url, self.get_url_attachment(att_id)) for att_id in rec.get('attachment_id')]
             dates['file'] = list_attachment
+
             values.append(dates)
         return valid_response(values)
 

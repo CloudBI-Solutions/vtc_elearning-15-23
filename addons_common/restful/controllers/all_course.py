@@ -27,7 +27,7 @@ class AllCoursesController(http.Controller):
     def get_all_courses(self, **payload):
         values = []
         base_url = AllCoursesController.get_url_base(self)
-        all_courses = request.env['slide.channel'].search([])      # .sudo()
+        all_courses = request.env['slide.channel'].search([('is_published', '=', True)])      # .sudo()
         for rec in all_courses:
             # cấp độ học
             tag_id = rec.tag_ids[0].id
