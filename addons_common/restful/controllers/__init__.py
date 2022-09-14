@@ -1,4 +1,4 @@
-# from . import attachment
+from . import attachment
 # from . import announcement
 # from . import approvals
 # from . import attendance

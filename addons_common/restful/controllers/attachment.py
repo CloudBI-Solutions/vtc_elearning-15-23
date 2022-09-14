@@ -15,6 +15,7 @@ class AttachmentController(http.Controller):
                  '/web/content2/<int:id>',
                  '/web/content2/<int:id>/<string:filename>',
                  '/web/content2/<string:model>/<int:id>/<string:field>',
+                 '/web/content2/<string:model>/<int:id>/<string:filename_field>/<string:field>/<string:download>',
                  '/web/content2/<string:model>/<int:id>/<string:field>/<string:filename>'], type='http', auth="public")
     def content_common(self, xmlid=None, model='ir.attachment', id=None, field='datas',
                        filename=None, filename_field='name', unique=None, mimetype=None,

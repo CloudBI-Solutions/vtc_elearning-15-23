@@ -24,7 +24,7 @@ class CourseByIdController(http.Controller):
 
     def get_url_attachment(self, attachment_id):
         attachment = request.env['ir.attachment'].sudo().browse(attachment_id)
-        return "web/content2/?model=ir.attachment&id=" + str(attachment_id) + "&filename_field=name&field=datas&download=true&name=" + attachment.name
+        return "web/content2/?model=ir.attachment&id=" + str(attachment_id) + "&filename_field=name&field=datas&download=true"
 
     @validate_token
     @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
@@ -80,35 +80,12 @@ class CourseByIdController(http.Controller):
             dates['rating_ids'] = ratings
 
             # tài liệu
+            list_attachment_files = request.env['ir.attachment'].sudo().search([('res_model', '=', 'slide.channel'), ('res_id', '=', rec.id)]).ids
+            # print('list attachment: ', list_attachment_files)
             list_attachment = [urls.url_join(base_url, self.get_url_attachment(att_id)) for att_id in
-                               rec.message_main_attachment_id]
-            # dates['files'] = list_attachment
-            print(list_attachment)
+                               list_attachment_files]
+            dates['files'] = list_attachment
 
             values.append(dates)
         return valid_response(values)
 
-    # @validate_token
-    # @http.route("/api/course_by_id/<id>", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
-    # def get_course_by_id(self, **payload):
-    #     values = []
-    #     base_url = CourseByIdController.get_url_base(self)
-    #     list_courses = request.env['slide.channel'].search(
-    #         [('id', '=', int(id))], limit=1)
-    #
-    #     for rec in list_courses:
-    #         dates = {'id': rec.id,
-    #                  'name': rec.name,
-    #                  }
-    #         slides = []
-    #         for slide in rec.slide_ids:
-    #             slide_detail = {
-    #                 'name': slide.name,
-    #                 'slide_type': slide.slide_type,
-    #                 'completion_time': slide.completion_time
-    #
-    #             }
-    #             slides.append(slide_detail)
-    #         dates['slide_ids'] = slides
-    #         values.append(dates)
-    #     return valid_response(values)
