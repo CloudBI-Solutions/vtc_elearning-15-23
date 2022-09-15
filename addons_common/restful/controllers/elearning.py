@@ -14,6 +14,7 @@ from werkzeug import urls
 from odoo import SUPERUSER_ID
 from odoo import http
 from odoo.http import request
+from distutils.command.config import config
 
 _logger = logging.getLogger(__name__)
 
@@ -177,7 +178,7 @@ class ElearningController(http.Controller):
 
     @validate_token
     @http.route("/api/v1/slide_channel/rating", type="http", auth="public", methods=["POST"], csrf=False, cors='*')
-    def update_comment_slide_channel(self, **payload):
+    def update_rating_slide_channel(self, **payload):
         field_require = [
             'res_id',
             'rating',
@@ -241,3 +242,259 @@ class ElearningController(http.Controller):
             'channel_id': int(payload['channel_id']),
             'partner_id': user.self.id,
         })
+
+    @validate_token
+    @http.route("/api/v1/slide_channel/completion", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    def get_completion_slide_channel_partner(self, **payload):
+        field_require = [
+            'channel_id',
+        ]
+        for field in field_require:
+            if field not in payload.keys():
+                return invalid_response(
+                    "Missing",
+                    "The parameter %s is missing!!!" % field)
+        slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['channel_id'])])
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
+        if user.self in slide_channel.channel_partner_ids.partner_id:
+            channel_partner = request.env['slide.channel.partner'].sudo().search([('channel_id', '=', payload['channel_id']), ('partner_id', '=', user.self.id)])
+            if channel_partner.completion:
+                return valid_response(channel_partner.completion)
+            else:
+                return invalid_response("Bạn đã chưa bắt đầu tham gia khóa học %s." % slide_channel.name)
+        else:
+            return invalid_response("Bạn chưa tham gia khóa học %s." % slide_channel.name)
+
+    @validate_token
+    @http.route("/api/v1/slide_channel/completed", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    def get_completed_slide_channel_partner(self, **payload):
+        field_require = [
+            'channel_id',
+        ]
+        for field in field_require:
+            if field not in payload.keys():
+                return invalid_response(
+                    "Missing",
+                    "The parameter %s is missing!!!" % field)
+        slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['channel_id'])])
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
+        channel_partner = request.env['slide.channel.partner'].sudo().search([('channel_id', '=', payload['channel_id']), ('partner_id', '=', user.self.id)])
+        if channel_partner.completed:
+            return invalid_response("Bạn đã hoàn thành khóa học %s." % slide_channel.name)
+        else:
+            return invalid_response("Bạn đã chưa hoàn thành khóa học %s." % slide_channel.name)
+
+    @validate_token
+    @http.route("/api/v1/slide_channel/allcomment", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    def get_comment_slide_channel(self, **payload):
+        field_require = [
+            'channel_id',
+        ]
+        for field in field_require:
+            if field not in payload.keys():
+                return invalid_response(
+                    "Missing",
+                    "The parameter %s is missing!!!" % field)
+        slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['channel_id'])])
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
+        if user.self in slide_channel.channel_partner_ids.partner_id:
+            mail_message = request.env['mail.message'].sudo().search([('res_id', '=', payload['channel_id']), ('model', '=', 'slide.channel')])
+            values = []
+            for msg in mail_message:
+                values.append({
+                    'id': msg.id,
+                    'subject': msg.subject,
+                    'body': msg.body,
+                    'author_id': msg.author_id,
+                    'parent_id': msg.parent_id
+                })
+            return valid_response(values)
+        else:
+            return invalid_response("Bạn chưa tham gia khóa học %s." % slide_channel.name)
+
+    @validate_token
+    @http.route("/api/v1/slide_channel/content", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    def get_content_slide_channel(self, **payload):
+        field_require = [
+            'channel_id',
+        ]
+        for field in field_require:
+            if field not in payload.keys():
+                return invalid_response(
+                    "Missing",
+                    "The parameter %s is missing!!!" % field)
+        slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['channel_id'])])
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
+        if user.self in slide_channel.channel_partner_ids.partner_id:
+            slide_slide = request.env['slide.slide'].sudo().search([('channel_id', '=', slide_channel.id)])
+            values = []
+            for slide in slide_slide:
+                values.append({
+                    'id': slide.id,
+                    'name': slide.name,
+                    'slide_type': slide.slide_type,
+                    'total_views': slide.total_views,
+                    'is_preview': slide.is_preview,
+                    'is_published': slide.is_published,
+                    'likes': slide.like,
+                    'dislikes': slide.dislikes
+                })
+            return valid_response(values)
+        else:
+            return invalid_response("Bạn chưa tham gia khóa học %s." % slide_channel.name)
+
+    @validate_token
+    @http.route("/api/v1/slide_channel/completion_time", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    def get_completion_time_slide_channel(self, **payload):
+        field_require = [
+            'channel_id',
+        ]
+        for field in field_require:
+            if field not in payload.keys():
+                return invalid_response(
+                    "Missing",
+                    "The parameter %s is missing!!!" % field)
+        slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['channel_id'])])
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
+        if user.self in slide_channel.channel_partner_ids.partner_id:
+            slide_slide = request.env['slide.slide'].sudo().search([('channel_id', '=', slide_channel.id)])
+            values = []
+            for slide in slide_slide:
+                values.append({
+                    'id': slide.id,
+                    'name': slide.name,
+                    'completion_time': slide.completion_time,
+                })
+            return valid_response(values)
+        else:
+            return invalid_response("Bạn chưa tham gia khóa học %s." % slide_channel.name)
+
+    @validate_token
+    @http.route("/api/v1/slide_slide/completed", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    def get_completed_slide_slide_partner(self, **payload):
+        field_require = [
+            'slide_id',
+        ]
+        for field in field_require:
+            if field not in payload.keys():
+                return invalid_response(
+                    "Missing",
+                    "The parameter %s is missing!!!" % field)
+        slide_slide = request.env['slide.slide'].sudo().search([('id', '=', payload['slide_id'])])
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
+        slide_partner = request.env['slide.slide.partner'].sudo().search([('slide_id', '=', payload['slide_id']), ('partner_id', '=', user.self.id)])
+        if slide_partner.completed:
+            return invalid_response("Bạn đã hoàn thành bài học %s." % slide_slide.name)
+        else:
+            return invalid_response("Bạn đã chưa hoàn thành bài học %s." % slide_slide.name)
+
+    @http.route("/api/v1/op_quiz", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    def get_op_quiz(self, **payload):
+        field_require = [
+            'slide_id',
+        ]
+        for field in field_require:
+            if field not in payload.keys():
+                return invalid_response(
+                    "Missing",
+                    "The parameter %s is missing!!!" % field)
+        values = []
+        op_quiz = request.env['op.quiz'].sudo().search([('slide_channel_id', '=', payload['slide_id'])])
+        for rec in op_quiz:
+            quiz = {
+                'name': rec.name,
+                'id': rec.id,
+                'quiz_config': rec.quiz_config,
+                'type': rec.type,
+                'categ_id': rec.categ_id,
+                'total_marks': rec.total_marks,
+                'single_que': rec.single_que,
+                'prev_allow': rec.prev_allow,
+                'prev_readonly': rec.prev_readonly,
+                'show_result': rec.show_result,
+                'no_of_attempt': rec.no_of_attempt,
+                'que_required': rec.que_required,
+                'auth_required': rec.auth_required,
+                'time_config': rec.time_config,
+            }
+            line_ids = []
+            for line in rec.line_ids:
+                line_ids.append({
+                    'id': line.id,
+                    'name': line.name,
+                    'que_type': line.name,
+                    'mark': line.name,
+                })
+            quiz['line_ids'] = line_ids
+            # ____________________________________________________
+            quiz_message_ids = []
+            for msg in rec.quiz_message_ids:
+                quiz_message_ids.append({
+                    'result_from': msg.result_from,
+                    'result_to': msg.result_to,
+                })
+            quiz['quiz_message_ids'] = quiz_message_ids
+            # ____________________________________________________
+            employees = []
+            for emp in rec.list_candidates:
+                employees.append({
+                    'name': emp.model,
+                    'work_phone': emp.work_phone,
+                    'work_email': emp.work_email,
+                    'company_id': emp.company_id,
+                    'department_id': emp.department_id,
+                    'job_id': emp.job_id,
+                    'partner_id': emp.partner_id,
+                })
+            quiz['employees'] = employees
+            values.append(quiz)
+        return valid_response(values)
+
+    @validate_token
+    @http.route("/api/v1/question_bank_line", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    def get_question_bank_line(self, **payload):
+        question_bank_line = request.env['op.question.bank.line'].sudo().search([])
+        values = []
+        for line in question_bank_line:
+            values.append({
+                'id': line.id,
+                'name': line.name,
+                'que_type': line.que_type,
+                'bank_id': line.bank_id
+            })
+        return valid_response(values)
+
+    @validate_token
+    @http.route("/api/v1/question_bank_answer", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    def get_question_bank_answer(self, **payload):
+        question_bank_answer = request.env['op.question.bank.answer'].sudo().search([])
+        values = []
+        for answer in question_bank_answer:
+            values.append({
+                'id': answer.id,
+                'name': answer.name,
+                'grade_id': answer.grade_id,
+                'question_id': answer.question_id
+            })
+        return valid_response(values)
+
+    @validate_token
+    @http.route("/api/v1/slide_slide_partner/completed", type="http", auth="public", methods=["POST"], csrf=False, cors='*')
+    def update_completed_slide_slide_partner(self, **payload):
+        field_require = [
+            'slide_id',
+        ]
+        for field in field_require:
+            if field not in payload.keys():
+                return invalid_response(
+                    "Missing",
+                    "The parameter %s is missing!!!" % field)
+        headers = request.httprequest.headers
+        slide_slide = request.env['slide.slide'].sudo().search([('id', '=', payload['slide_id'])])
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
+        slide_partner = request.env['slide.slide.partner'].sudo().search([('slide_id', '=', payload['slide_id']), ('partner_id', '=', user.self.id)])
+        if slide_partner.completed:
+            return invalid_response("Bạn đã hoàn thành bài học %s." % slide_slide.name)
+        else:
+            slide_partner.completed = True
+            return invalid_response("Bạn đã hoàn thành bài học %s." % slide_slide.name)
