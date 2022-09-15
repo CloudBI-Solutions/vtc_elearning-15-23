@@ -16,3 +16,4 @@ from . import user
 from . import token
 from . import all_course
 from . import get_course_by_id
+from . import get_lesson_by_id
