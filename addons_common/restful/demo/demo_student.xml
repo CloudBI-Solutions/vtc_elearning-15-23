@@ -19,7 +19,6 @@
 
     <record model="lecturers" id="lecturers1ad">
         <field name="name">Ly hiet</field>
-
     </record>
 
 </odoo>

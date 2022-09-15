@@ -23,7 +23,7 @@ class AllCoursesController(http.Controller):
         return 'https://test.diligo.vn:15000'
 
     @validate_token
-    @http.route("/api/get/all_courses", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    @http.route("/api/all_courses", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
     def get_all_courses(self, **payload):
         values = []
         base_url = AllCoursesController.get_url_base(self)
