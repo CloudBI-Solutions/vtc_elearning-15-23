@@ -22,7 +22,7 @@ class AllCoursesController(http.Controller):
             return config
         return 'https://test.diligo.vn:15000'
 
-    @validate_token
+    # @validate_token
     @http.route("/api/get/all_courses", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
     def get_all_courses(self, **payload):
         values = []
@@ -57,6 +57,6 @@ class AllCoursesController(http.Controller):
                 }
                 slides.append(slide_info)
             dates['slides'] = slides
-
+            # print(dates)
             values.append(dates)
         return valid_response(values)
