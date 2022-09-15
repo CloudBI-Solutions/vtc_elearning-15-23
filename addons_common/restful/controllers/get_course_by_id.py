@@ -26,7 +26,7 @@ class CourseByIdController(http.Controller):
         attachment = request.env['ir.attachment'].sudo().browse(attachment_id)
         return "web/content2/?model=ir.attachment&id=" + str(attachment_id) + "&filename_field=name&field=datas&download=true"
 
-    @validate_token
+    # @validate_token
     @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
     def get_course_by_id(self, **payload):
         values = []
@@ -41,6 +41,7 @@ class CourseByIdController(http.Controller):
                      'name': rec.name,
                      'description': rec.description,
                      'tag_id': tag_id,
+                     'total_student': rec.count_student,
                      }
 
             # list giảng viên
@@ -54,17 +55,27 @@ class CourseByIdController(http.Controller):
             dates['lecturers'] = list_lecturers
 
             # thông tin tab nội dung
-            slides = []
-            for slide in rec.slide_ids:
-                slide_detail = {
-                    'id': slide.id,
-                    'name': slide.name,
-                    'slide_type': slide.slide_type,
-                    'completion_time': slide.completion_time,
+            cate = request.env['slide.slide'].search([('is_category', '=', True), ('channel_id', '=', rec.id)])
+            print(cate)
+            list_cate = []
+            for c in cate:
+                infor_cate = {
+                    'id': c.id,
+                    'name': c.name,
                 }
-                slides.append(slide_detail)
-            dates['slide_ids'] = slides
-
+                list_slide_in_cate = []
+                for s in c.slide_ids:
+                    slide_cate = {
+                        'id': s.id,
+                        'name': s.name,
+                        'slide_type': s.slide_type,
+                        'completion_time': s.completion_time,
+                    }
+                    list_slide_in_cate.append(slide_cate)
+                infor_cate['slide'] = list_slide_in_cate
+                list_cate.append(infor_cate)
+                print(c.slide_ids)
+            dates['category'] = list_cate
             # tổng học viên
             total_students = len(rec.student_ids)
             dates['total_students'] = total_students
