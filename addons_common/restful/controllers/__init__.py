@@ -1,4 +1,4 @@
-# from . import attachment
+from . import attachment
 # from . import announcement
 # from . import approvals
 # from . import attendance
@@ -14,3 +14,5 @@
 # from . import recruitment
 from . import user
 from . import token
+from . import all_course
+from . import get_course_by_id
