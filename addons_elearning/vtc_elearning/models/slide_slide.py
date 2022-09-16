@@ -28,4 +28,3 @@ class SlideSlide(models.Model):
     _inherit = 'slide.slide'
 
     quiz_id = fields.Many2one('op.quiz', string='Quiz')
-    slide_type = fields.Selection([('video', 'Video'), ('document', 'Document'), ('quiz', 'Quiz')], string='Slide type', default='video')

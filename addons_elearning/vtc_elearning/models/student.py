@@ -33,16 +33,6 @@ class Student(models.Model):
     comment_slide_ids = fields.One2many('comment.slide', 'student_id', string='Comment slide')
     comment_source_ids = fields.One2many('comment.course', 'student_id', string='Comment source')
 
-
-class ProgressSlide(models.Model):
-    _name = 'progress.slide'
-    _description = 'progress slide student'
-
-    progress = fields.Integer('Progress')
-    slide_id = fields.Many2one('slide.slide', string='Slide')
-    student_id = fields.Many2one('student.student', string='Student')
-
-    # @api.onchange('email')
     def check_email_login_user(self):
         if self.email:
             user = self.env['res.users'].search([('login', '=', self.email)])
@@ -55,4 +45,16 @@ class ProgressSlide(models.Model):
             })
         else:
             raise UserError(_('Vui lòng nhập email để được tạo tài khoản học trực tuyến.'))
+
+
+class ProgressSlide(models.Model):
+    _name = 'progress.slide'
+    _description = 'progress slide student'
+
+    progress = fields.Integer('Progress')
+    slide_id = fields.Many2one('slide.slide', string='Slide')
+    student_id = fields.Many2one('student.student', string='Student')
+
+    # @api.onchange('email')
+
 
