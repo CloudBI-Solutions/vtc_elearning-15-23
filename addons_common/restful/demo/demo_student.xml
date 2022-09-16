@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo >
+    <record model="student.student" id="student1ad">
+        <field name="name">Ly Lien Kiet</field>
+        <field name="sequence">1</field>
+    </record>
+    <record model="student.student" id="student2ad">
+        <field name="name">Hoang Phi Hong</field>
+        <field name="sequence">2</field>
+    </record>
+    <record model="student.student" id="student3ad">
+        <field name="name">Chu Du</field>
+        <field name="sequence">3</field>
+    </record>
+    <record model="student.student" id="student4ad">
+        <field name="name">Gia Cat Luong</field>
+        <field name="sequence">4</field>
+    </record>
+
+    <record model="lecturers" id="lecturers1ad">
+        <field name="name">Ly hiet</field>
+    </record>
+
+</odoo>

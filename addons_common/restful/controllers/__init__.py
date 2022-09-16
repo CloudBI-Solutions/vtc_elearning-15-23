@@ -1,10 +1,10 @@
-# from . import attachment
+from . import attachment
 # from . import announcement
 # from . import approvals
 # from . import attendance
 # from . import blog
 # from . import device
-# from . import elearning
+from . import elearning
 # from . import employee
 # from . import helpdesk
 # from . import kpis
@@ -14,3 +14,6 @@
 # from . import recruitment
 from . import user
 from . import token
+from . import all_course
+from . import get_course_by_id
+from . import get_lesson_by_id

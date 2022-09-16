@@ -29,6 +29,18 @@ class Student(models.Model):
     res_country_ward = fields.Many2one('res.country.ward', string='Country ward')
     res_country_district = fields.Many2one('res.country.district', string='Country district')
     user_id = fields.Many2one('res.users', string='User')
+    progress_ids = fields.One2many('progress.slide', 'student_id', string='Progress')
+    comment_slide_ids = fields.One2many('comment.slide', 'student_id', string='Comment slide')
+    comment_source_ids = fields.One2many('comment.course', 'student_id', string='Comment source')
+
+
+class ProgressSlide(models.Model):
+    _name = 'progress.slide'
+    _description = 'progress slide student'
+
+    progress = fields.Integer('Progress')
+    slide_id = fields.Many2one('slide.slide', string='Slide')
+    student_id = fields.Many2one('student.student', string='Student')
 
     # @api.onchange('email')
     def check_email_login_user(self):

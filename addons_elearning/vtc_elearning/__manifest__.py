@@ -13,6 +13,8 @@
         'views/quiz_view_inherit.xml',
         'views/lecturers_view.xml',
         'views/student_view.xml',
+        'views/course_level.xml',
+        'views/slide_channel_inherit.xml',
     ],
     'demo': [],
     'depends': [

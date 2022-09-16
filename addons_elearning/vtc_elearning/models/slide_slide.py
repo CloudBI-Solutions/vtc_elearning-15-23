@@ -22,3 +22,9 @@ class SlideChannel(models.Model):
             if record.student_ids:
                 student = self.env['student.student'].search([('source_ids', 'in', [record.id])])
                 record.count_student = len(student)
+
+class SlideSlide(models.Model):
+    _inherit = 'slide.slide'
+
+    quiz_id = fields.Many2one('op.quiz', string='Quiz')
+    slide_type = fields.Selection([('video', 'Video'), ('document', 'Document'), ('quiz', 'Quiz')], string='Slide type', default='video')

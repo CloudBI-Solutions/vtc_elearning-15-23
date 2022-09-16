@@ -5,9 +5,23 @@ class CommentCourse(models.Model):
     _description = 'Comment course'
 
     name = fields.Char('Comment')
-    comment_id = fields.Many2one('comment')
+    comment_id = fields.Many2one('comment.course')
     course_id = fields.Many2one('slide.channel', string='Course')
-    user_id = fields.Many2one('res.users', string='User')
+    student_id = fields.Many2one('student.student', string='Student')
+    user_id = fields.Many2one(related='student_id.user_id')
+
+
+class CommentSlide(models.Model):
+    _name = 'comment.slide'
+    _description = "Student comment slide"
+
+    name = fields.Char('Comment')
+    comment_id = fields.Many2one('comment.slide', string='Comment')
+    comment_ids = fields.One2many('comment.slide', 'comment_id', string='Comment')
+    slide_id = fields.Many2one('slide.slide', string='Course')
+    student_id = fields.Many2one('student.student', string='Student')
+    user_id = fields.Many2one(related='student_id.user_id')
+
 
 class RatLecturers(models.Model):
     _name = 'rat.lecturers'
