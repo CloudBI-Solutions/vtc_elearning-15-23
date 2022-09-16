@@ -35,11 +35,9 @@ class CourseByIdController(http.Controller):
         base_url = CourseByIdController.get_url_base(self)
         list_courses = request.env['slide.channel'].search([('id', '=', payload.get('course_id'))])
         # cấp độ học
-        # tag_id = list_courses.tag_ids[0].id
         dates = {'id': list_courses.id,
                  'name': list_courses.name,
                  'description': list_courses.description,
-                 # 'tag_id': tag_id,
                  'total_student': list_courses.count_student,
                  'level': list_courses.course_level_id,
                  }
@@ -56,7 +54,18 @@ class CourseByIdController(http.Controller):
 
         # thông tin tab nội dung
         cate = request.env['slide.slide'].search([('is_category', '=', True), ('channel_id', '=', list_courses.id)])
-        # print(cate)
+        slide = request.env['slide.slide'].search([('is_category', '=', False), ('channel_id', '=', list_courses.id), ('category_id', '=', False)])
+        if slide:
+            list_slide = []
+            for s in slide:
+                slide_infor = {
+                    'id': s.id,
+                    'name': s.name,
+                    'slide_type': s.slide_type,
+                    'completion_time': s.completion_time,
+                }
+                list_slide.append(slide_infor)
+            dates['slide'] = list_slide
         list_cate = []
         for c in cate:
             infor_cate = {
@@ -114,6 +123,7 @@ class CourseByIdController(http.Controller):
             'progress': progress.progress,
             'is_done': 'False',
         }
+        print(lesson.slide_type)
         if lesson.slide_type == 'video':
             data['url'] = lesson.url
             data['duration'] = lesson.completion_time
