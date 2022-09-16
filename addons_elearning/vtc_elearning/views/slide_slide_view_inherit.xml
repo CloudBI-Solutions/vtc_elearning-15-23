@@ -16,7 +16,9 @@
                 <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" placeholder="Cấp độ học"/>
             </xpath>
             <xpath expr="//field[@name='user_id']" position="replace">
-                <field name="type_course"/>
+                <field name="type_course" required="1"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
             </xpath>
             <xpath expr="//page[@name='karma_rules']" position="replace">
                 <page string="Student" name="students">
@@ -38,9 +40,9 @@
                             <field name="name"/>
                              <field name="phone" widget="phone"/>
                              <field name="email"/>
-<!--                             <field name="total_course"/>-->
-<!--                             <field name="total_student"/>-->
-<!--                             <field name="rating"/>-->
+                             <field name="total_course"/>
+                             <field name="total_student"/>
+                             <field name="rating_text"/>
                         </tree>
                     </field>
                 </page>

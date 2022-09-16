@@ -4,5 +4,5 @@ class Certificate(models.Model):
     _name = 'certificate'
     _description = 'Certificate'
 
-    student_id = fields.Many2one('student.student')
+    student_id = fields.Many2one('student.student', string='Student')
     attachment_id = fields.Binary(string='File certificate')

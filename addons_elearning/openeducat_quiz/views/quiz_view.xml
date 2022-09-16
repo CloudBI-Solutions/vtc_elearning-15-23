@@ -261,7 +261,7 @@
                                     <field name="challenge_ids" widget="many2many_tags"/>
                                 </group>
                             </page>
-                            <page string="Employee">
+                            <page name="employee" string="Employee">
                                  <field name="list_candidates" nolabel="1" readonly="1"/>
                             </page>
                         </notebook>

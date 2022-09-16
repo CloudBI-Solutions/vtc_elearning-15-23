@@ -44,12 +44,15 @@
         <field name="model">student.student</field>
         <field name="arch" type="xml">
             <form string="Student">
+                <header>
+                    <button name="check_email_login_user" string="Tạo tài khoản" type="object" class="oe_highlight"/>
+                </header>
                 <sheet>
                     <div name="button_box" class="oe_button_box">
                         <button name="%(student_course_action)d" type="action" string="Course" icon="fa-solid fa-graduation-cap"/>
                         <button name="%(student_quiz_action)d" type="action" string="Quiz" icon="fa-regular fa-pen-paintbrush"/>
                         <button name="%(student_quiz_result_action)d" type="action" string="Quiz result" icon="fa-regular fa-file-certificate"/>
-                        <button name="%(certificate_student_view_action)d" type="action" string="Certificate" icon="fa-regular fa-diploma"/>
+                        <button name="%(certificate_student_view_action)d" type="action" string="Certificate" icon="fa-regular"/>
                     </div>
                     <field name="avatar" widget="image" class="oe_avatar" options="{&quot;zoom&quot;: true, &quot;preview_image&quot;:&quot;avatar_128&quot;}"/>
                     <div class="oe_title">
@@ -58,29 +61,35 @@
                         </h1>
                     </div>
                     <group>
-                        <group>
+                        <group string="Contact">
                             <field name="phone"/>
                             <field name="email"/>
                         </group>
-                        <group>
+                        <group string="Personal information">
                             <field name="birth"/>
                             <field name="identity_card"/>
                             <field name="address"/>
                         </group>
-                        <group>
+                        <group string="Information work">
                             <field name="position"/>
                             <field name="work_unit"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group string="Address">
                             <field name="res_country_state"/>
                             <field name="res_country_district"/>
                             <field name="res_country_ward"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Source">
+                        <page string="Khóa học">
                             <field name="source_ids"/>
                         </page>
-                        <page string="Quiz and result">
+                        <page string="Quiz">
                             <field name="quiz_ids"/>
+
+                        </page>
+                        <page string="Kết quả">
                             <field name="quiz_result_ids"/>
                         </page>
                     </notebook>

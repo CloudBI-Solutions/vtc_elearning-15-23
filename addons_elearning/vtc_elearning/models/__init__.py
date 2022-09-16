@@ -5,5 +5,6 @@ from . import slide_slide
 from . import comment
 from . import certificate
 from . import position
+from . import position
 from . import slide_channel_inherit
 from . import course_level
