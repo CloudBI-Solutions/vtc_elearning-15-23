@@ -8,6 +8,8 @@ from odoo.addons.restful.controllers.main import (
 )
 
 from werkzeug import urls
+
+from addons_common.restful.common import invalid_response
 from odoo import http
 from odoo.http import request
 
@@ -26,66 +28,110 @@ class CourseByIdController(http.Controller):
         attachment = request.env['ir.attachment'].sudo().browse(attachment_id)
         return "web/content2/?model=ir.attachment&id=" + str(attachment_id) + "&filename_field=name&field=datas&download=true"
 
-    @validate_token
+    # @validate_token
     @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
     def get_course_by_id(self, **payload):
         values = []
         base_url = CourseByIdController.get_url_base(self)
-        list_courses = request.env['slide.channel'].search(
-            [('is_published', '=', True), ('id', '=', payload.get('course_id'))])
+        list_courses = request.env['slide.channel'].search([('id', '=', payload.get('course_id'))])
+        # cấp độ học
+        # tag_id = list_courses.tag_ids[0].id
+        dates = {'id': list_courses.id,
+                 'name': list_courses.name,
+                 'description': list_courses.description,
+                 # 'tag_id': tag_id,
+                 'total_student': list_courses.count_student,
+                 'level': list_courses.course_level_id,
+                 }
 
-        for rec in list_courses:
-            # cấp độ học
-            tag_id = rec.tag_ids[0].id
-            dates = {'id': rec.id,
-                     'name': rec.name,
-                     'description': rec.description,
-                     'tag_id': tag_id,
-                     }
+        # list giảng viên
+        list_lecturers = []
+        for lecturer in list_courses.lecturers_ids:
+            lecturer_info = {
+                'id': lecturer.id,
+                'name': lecturer.name,
+            }
+            list_lecturers.append(lecturer_info)
+        dates['lecturers'] = list_lecturers
 
-            # list giảng viên
-            list_lecturers = []
-            for lecturer in rec.lecturers_ids:
-                lecturer_info = {
-                    'id': lecturer.id,
-                    'name': lecturer.name,
+        # thông tin tab nội dung
+        cate = request.env['slide.slide'].search([('is_category', '=', True), ('channel_id', '=', list_courses.id)])
+        # print(cate)
+        list_cate = []
+        for c in cate:
+            infor_cate = {
+                'id': c.id,
+                'name': c.name,
+            }
+            list_slide_in_cate = []
+            for s in c.slide_ids:
+                slide_cate = {
+                    'id': s.id,
+                    'name': s.name,
+                    'slide_type': s.slide_type,
+                    'completion_time': s.completion_time,
                 }
-                list_lecturers.append(lecturer_info)
-            dates['lecturers'] = list_lecturers
+                list_slide_in_cate.append(slide_cate)
+            infor_cate['slide'] = list_slide_in_cate
+            list_cate.append(infor_cate)
+            # print(c.slide_ids)
+        dates['category'] = list_cate
+        # tổng học viên
+        # total_students = len(list_courses.student_ids)
+        # dates['total_students'] = total_students
 
-            # thông tin tab nội dung
-            slides = []
-            for slide in rec.slide_ids:
-                slide_detail = {
-                    'id': slide.id,
-                    'name': slide.name,
-                    'slide_type': slide.slide_type,
-                    'completion_time': slide.completion_time,
-                }
-                slides.append(slide_detail)
-            dates['slide_ids'] = slides
+        # đánh giá
+        ratings = []
+        for rate in list_courses.sudo().rating_ids:
+            rating_detail = {
+                'id': rate.id,
+                'feedback': rate.feedback,
+            }
+            ratings.append(rating_detail)
+        dates['rating_ids'] = ratings
 
-            # tổng học viên
-            total_students = len(rec.student_ids)
-            dates['total_students'] = total_students
+        # tài liệu
+        list_attachment_files = request.env['ir.attachment'].sudo().search([('res_model', '=', 'slide.channel'), ('res_id', '=', list_courses.id)]).ids
+        # print('list attachment: ', list_attachment_files)
+        list_attachment = [urls.url_join(base_url, self.get_url_attachment(att_id)) for att_id in
+                           list_attachment_files]
+        dates['files'] = list_attachment
 
-            # đánh giá
-            ratings = []
-            for rate in rec.rating_ids:
-                rating_detail = {
-                    'id': rate.id,
-                    'feedback': rate.feedback,
-                }
-                ratings.append(rating_detail)
-            dates['rating_ids'] = ratings
+        values.append(dates)
+        return valid_response(values)
 
-            # tài liệu
-            list_attachment_files = request.env['ir.attachment'].sudo().search([('res_model', '=', 'slide.channel'), ('res_id', '=', rec.id)]).ids
-            # print('list attachment: ', list_attachment_files)
-            list_attachment = [urls.url_join(base_url, self.get_url_attachment(att_id)) for att_id in
-                               list_attachment_files]
-            dates['files'] = list_attachment
-
-            values.append(dates)
+    @http.route("/api/get/lesson_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    def get_lesson_by_id(self, **payload):
+        values = []
+        # base_url = CourseByIdController.get_url_base(self)
+        lesson = request.env['slide.slide'].search([('id', '=', payload.get('lesson_id'))])
+        progress = request.env['progress.slide'].sudo().search([('student_id.user_id', '=', request.uid), ('slide_id', '=', lesson.id)])
+        # list_comment = request.env['comment.slide'].sudo().search([('student.user_id', '=', request.uid), ('slide_id', '=', lesson.id)])
+        data = {
+            'id': lesson.id,
+            'name': lesson.name,
+            'type': lesson.slide_type,
+            'progress': progress.progress,
+            'is_done': 'False',
+        }
+        if lesson.slide_type == 'video':
+            data['url'] = lesson.url
+            data['duration'] = lesson.completion_time
+        elif lesson.slide_type == 'document':
+            data['url'] = lesson.url
+        elif lesson.slide_type == 'quiz':
+            data['time'] = lesson.quiz_id.time_config
+        else:
+            return invalid_response("Coming soon")
+        # comment = []
+        # for record in list_comment:
+        #     cmt = {
+        #         'id': record.id,
+        #         'comment': record.comment,
+        #
+        #     }
+        if progress.progress == 100:
+            data['is_done'] = 'True'
+        values.append(data)
         return valid_response(values)
 
