@@ -1,4 +1,8 @@
-from odoo import fields, models, api
+
+
+from odoo import fields, models, api, _
+from odoo.exceptions import UserError
+
 
 class Student(models.Model):
     _name = 'student.student'
@@ -26,4 +30,17 @@ class Student(models.Model):
     res_country_district = fields.Many2one('res.country.district', string='Country district')
     user_id = fields.Many2one('res.users', string='User')
 
+    # @api.onchange('email')
+    def check_email_login_user(self):
+        if self.email:
+            user = self.env['res.users'].search([('login', '=', self.email)])
+            if user:
+                raise ValueError('Email đã được đăng ký tài khoản, vui lòng nhập email mới để được tạo tài khoản học trực tuyến.')
+            self.user_id = self.env['res.users'].sudo().create({
+                'name': self.name,
+                'login': self.email,
+                'password': '1'
+            })
+        else:
+            raise UserError(_('Vui lòng nhập email để được tạo tài khoản học trực tuyến.'))
 
