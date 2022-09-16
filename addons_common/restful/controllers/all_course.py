@@ -23,7 +23,7 @@ class AllCoursesController(http.Controller):
         return 'https://test.diligo.vn:15000'
 
     # @validate_token
-    @http.route("/api/all_courses", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    @http.route("/api/all_courses", type="http", auth="public", methods=["GET"], csrf=False, cors="*" )
     def get_all_courses(self, **payload):
         values = []
         base_url = AllCoursesController.get_url_base(self)
@@ -61,7 +61,7 @@ class AllCoursesController(http.Controller):
             total_slide = 0
             count_time_slide = 0
             for slide in rec.slide_ids:
-                print(slide.completion_time)
+                # print(slide.completion_time)
                 if slide.is_category != True:
                     total_slide += 1
                     count_time_slide += slide.completion_time
