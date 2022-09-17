@@ -15,7 +15,6 @@ from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 
-_logger = logging.getLogger(__name__)
 
 
 class AccessToken(http.Controller):
@@ -116,7 +115,7 @@ class AccessToken(http.Controller):
                     'go_to_backend': base_url + '/web',
                     "company_name": request.env.user.company_name,
                     "currency": request.env.user.currency_id.name,
-                    "company_name": request.env.user.company_name,
+                    # "company_name": request.env.user.company_name,
                     "country": request.env.user.country_id.name,
                     "contact_address": request.env.user.contact_address,
                     "customer_rank": request.env.user.customer_rank,
