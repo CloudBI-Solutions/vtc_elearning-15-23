@@ -27,7 +27,7 @@ class LessonByIdController(http.Controller):
         return "web/content2/?model=ir.attachment&id=" + str(attachment_id) + "&filename_field=name&field=datas&download=true"
 
     @validate_token
-    @http.route("/api/lesson_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    @http.route("/api/lesson_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors="*")
     def get_lesson_by_id(self, **payload):
         values = []
         base_url = LessonByIdController.get_url_base(self)

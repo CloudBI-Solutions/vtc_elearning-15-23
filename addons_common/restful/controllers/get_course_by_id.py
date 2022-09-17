@@ -9,7 +9,7 @@ from odoo.addons.restful.controllers.main import (
 
 from werkzeug import urls
 
-from addons_common.restful.common import invalid_response
+from odoo.addons.restful.common import invalid_response
 from odoo import http
 from odoo.http import request
 
@@ -28,7 +28,7 @@ class CourseByIdController(http.Controller):
         attachment = request.env['ir.attachment'].sudo().browse(attachment_id)
         return "web/content2/?model=ir.attachment&id=" + str(attachment_id) + "&filename_field=name&field=datas&download=true"
 
-    # @validate_token
+    @validate_token
     @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
     def get_course_by_id(self, **payload):
         values = []
@@ -107,6 +107,7 @@ class CourseByIdController(http.Controller):
         dates['files'] = list_attachment
 
         values.append(dates)
+        print(values)
         return valid_response(values)
 
     @http.route("/api/get/lesson_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
