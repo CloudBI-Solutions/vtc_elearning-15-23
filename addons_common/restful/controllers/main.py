@@ -14,9 +14,10 @@ _logger = logging.getLogger(__name__)
 
 def validate_token(func):
     """."""
-
+    print("restful")
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
+        print('wrap')
         """."""
         headers = request.httprequest.headers
         access_token = get_access_token(headers, kwargs)

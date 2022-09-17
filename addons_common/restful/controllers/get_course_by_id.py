@@ -1,7 +1,7 @@
 import logging
 
 from odoo.addons.restful.common import (
-    valid_response,
+    valid_response, invalid_response
 )
 from odoo.addons.restful.controllers.main import (
     validate_token
@@ -9,7 +9,7 @@ from odoo.addons.restful.controllers.main import (
 
 from werkzeug import urls
 
-from addons_common.restful.common import invalid_response
+# from addons_common.restful.common import invalid_response
 from odoo import http
 from odoo.http import request
 
@@ -112,7 +112,7 @@ class CourseByIdController(http.Controller):
     @http.route("/api/get/lesson_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
     def get_lesson_by_id(self, **payload):
         values = []
-        # base_url = CourseByIdController.get_url_base(self)
+        base_url = CourseByIdController.get_url_base(self)
         lesson = request.env['slide.slide'].search([('id', '=', payload.get('lesson_id'))])
         progress = request.env['progress.slide'].sudo().search([('student_id.user_id', '=', request.uid), ('slide_id', '=', lesson.id)])
         # list_comment = request.env['comment.slide'].sudo().search([('student.user_id', '=', request.uid), ('slide_id', '=', lesson.id)])
@@ -122,8 +122,13 @@ class CourseByIdController(http.Controller):
             'type': lesson.slide_type,
             'progress': progress.progress,
             'is_done': 'False',
+            'date_published': lesson.date_published,    # ngay dang
+            'create_uid': lesson.create_uid,
+            'channel_id': lesson.channel_id,            # khoa hoc
+            'mime_type': lesson.mime_type,
+            'description': lesson.description,
         }
-        print(lesson.slide_type)
+        # print(lesson.slide_type)
         if lesson.slide_type == 'video':
             data['url'] = lesson.url
             data['duration'] = lesson.completion_time
@@ -142,6 +147,34 @@ class CourseByIdController(http.Controller):
         #     }
         if progress.progress == 100:
             data['is_done'] = 'True'
+
+        # đố vui
+        data['slide_question'] = {
+            'quiz': {
+                'quiz_1': lesson.quiz_first_attempt_reward,
+                'quiz_2': lesson.quiz_second_attempt_reward,
+                'quiz_3': lesson.quiz_third_attempt_reward,
+                'quiz_4': lesson.quiz_fourth_attempt_reward
+            },
+            'questions': [],
+        }
+        for question in lesson.question_ids:
+            question_detail = {
+                'question': question.question,
+                'attempts_count': question.attempts_count,
+                'attempts_avg': question.attempts_avg,
+                'done_count': question.done_count,
+            }
+            data['slide_question']['questions'].append(question_detail)
+
+            # tài liệu
+            list_attachment_files = request.env['ir.attachment'].sudo().search(
+                [('res_model', '=', 'slide.slide'), ('res_id', '=', lesson.id)]).ids
+            # print('list attachment: ', list_attachment_files)
+            list_attachment = [urls.url_join(base_url, self.get_url_attachment(att_id)) for att_id in
+                               list_attachment_files]
+            data['files'] = list_attachment
+
         values.append(data)
         return valid_response(values)
 
