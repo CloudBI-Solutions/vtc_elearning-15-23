@@ -29,7 +29,7 @@ class HelpdeskController(http.Controller):
         return 'https://test.diligo.vn:15000'
 
     @validate_token
-    @http.route("/api/v1/helpdesk", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    @http.route("/api/v1/helpdesk", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_helpdesk(self, **payload):
         values = []
         base_url = HelpdeskController.get_url_base(self)

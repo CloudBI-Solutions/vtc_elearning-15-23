@@ -9,7 +9,7 @@ from odoo.addons.restful.controllers.main import (
 
 from werkzeug import urls
 
-from addons_common.restful.common import invalid_response
+from odoo.addons.restful.common import invalid_response
 from odoo import http, SUPERUSER_ID
 from odoo.http import request
 

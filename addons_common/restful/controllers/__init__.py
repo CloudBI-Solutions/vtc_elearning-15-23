@@ -8,7 +8,7 @@ from . import elearning
 # from . import employee
 # from . import helpdesk
 # from . import kpis
-# from . import main, token
+from . import main, token
 # from . import project
 # from . import quiz
 # from . import recruitment

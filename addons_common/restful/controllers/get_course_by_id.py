@@ -26,16 +26,17 @@ class CourseByIdController(http.Controller):
 
     def get_url_attachment(self, attachment_id):
         attachment = request.env['ir.attachment'].sudo().browse(attachment_id)
-        return "web/content2/?model=ir.attachment&id=" + str(attachment_id) + "&filename_field=name&field=datas&download=true"
+        return "web/content2/?model=ir.attachment&id=" + str(
+            attachment_id) + "&filename_field=name&field=datas&download=true"
 
     @validate_token
-    @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_course_by_id(self, **payload):
         values = []
         base_url = CourseByIdController.get_url_base(self)
         list_courses = request.env['slide.channel'].search([('id', '=', payload.get('course_id'))])
         # cấp độ học
-        dates = {'id': list_courses.id,
+        datas = {'id': list_courses.id,
                  'name': list_courses.name,
                  'description': list_courses.description,
                  'total_student': list_courses.count_student,
@@ -50,11 +51,13 @@ class CourseByIdController(http.Controller):
                 'name': lecturer.name,
             }
             list_lecturers.append(lecturer_info)
-        dates['lecturers'] = list_lecturers
+        datas['lecturers'] = list_lecturers
 
         # thông tin tab nội dung
-        cate = request.env['slide.slide'].search([('is_category', '=', True), ('channel_id', '=', list_courses.id)])
-        slide = request.env['slide.slide'].search([('is_category', '=', False), ('channel_id', '=', list_courses.id), ('category_id', '=', False)])
+        cate = request.env['slide.slide'].sudo().search(
+            [('is_category', '=', True), ('channel_id', '=', list_courses.id)])
+        print(cate)
+        slide = request.env['slide.slide'].sudo().search([('channel_id', '=', list_courses.id),('is_category', '=', False)])
         if slide:
             list_slide = []
             for s in slide:
@@ -65,7 +68,7 @@ class CourseByIdController(http.Controller):
                     'completion_time': s.completion_time,
                 }
                 list_slide.append(slide_infor)
-            dates['slide'] = list_slide
+            datas['slide'] = list_slide
         list_cate = []
         for c in cate:
             infor_cate = {
@@ -84,7 +87,7 @@ class CourseByIdController(http.Controller):
             infor_cate['slide'] = list_slide_in_cate
             list_cate.append(infor_cate)
             # print(c.slide_ids)
-        dates['category'] = list_cate
+        datas['category'] = list_cate
         # tổng học viên
         # total_students = len(list_courses.student_ids)
         # dates['total_students'] = total_students
@@ -97,25 +100,26 @@ class CourseByIdController(http.Controller):
                 'feedback': rate.feedback,
             }
             ratings.append(rating_detail)
-        dates['rating_ids'] = ratings
+        datas['rating_ids'] = ratings
 
         # tài liệu
-        list_attachment_files = request.env['ir.attachment'].sudo().search([('res_model', '=', 'slide.channel'), ('res_id', '=', list_courses.id)]).ids
+        list_attachment_files = request.env['ir.attachment'].sudo().search(
+            [('res_model', '=', 'slide.channel'), ('res_id', '=', list_courses.id)]).ids
         # print('list attachment: ', list_attachment_files)
         list_attachment = [urls.url_join(base_url, self.get_url_attachment(att_id)) for att_id in
                            list_attachment_files]
-        dates['files'] = list_attachment
+        datas['files'] = list_attachment
 
-        values.append(dates)
-        print(values)
+        values.append(datas)
         return valid_response(values)
 
-    @http.route("/api/get/lesson_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    @http.route("/api/get/lesson_by_id", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_lesson_by_id(self, **payload):
         values = []
         # base_url = CourseByIdController.get_url_base(self)
-        lesson = request.env['slide.slide'].search([('id', '=', payload.get('lesson_id'))])
-        progress = request.env['progress.slide'].sudo().search([('student_id.user_id', '=', request.uid), ('slide_id', '=', lesson.id)])
+        lesson = request.env['slide.slide'].sudo().search([('id', '=', payload.get('lesson_id'))])
+        progress = request.env['progress.slide'].sudo().search(
+            [('student_id.user_id', '=', request.uid), ('slide_id', '=', lesson.id)])
         # list_comment = request.env['comment.slide'].sudo().search([('student.user_id', '=', request.uid), ('slide_id', '=', lesson.id)])
         data = {
             'id': lesson.id,
@@ -145,4 +149,3 @@ class CourseByIdController(http.Controller):
             data['is_done'] = 'True'
         values.append(data)
         return valid_response(values)
-

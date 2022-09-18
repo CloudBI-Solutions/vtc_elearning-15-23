@@ -31,14 +31,13 @@ class LessonByIdController(http.Controller):
     def get_lesson_by_id(self, **payload):
         values = []
         base_url = LessonByIdController.get_url_base(self)
-        list_lessons = request.env['slide.slide'].search(
-            [('is_published', '=', True), ('id', '=', payload.get('lesson_id'))])
+        list_lessons = request.env['slide.slide'].sudo().search([('is_published', '=', True), ('id', '=', payload.get('lesson_id'))])
 
         for rec in list_lessons:
 
             dates = {'id': rec.id,
                      'name': rec.name,
-                        'slide_type': rec.slide_type,   # loai
+                     'slide_type': rec.slide_type,   # loai
                      'channel_id': rec.channel_id,      # khoa hoc
                      'mime_type': rec.mime_type,
                      'completion_time': rec.completion_time,    # thoi luong
