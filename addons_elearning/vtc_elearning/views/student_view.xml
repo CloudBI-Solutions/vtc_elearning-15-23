@@ -111,6 +111,17 @@
         </field>
     </record>
 
+    <record id="comment_slide_view_action" model="ir.actions.act_window">
+        <field name="name">Student comment slide</field>
+        <field name="res_model">comment.slide</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="student_comment_slide_menu_item"
+              name="Bình luận bài học"
+              parent="website_slides.website_slides_menu_root"
+              sequence="5"
+              action="comment_slide_view_action"/>
 
     <menuitem id="student_menu_item"
               name="Student"
