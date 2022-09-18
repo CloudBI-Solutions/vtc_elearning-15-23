@@ -20,6 +20,9 @@
                 <field name="start_date"/>
                 <field name="end_date"/>
             </xpath>
+            <xpath expr="//field[@name='channel_type']" position="before">
+                <field name="is_published" />
+            </xpath>
             <xpath expr="//page[@name='karma_rules']" position="replace">
                 <page string="Student" name="students">
                      <field name="student_ids">
