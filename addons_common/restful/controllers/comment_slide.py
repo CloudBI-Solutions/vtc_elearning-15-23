@@ -29,13 +29,9 @@ class CommentSlide(http.Controller):
     def get_comment_slide_by_id(self, **payload):
         values = []
         base_url = CommentSlide.get_url_base(self)
-        print(payload.get('slide_id'))
-        comment1 = request.env['comment.slide'].sudo().search([('slide_id.id', '=', payload.get('slide_id'))])
-        print(comment1)
-        for i in comment1:
-            print(i.comment_ids)
-        list_comment = request.env['comment.slide'].sudo().search([('slide_id.id', '=', payload.get('slide_id')), ('comment_ids', '!=', False)])
-        # print(list_comment)
+        list_comment = request.env['comment.slide'].sudo().search([('slide_id.id', '=', payload.get('slide_id')),
+                                                                   ('comment_id', '=', False)])
+        print(list_comment)
         for record in list_comment:
             data = {
                 'id': record.id,
