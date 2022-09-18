@@ -3,7 +3,8 @@ from odoo import fields, models, api
 class RatingSystem(models.Model):
     _name = 'rating.system'
 
-    user_id = fields.Many2one('res.user', string='User')
+    user_id = fields.Many2one('res.users', string='User')
+    name = fields.Char(related='user_id.name')
     student_id = fields.Many2one('student.student', string='Student')
     system_onetouch = fields.Selection([('0', '0'),
                                         ('1', '1'),
