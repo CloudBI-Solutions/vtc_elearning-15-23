@@ -28,7 +28,7 @@ class EmployeeController(http.Controller):
         return 'https://test.diligo.vn:15000'
 
     @validate_token
-    @http.route("/api/v1/employee-info", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    @http.route("/api/v1/employee-info", type="http", auth="public", methods=["GET", "OPTION"], csrf=False, cors='*')
     def get_employee_infor(self, **payload):
         base_url = EmployeeController.get_url_base(self)
         values = []

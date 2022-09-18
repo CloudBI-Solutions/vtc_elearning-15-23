@@ -59,11 +59,7 @@ class CourseByIdController(http.Controller):
 
         cate = request.env['slide.slide'].sudo().search(
             [('is_category', '=', True), ('channel_id', '=', list_courses.id)])
-        print(cate)
-        slide = request.env['slide.slide'].search([('channel_id', '=', list_courses.id),
-                                                   ('is_category', '=', False),
-                                                   ('slide_type', 'in', ['document', 'video', 'quiz'])])
-        print(slide, 'Slide')
+        slide = request.env['slide.slide'].sudo().search([('channel_id', '=', list_courses.id),('is_category', '=', False)])
         if slide:
             list_slide = []
             for s in slide:
@@ -135,7 +131,6 @@ class CourseByIdController(http.Controller):
             'progress': progress.progress,
             'is_done': 'False',
         }
-        print(lesson.slide_type)
         if lesson.slide_type == 'video':
             data['url'] = lesson.url
             data['duration'] = lesson.completion_time

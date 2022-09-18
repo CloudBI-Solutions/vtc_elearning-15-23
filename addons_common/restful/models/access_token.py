@@ -13,13 +13,6 @@ def nonce(length=40, prefix="access_token"):
     rbytes = os.urandom(length)
     return "{}_{}".format(prefix, str(hashlib.sha1(rbytes).hexdigest()))
 
-class HGUGHUH(models.Model):
-    _inherit= 'slide.slide'
-
-    def write(self, values):
-        print(self.slide_type)
-
-
 class APIAccessToken(models.Model):
     _name = "api.access_token"
     _description = "API Access Token"

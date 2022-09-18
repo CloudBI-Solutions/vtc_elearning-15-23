@@ -25,7 +25,6 @@ class SlideSlide(models.Model):
 
     # Hàm này kiểm tra xem 1 bucket nào đó đã tồn tại chưa, ví dụ như bạn muốn kiểm tra trước khi tạo chẳng hạn
     def check_bucket_exist(self, bucket_name="slide"):
-        print(bucket_name)
         try:
             response = s3.list_buckets()
             buckets = [bucket['Name'] for bucket in response['Buckets']]
@@ -35,8 +34,6 @@ class SlideSlide(models.Model):
 
     # Hàm này để tạo 1 bucket mới
     def create_new_bucket(self, bucket_name="slide"):
-        print(bucket_name)
-        print(REGION_NAME)
         s3.create_bucket(
             Bucket=bucket_name,
             CreateBucketConfiguration={

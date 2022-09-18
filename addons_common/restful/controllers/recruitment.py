@@ -135,8 +135,6 @@ class RecruitmentController(http.Controller):
             'user',
             'cv',
         ]
-        print(payload['cv'])
-        print(payload['cv'].filename)
         for field in field_require:
             if field not in payload.keys():
                 return invalid_response(
