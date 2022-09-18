@@ -23,7 +23,6 @@ class ResUsersController(http.Controller):
             return config
         return 'https://test.diligo.vn:15000'
 
-    @validate_token
     @http.route("/api/v1/res_users", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
     def get_res_users(self, **payload):
         values = []

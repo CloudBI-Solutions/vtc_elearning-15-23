@@ -9,7 +9,7 @@ from odoo.addons.restful.controllers.main import (
 
 from werkzeug import urls
 
-from addons_common.restful.common import invalid_response
+from odoo.addons.restful.common import invalid_response
 from odoo import http, SUPERUSER_ID
 from odoo.http import request
 
@@ -24,18 +24,13 @@ class CommentSlide(http.Controller):
             return config
         return 'https://test.diligo.vn:15000'
 
-    @http.route("/api/v1/comment/slide", type='http', auth="public", methods=["POST", "OPTIONS"], website=True,
-                csrf=False, cors="*")
+    @validate_token
+    @http.route("/api/v1/comment/slide", type='http', auth="none", methods=["GET", "OPTIONS"], website=False, cors="*")
     def get_comment_slide_by_id(self, **payload):
         values = []
         base_url = CommentSlide.get_url_base(self)
-        print(payload.get('slide_id'))
         comment1 = request.env['comment.slide'].sudo().search([('slide_id.id', '=', payload.get('slide_id'))])
-        print(comment1)
-        for i in comment1:
-            print(i.comment_ids)
         list_comment = request.env['comment.slide'].sudo().search([('slide_id.id', '=', payload.get('slide_id')), ('comment_ids', '!=', False)])
-        # print(list_comment)
         for record in list_comment:
             data = {
                 'id': record.id,

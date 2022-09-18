@@ -23,7 +23,7 @@ class DeviceController(http.Controller):
             return config
         return 'https://test.diligo.vn:15000'
 
-    @http.route("/api/v1/device", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    @http.route("/api/v1/device", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_device(self, **payload):
         """ API 1.13 Danh sách tin tuyển dụng"""
         values = []
