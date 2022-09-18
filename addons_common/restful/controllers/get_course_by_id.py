@@ -29,7 +29,7 @@ class CourseByIdController(http.Controller):
         return "web/content2/?model=ir.attachment&id=" + str(
             attachment_id) + "&filename_field=name&field=datas&download=true"
 
-    @validate_token
+    # @validate_token
     @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_course_by_id(self, **payload):
         values = []
@@ -56,7 +56,6 @@ class CourseByIdController(http.Controller):
         # thông tin tab nội dung
         cate = request.env['slide.slide'].sudo().search(
             [('is_category', '=', True), ('channel_id', '=', list_courses.id)])
-        print(cate)
         slide = request.env['slide.slide'].sudo().search([('channel_id', '=', list_courses.id),('is_category', '=', False)])
         if slide:
             list_slide = []
@@ -128,7 +127,6 @@ class CourseByIdController(http.Controller):
             'progress': progress.progress,
             'is_done': 'False',
         }
-        print(lesson.slide_type)
         if lesson.slide_type == 'video':
             data['url'] = lesson.url
             data['duration'] = lesson.completion_time

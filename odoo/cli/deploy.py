@@ -84,6 +84,5 @@ class Deploy(Command):
             if not args.url.startswith(('http://', 'https://')):
                 args.url = 'https://%s' % args.url
             result = self.deploy_module(args.path, args.url, args.login, args.password, args.db, force=args.force)
-            print(result)
         except Exception as e:
             sys.exit("ERROR: %s" % e)

@@ -18,7 +18,7 @@ def validate_token(func):
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
         """."""
-        access_token = kwargs.get('uid')
+        access_token = kwargs.get('uid') or kwargs.get('res_id')
         if not access_token:
             return invalid_response("access_token_not_found", "missing access token in request header", 401)
         return func(self, *args, **kwargs)
