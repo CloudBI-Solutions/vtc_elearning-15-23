@@ -8,3 +8,4 @@ from . import position
 from . import position
 from . import slide_channel_inherit
 from . import course_level
+from . import rating_system
