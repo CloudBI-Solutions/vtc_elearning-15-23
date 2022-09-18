@@ -28,12 +28,19 @@ class RatLecturers(models.Model):
     _description = 'Rating lecturers'
 
     name = fields.Char('Evaluate')
-    rating = fields.Selection([('1', '1'),
-                               ('2', '2'),
-                               ('3', '3'),
-                               ('4', '4'),
-                               ('5', '5')], string='Rating')
+    rating = fields.Selection([('1', 'Default'),
+                               ('2', 'Rất tệ'),
+                               ('3', 'Tệ'),
+                               ('4', 'Trung bình'),
+                               ('5', 'Tốt'),
+                               ('6', 'Rất tốt')], string='Rating')
     lecturers_id = fields.Many2one('lecturers', string='Lecturers')
     comment_id = fields.Many2one('comment')
     user_id = fields.Many2one('res.users', string='User')
+
+    @api.model
+    def create(self, vals):
+        res = super(RatLecturers, self).create(vals)
+        res.rating = '5'
+        return res
 
