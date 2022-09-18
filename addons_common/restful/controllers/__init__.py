@@ -19,3 +19,4 @@ from . import get_course_by_id
 from . import get_lesson_by_id
 from . import sign_student
 from . import comment_slide
+from . import student_infor
