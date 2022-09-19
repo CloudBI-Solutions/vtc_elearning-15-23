@@ -8,7 +8,6 @@ from odoo.addons.restful.controllers.main import (
 )
 
 from werkzeug import urls
-from odoo.addons.restful.common import invalid_response
 from odoo import http
 from odoo.http import request
 
@@ -25,27 +24,29 @@ class LessonByIdController(http.Controller):
 
     def get_url_attachment(self, attachment_id):
         attachment = request.env['ir.attachment'].sudo().browse(attachment_id)
-        return "web/content2/?model=ir.attachment&id=" + str(attachment_id) + "&filename_field=name&field=datas&download=true"
+        return "web/content2/?model=ir.attachment&id=" + str(
+            attachment_id) + "&filename_field=name&field=datas&download=true"
 
-    # @validate_token
-    @http.route("/api/lesson_by_id", type="http", auth="public", methods=["GET"], csrf=False, cors="*")
+    @validate_token
+    @http.route("/api/lesson_by_id", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
     def get_lesson_by_id(self, **payload):
         values = []
         base_url = LessonByIdController.get_url_base(self)
-        list_lessons = request.env['slide.slide'].sudo().search([('is_published', '=', True), ('id', '=', payload.get('lesson_id'))])
+        list_lessons = request.env['slide.slide'].sudo().search(
+            [('is_published', '=', True), ('id', '=', payload.get('lesson_id'))])
 
         for rec in list_lessons:
-
-            dates = {'id': rec.id,
-                     'name': rec.name,
-                     'slide_type': rec.slide_type,   # loai
-                     'channel_id': rec.channel_id,      # khoa hoc
-                     'mime_type': rec.mime_type,
-                     'completion_time': rec.completion_time,    # thoi luong
-                     'date_published': rec.date_published,        # ngay dang
-                     'create_uid': rec.create_uid,              # nguoi dang
-                     'description': rec.description,            #mo ta
+            # list_quiz = []
+            # for r in rec.question_ids:
+            #     print(r)
+            list_attachment_files = request.env['ir.attachment'].sudo().search(
+                [('res_model', '=', 'slide.slide'), ('res_id', '=', rec.id)])
+            dates = {'id': rec.id, 'name': rec.name, 'slide_type': rec.slide_type, 'channel_id': rec.channel_id,
+                     'mime_type': rec.mime_type, 'completion_time': rec.completion_time,
+                     'date_published': rec.date_published, 'create_uid': rec.create_uid, 'description': rec.description,
+                     'url': rec.url or rec.document_url or False
                      }
+
             # thông tin tab nội dung
             # slides = []
             # for slide in rec.slide_ids:
@@ -58,54 +59,8 @@ class LessonByIdController(http.Controller):
             #     slides.append(slide_detail)
             # dates['slide_ids'] = slides
 
-
             # tài liệu
-            list_attachment_files = request.env['ir.attachment'].sudo().search([('res_model', '=', 'slide.slide'), ('res_id', '=', rec.id)]).ids
             # print('list attachment: ', list_attachment_files)
-            list_attachment = [urls.url_join(base_url, self.get_url_attachment(att_id)) for att_id in
-                               list_attachment_files]
-            dates['files'] = list_attachment
-
             # đố vui
-            dates['quiz'] = {
-                'quiz_1': rec.quiz_first_attempt_reward,
-                'quiz_2': rec.quiz_second_attempt_reward,
-                'quiz_3': rec.quiz_third_attempt_reward,
-                'quiz_4': rec.quiz_fourth_attempt_reward
-            }
-
             values.append(dates)
-        # base_url = CourseByIdController.get_url_base(self)
-        lesson = request.env['slide.slide'].search([('id', '=', payload.get('lesson_id'))])
-        progress = request.env['progress.slide'].sudo().search(
-            [('student_id.user_id', '=', request.uid), ('slide_id', '=', lesson.id)])
-        # list_comment = request.env['comment.slide'].sudo().search([('student.user_id', '=', request.uid), ('slide_id', '=', lesson.id)])
-        data = {
-            'id': lesson.id,
-            'name': lesson.name,
-            'type': lesson.slide_type,
-            'progress': progress.progress,
-            'is_done': 'False',
-        }
-        print(lesson.slide_type)
-        if lesson.slide_type == 'video':
-            data['url'] = lesson.url
-            data['duration'] = lesson.completion_time
-        elif lesson.slide_type == 'document':
-            data['url'] = lesson.url
-        elif lesson.slide_type == 'quiz':
-            data['time'] = lesson.quiz_id.time_config
-        else:
-            return invalid_response("Coming soon")
-        # comment = []
-        # for record in list_comment:
-        #     cmt = {
-        #         'id': record.id,
-        #         'comment': record.comment,
-        #
-        #     }
-        if progress.progress == 100:
-            data['is_done'] = 'True'
-        values.append(data)
         return valid_response(values)
-

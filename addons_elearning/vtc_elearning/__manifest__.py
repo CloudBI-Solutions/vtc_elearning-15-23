@@ -15,6 +15,7 @@
         'views/student_view.xml',
         'views/course_level.xml',
         'views/slide_channel_inherit.xml',
+        'views/rating_system.xml',
     ],
     'demo': [],
     'depends': [

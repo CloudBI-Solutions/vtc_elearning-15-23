@@ -12,7 +12,6 @@ class OpQuiz(models.Model):
             self.list_candidates = self.department_id.member_ids
         elif self.type == 'channel_slide':
             self.student_ids = self.slide_channel_id.student_ids.ids
-            print(self.student_ids)
         else:
             self.list_candidates = self.env['hr.employee'].search([])
 

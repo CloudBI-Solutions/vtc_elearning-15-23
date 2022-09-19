@@ -612,7 +612,6 @@ class IrAttachment(models.Model):
             in vals.items()
             if key not in ('file_size', 'checksum', 'store_fname')
         } for vals in vals_list]
-
         for values in vals_list:
             values = self._check_contents(values)
             raw, datas = values.pop('raw', None), values.pop('datas', None)
