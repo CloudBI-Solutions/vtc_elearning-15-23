@@ -14,7 +14,7 @@
 
     <menuitem name="OneTouch"
         id="website_slides.website_slides_menu_root"
-        web_icon="vtc_elearning,static/description/icon.jpg"
+        web_icon="vtc_elearning,static/description/icon.png"
         groups="website_slides.group_website_slides_officer"
         action="website_slides.slide_channel_action_overview"
         sequence="100"/>
