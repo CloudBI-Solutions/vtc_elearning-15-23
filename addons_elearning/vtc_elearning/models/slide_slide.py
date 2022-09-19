@@ -3,6 +3,8 @@ from odoo import fields, models, api, _
 class SlideChannel(models.Model):
     _inherit = 'slide.channel'
 
+    course_level_id = fields.Many2one('course.level', string='course level')
+    final_quiz = fields.Many2one('op.quiz', "The Final test")
     student_ids = fields.Many2many('student.student', string='Student')
     lecturers_ids = fields.Many2many('lecturers', string='Lecturers')
     start_date = fields.Date('Start date')
@@ -16,6 +18,7 @@ class SlideChannel(models.Model):
         default='public', string='Enroll Policy', required=True,
         help='Condition to enroll: everyone, on invite, on payment (sale bridge).')
     count_student = fields.Integer('Student count', compute='calculate_count_student', store=True)
+
 
     @api.depends('student_ids')
     def calculate_count_student(self):
