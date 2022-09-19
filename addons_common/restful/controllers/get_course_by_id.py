@@ -33,18 +33,16 @@ class CourseByIdController(http.Controller):
     @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_course_by_id(self, **payload):
         values = []
-        print(payload)
         base_url = CourseByIdController.get_url_base(self)
         list_courses = request.env['slide.channel'].sudo().search([('id', '=', payload.get('course_id'))])
-        print(list_courses)
         # cấp độ học
         datas = {'id': list_courses.id,
                  'name': list_courses.name,
                  'description': list_courses.description,
                  'total_student': list_courses.count_student,
                  'level': list_courses.course_level_id,
+                 'final_quiz': list_courses.final_quiz.id
                  }
-
         # list giảng viên
         list_lecturers = []
         for lecturer in list_courses.lecturers_ids:
