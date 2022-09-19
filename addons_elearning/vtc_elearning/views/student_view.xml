@@ -49,7 +49,10 @@
                 </header>
                 <sheet>
                     <div name="button_box" class="oe_button_box">
-                        <button name="%(student_course_action)d" type="action" string="Course" icon="fa-solid fa-graduation-cap"/>
+                        <button name="%(student_course_action)d"
+                                type="action"
+                                string="Course"
+                                icon="fa-solid fa-graduation-cap"/>
                         <button name="%(student_quiz_action)d" type="action" string="Quiz" icon="fa-regular fa-pen-paintbrush"/>
                         <button name="%(student_quiz_result_action)d" type="action" string="Quiz result" icon="fa-regular fa-file-certificate"/>
                         <button name="%(certificate_student_view_action)d" type="action" string="Certificate" icon="fa-regular"/>

@@ -17,6 +17,7 @@ class SlideChannel(models.Model):
         help='Condition to enroll: everyone, on invite, on payment (sale bridge).')
     count_student = fields.Integer('Student count', compute='calculate_count_student', store=True)
 
+
     @api.depends('student_ids')
     def calculate_count_student(self):
         for record in self:
