@@ -102,7 +102,18 @@
 
                         </page>
                         <page string="Kết quả">
-                            <field name="quiz_result_ids"/>
+                            <field name="quiz_result_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="quiz_id"/>
+                                    <field name="finish_date"/>
+                                    <field name="total_question"/>
+                                    <field name="total_correct"/>
+                                    <field name="total_incorrect"/>
+                                    <field name="score"/>
+                                    <field name="create_on"/>
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
