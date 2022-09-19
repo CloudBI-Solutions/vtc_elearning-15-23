@@ -12,9 +12,10 @@ With use of this module user can enable REST API in any Odoo applications/module
 
 For detailed example of REST API refer https://ajepe.github.io/restful-api-for-odoo
 """,
-    "depends": ["web", "base_setup", 'website_ora_elearning'],
+    "depends": ["web", "base_setup", 'website_ora_elearning','website_slides'],
     "data": ["views/ir_model.xml", "views/res_users.xml",
              "security/ir.model.access.csv",
+             "views/slide_slide.xml"
 
              ],
     'demo': [

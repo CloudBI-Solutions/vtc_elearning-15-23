@@ -301,7 +301,6 @@ class ProjectController(http.Controller):
     def get_status_my_mission(self, **payload):
         values = []
         data = request.env['project.task.type'].sudo().search([])
-        print(data)
         for rec in data:
             dates = {'id': rec.id,
                      'name': rec.name,
@@ -413,7 +412,6 @@ class ProjectController(http.Controller):
         values = {}
 
         mission = request.env['project.task'].sudo().search([('id', '=', payload.get('task_id'))])
-        print(mission.stage_id)
         if not mission:
             return invalid_response(
                 "invalid object model \nThe model is not available in the registry."
