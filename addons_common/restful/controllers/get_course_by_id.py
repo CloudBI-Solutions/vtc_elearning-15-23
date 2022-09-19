@@ -32,10 +32,8 @@ class CourseByIdController(http.Controller):
     @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_course_by_id(self, **payload):
         values = []
-        print(payload)
         base_url = CourseByIdController.get_url_base(self)
-        list_courses = request.env['slide.channel'].sudo().search([('id', '=', payload.get('course_id'))])
-        print(list_courses)
+        list_courses = request.env['slide.channel'].search([('id', '=', payload.get('course_id'))])
         # cấp độ học
         datas = {'id': list_courses.id,
                  'name': list_courses.name,
@@ -55,14 +53,10 @@ class CourseByIdController(http.Controller):
         datas['lecturers'] = list_lecturers
 
         # thông tin tab nội dung
-
         cate = request.env['slide.slide'].sudo().search(
             [('is_category', '=', True), ('channel_id', '=', list_courses.id)])
         print(cate)
-        slide = request.env['slide.slide'].search([('channel_id', '=', list_courses.id),
-                                                   ('is_category', '=', False),
-                                                   ('slide_type', 'in', ['document', 'video', 'quiz'])])
-        print(slide, 'Slide')
+        slide = request.env['slide.slide'].sudo().search([('channel_id', '=', list_courses.id),('is_category', '=', False)])
         if slide:
             list_slide = []
             for s in slide:
@@ -82,14 +76,13 @@ class CourseByIdController(http.Controller):
             }
             list_slide_in_cate = []
             for s in c.slide_ids:
-                if s.slide_type in ['document', 'video', 'quiz']:
-                    slide_cate = {
-                        'id': s.id,
-                        'name': s.name,
-                        'slide_type': s.slide_type,
-                        'completion_time': s.completion_time,
-                    }
-                    list_slide_in_cate.append(slide_cate)
+                slide_cate = {
+                    'id': s.id,
+                    'name': s.name,
+                    'slide_type': s.slide_type,
+                    'completion_time': s.completion_time,
+                }
+                list_slide_in_cate.append(slide_cate)
             infor_cate['slide'] = list_slide_in_cate
             list_cate.append(infor_cate)
             # print(c.slide_ids)
