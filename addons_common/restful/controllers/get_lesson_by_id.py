@@ -32,35 +32,19 @@ class LessonByIdController(http.Controller):
     def get_lesson_by_id(self, **payload):
         values = []
         base_url = LessonByIdController.get_url_base(self)
-        list_lessons = request.env['slide.slide'].sudo().search(
+        lesson = request.env['slide.slide'].sudo().search(
             [('is_published', '=', True), ('id', '=', payload.get('lesson_id'))])
-
-        for rec in list_lessons:
-            # list_quiz = []
-            # for r in rec.question_ids:
-            #     print(r)
-            list_attachment_files = request.env['ir.attachment'].sudo().search(
-                [('res_model', '=', 'slide.slide'), ('res_id', '=', rec.id)])
-            dates = {'id': rec.id, 'name': rec.name, 'slide_type': rec.slide_type, 'channel_id': rec.channel_id,
-                     'mime_type': rec.mime_type, 'completion_time': rec.completion_time,
-                     'date_published': rec.date_published, 'create_uid': rec.create_uid, 'description': rec.description,
-                     'url': rec.url or rec.document_url or False
-                     }
-
-            # thông tin tab nội dung
-            # slides = []
-            # for slide in rec.slide_ids:
-            #     slide_detail = {
-            #         'id': slide.id,
-            #         'name': slide.name,
-            #         'slide_type': slide.slide_type,
-            #         'completion_time': slide.completion_time,
-            #     }
-            #     slides.append(slide_detail)
-            # dates['slide_ids'] = slides
-
-            # tài liệu
-            # print('list attachment: ', list_attachment_files)
-            # đố vui
-            values.append(dates)
+        dates = {
+            'id': lesson.id, 'name': lesson.name, 'slide_type': lesson.slide_type, 'channel_id': lesson.channel_id,
+            'mime_type': lesson.mime_type, 'completion_time': lesson.completion_time,
+            'date_published': lesson.date_published, 'create_uid': lesson.create_uid, 'description': lesson.description,
+            'url': lesson.url or lesson.document_url or False
+        }
+        quiz = [{'question_id': r.id, "question_name": r.question,
+                 "answer": [{'answer_name': rec.text_value, 'is_correct': rec.is_correct, 'comment': rec.comment} for
+                            rec in r.answer_ids]} for r in lesson.question_ids]
+        # list_attachment_files = request.env['ir.attachment'].sudo().search(
+        # [('res_model', '=', 'slide.slide'), ('res_id', '=', lesson.id)])
+        dates['quiz'] = quiz
+        values.append(dates)
         return valid_response(values)
