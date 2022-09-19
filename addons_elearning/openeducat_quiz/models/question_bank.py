@@ -20,6 +20,13 @@ class OpQuestionBank(models.Model):
     bank_type_id = fields.Many2one('op.question.bank.type', 'Type')
     description = fields.Text('Description')
     line_ids = fields.One2many('op.question.bank.line', 'bank_id', 'Questions')
+    total_question = fields.Integer('Total question', compute='calculate_total_question', store=True)
+
+
+    @api.depends('line_ids')
+    def calculate_total_question(self):
+        for record in self:
+            record.total_question = len(record.line_ids)
 
     @api.model
     def get_import_templates(self):
