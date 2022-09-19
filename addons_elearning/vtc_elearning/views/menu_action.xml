@@ -14,8 +14,29 @@
 
     <menuitem name="OneTouch"
         id="website_slides.website_slides_menu_root"
-        web_icon="vtc_elearning,static/description/icon.png"
+        web_icon="vtc_elearning,static/description/icon.jpg"
         groups="website_slides.group_website_slides_officer"
         action="website_slides.slide_channel_action_overview"
         sequence="100"/>
+
+    <menuitem id="hr_manager_menuitem"
+              name="Menu item"
+              parent="base.menu_administration"
+              groups="base.group_system"
+              sequence="4"
+    />
+
+        <menuitem name="Contacts"
+                id="contacts.menu_contacts"
+                sequence="20"
+                parent="hr_manager_menuitem"
+                groups="base.group_system"/>
+
+        <menuitem name="Website"
+                id="website.menu_website_configuration"
+                parent="hr_manager_menuitem"
+                sequence="95"
+                groups="base.group_system"
+                />
+
 </odoo>
