@@ -49,16 +49,6 @@ class Student(models.Model):
     @api.model
     def create(self, vals):
         res = super(Student, self).create(vals)
-        res.partner_id = self.env['res.partner'].create({
-            'name': vals['name'],
-            'phone': vals['phone'],
-            # 'image_1920': vals['avatar'],
-            'email': vals['email'],
-            # 'function': vals['position'],
-            'street': vals['address'],
-        })
-
-
         return res
 
 
