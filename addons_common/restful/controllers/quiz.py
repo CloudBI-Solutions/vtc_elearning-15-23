@@ -23,7 +23,7 @@ class QuizController(http.Controller):
     @validate_token
     @http.route("/api/get/quiz_by_id", type="http", auth="public", methods=["GET","OPTIONS"], csrf=False, cors='*')
     def get_quiz_by_id(self, **kwargs):
-        quiz = request.env['op.quiz'].sudo().search([('id','=', kwargs.get('quiz_id'))])
+        quiz = request.env['op.quiz'].sudo().search([('id','=', int(kwargs.get('quiz_id')))])
         line_ids = []
         if quiz.line_ids:
             for r in quiz.line_ids:
@@ -164,10 +164,10 @@ class QuizController(http.Controller):
                     "Missing",
                     "The parameter %s is missing!!!" % field)
             quiz = request.env['op.quiz'].sudo().search([('id', '=', payload.get('quiz_id'))])
-        result = request.env['op.quiz.result'].with_user(request.uid).create({
+        result = request.env['op.quiz.result'].with_user(payload.get('uid')).create({
             'name': quiz.name,
             'quiz_id': quiz.id,
-            'user_id': request.uid,
+            'user_id': payload.get('uid'),
             'categ_id': quiz.categ_id.id,
             'total_marks': quiz.total_marks,
             'score': payload.get('score'),

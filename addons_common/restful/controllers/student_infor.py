@@ -3,6 +3,9 @@ import logging
 from odoo.addons.restful.common import (
     valid_response,
 )
+from odoo.addons.restful.controllers.main import (
+    validate_token
+)
 from werkzeug import urls
 
 from odoo import http
@@ -19,14 +22,16 @@ class StudentInfor(http.Controller):
             return config
         return 'https://test.diligo.vn:15000'
 
-    @http.route("/api/get/infor-student", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
+    @validate_token
+    @http.route("/api/get/infor_student", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
     def get_infor_student_by_id(self, **payload):
         values = []
         base_url = StudentInfor.get_url_base(self)
-        student = request.env['student.student'].sudo().search([('id', '=', payload.get('student_id'))])
+        user = request.env['res.users'].sudo().search([('id','=', int(payload.get('uid')))])
+        student = request.env['student.student'].sudo().search([('user_id', '=', user.id)])
         # cấp độ học
-        datas = {'id': student.id,
-                 'name': student.name,
+        datas = {'id': user.id,
+                 'name': user.name,
                  'avatar': urls.url_join(base_url,
                                          '/web/image?model=student.student&id={0}&field=avatar'.format(
                                              student.id)),
@@ -42,4 +47,5 @@ class StudentInfor(http.Controller):
                                           'name': student.res_country_district.name} or '',
                  }
         values.append(datas)
+        print(values)
         return valid_response(values)
