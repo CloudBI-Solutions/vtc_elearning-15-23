@@ -216,7 +216,7 @@ msgstr "Đánh giá"
 #: model:ir.ui.menu,name:vtc_elearning.rating_system_menu_item
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.rating_system_form_view
 msgid "Rating system"
-msgstr "Đánh giá hệ thống"
+msgstr "Khảo sát hệ thống"
 
 #. module: vtc_elearning
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__rat_lecturers__rating__2
