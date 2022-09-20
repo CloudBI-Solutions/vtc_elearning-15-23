@@ -1,4 +1,6 @@
 from odoo import fields, models, api, _
+from odoo.exceptions import UserError
+
 
 class SlideChannel(models.Model):
     _inherit = 'slide.channel'
