@@ -51,7 +51,7 @@
                         <attribute name="string">Học viên</attribute>
                     </xpath>
                     <xpath expr="//field[@name='write_date']" position="attributes">
-                        <attribute name="string">Thoời gian hoạt động cuối</attribute>
+                        <attribute name="string">Thời gian hoạt động cuối</attribute>
                     </xpath>
                 </field>
         </record>
