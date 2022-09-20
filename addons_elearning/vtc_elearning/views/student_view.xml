@@ -45,7 +45,12 @@
         <field name="arch" type="xml">
             <form string="Student">
                 <header>
-                    <button name="check_email_login_user" string="Tạo tài khoản" type="object" class="oe_highlight"/>
+                    <button name="check_email_login_user"
+                            string="Tạo tài khoản"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('user_id','!=', False)]}"
+                    />
                 </header>
                 <sheet>
                     <div name="button_box" class="oe_button_box">
