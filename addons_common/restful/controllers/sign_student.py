@@ -18,7 +18,7 @@ _logger = logging.getLogger(__name__)
 
 class SignStudent(http.Controller):
 
-    @http.route("/api/v1/sign/student", type='http', auth="public", methods=["POST", "OPTIONS"], website=True,
+    @http.route("/api/v1/sign/student", type='http', auth="public", methods=["POST"],
                 csrf=False, cors="*")
     def sign_student(self, **payload):
         headers = request.httprequest.headers
@@ -27,10 +27,15 @@ class SignStudent(http.Controller):
             'login': headers.get('login'),
             'password': headers.get('password'),
         }
-        request.env['res.users'].with_user(SUPERUSER_ID).create(domain)
-        return invalid_response("Bạn đã ứng tuyển thành công vào vị trí %s." % payload.get('job_name'))
+        user = request.env['res.users'].with_user(SUPERUSER_ID).create(domain)
+        request.env['student.student'].sudo().create({
+            'name': payload.get('fullname'),
+            'email': payload.get('login'),
+            'user_id': user.id
+        })
+        return valid_response("Bạn đã đăng kí thành công !")
 
-    @http.route("/api/update-infor-student", type='http', auth="public", methods=["POST", "OPTIONS"], website=True,
+    @http.route("/api/update-infor-student", type='http', auth="public", methods=["POST", "OPTIONS"],
                 csrf=False, cors="*")
     def update_infor_student(self, **payload):
         field_require = [
@@ -48,5 +53,4 @@ class SignStudent(http.Controller):
             'password': '1'
         }
         user = request.env['res.users'].with_user(SUPERUSER_ID).create(domain)
-        print(user)
-        return invalid_response("Bạn đã ứng tuyển thành công vào vị trí %s." % payload.get('job_name'))
+        return valid_response("Cập nhập thành công!")

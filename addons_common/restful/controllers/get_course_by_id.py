@@ -35,6 +35,15 @@ class CourseByIdController(http.Controller):
         values = []
         base_url = CourseByIdController.get_url_base(self)
         list_courses = request.env['slide.channel'].sudo().search([('id', '=', payload.get('course_id'))])
+        ratings = request.env['rating.rating'].sudo().search([('res_id', '=', payload.get('course_id'))])
+        rating_response = []
+        for rec in ratings:
+            rating_response.append({
+                'customer_name': rec.partner_id,
+                'avatar': urls.url_join(base_url,
+                                        '/web/image?model=hr.employee.public&id={0}&field=image_1920'.format(
+                                            rec.id)),
+            })
         # cấp độ học
         datas = {'id': list_courses.id,
                  'name': list_courses.name,
@@ -57,7 +66,8 @@ class CourseByIdController(http.Controller):
 
         cate = request.env['slide.slide'].sudo().search(
             [('is_category', '=', True), ('channel_id', '=', list_courses.id)])
-        slide = request.env['slide.slide'].sudo().search([('channel_id', '=', list_courses.id),('is_category', '=', False)])
+        slide = request.env['slide.slide'].sudo().search(
+            [('channel_id', '=', list_courses.id), ('is_category', '=', False)])
         if slide:
             list_slide = []
             for s in slide:
