@@ -18,7 +18,7 @@ _logger = logging.getLogger(__name__)
 
 class SignStudent(http.Controller):
 
-    @http.route("/api/v1/sign/student", type='http', auth="public", methods=["POST", "OPTIONS"],
+    @http.route("/api/v1/sign/student", type='http', auth="public", methods=["GET", "OPTIONS"],
                 csrf=False, cors="*")
     def sign_student(self, **payload):
         domain = {
