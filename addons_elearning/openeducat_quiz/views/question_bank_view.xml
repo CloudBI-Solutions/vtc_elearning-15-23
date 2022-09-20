@@ -40,8 +40,8 @@
                                             <field name="name" required="1"/>
                                             <field name="mark" required="1"/>
                                             <field name="que_type" required="1"/>
-                                            <field name="case_sensitive"
-                                                   attrs="{'invisible': [('que_type', '!=', 'blank')]}"/>
+<!--                                            <field name="case_sensitive"-->
+<!--                                                   attrs="{'invisible': [('que_type', '!=', 'blank')]}"/>-->
                                             <field name="answer"
                                                    attrs="{'invisible': [('que_type', '!=', 'blank')], 'required': [('que_type', '=', 'blank')]}"/>
                                             <field name="grade_true_id"
