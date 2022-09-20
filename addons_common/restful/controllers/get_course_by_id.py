@@ -40,13 +40,13 @@ class CourseByIdController(http.Controller):
         base_url = CourseByIdController.get_url_base(self)
         list_courses = request.env['slide.channel'].sudo().search([('id', '=', payload.get('course_id'))])
         ratings = request.env['rating.rating'].sudo().search([('res_id', '=', payload.get('course_id'))])
+        avg_rating = [r.star for r in ratings]
         list_users, list_students, rating_response = [], [], []
         for rec in ratings:
             list_users.append(request.env['res.users'].sudo().search([('partner_id', '=', rec.partner_id.id)]))
         for rec in list_users:
             list_students.append(request.env['student.student'].sudo().search([('user_id', '=', rec.id)]))
         rating_response = []
-        avg_rating = [r.star for r in ratings]
         process = request.env['slide.channel.partner'].sudo().search([('partner_id','=',user_login.partner_id.id),('channel_id','=', int(payload.get('course_id')))])
         for r in ratings:
             rating_response.append({
@@ -66,7 +66,7 @@ class CourseByIdController(http.Controller):
                  'level': list_courses.course_level_id,
                  'final': list_courses.final_quiz_ids.ids,
                  'rating_course': rating_response,
-                 'avt_star': self.Average(avg_rating) if avg_rating else 'Chưa có đánh giá nào',
+                 'avt_star': list_courses.rating_avg if list_courses.rating_avg != 0 else 'Chưa có đánh giá nào',
                  'process': process.completion
                  }
         # list giảng viên

@@ -88,7 +88,6 @@ class AccessToken(http.Controller):
             return invalid_response("wrong database name", error, 403)
 
         uid = request.session.uid
-        print(uid)
         # print(uid.has_group('base.group_user'))
         # odoo login failed:
         if not uid:

@@ -5,6 +5,18 @@ from odoo.exceptions import UserError
 class SlideChannel(models.Model):
     _inherit = 'slide.channel'
 
+    rating_avg = fields.Float('Rating AVG', compute='_compute_rating_avg', store=True)
+
+    def average(self, lst):
+        return sum(lst) / len(lst)
+
+    def _compute_rating_avg(self):
+        for rec in self:
+            list_star = self.env['rating.rating'].search([('res_id','=',rec.id)])
+            avg_rating_list = [r.star for r in list_star]
+            rec.rating_avg = self.average(avg_rating_list) if avg_rating_list else False
+
+
     course_level_id = fields.Many2one('course.level', string='course level')
     final_quiz_ids = fields.One2many('slide.quiz.line','slide_channel_id', readonly=True)
     student_ids = fields.Many2many('student.student', string='Student')
