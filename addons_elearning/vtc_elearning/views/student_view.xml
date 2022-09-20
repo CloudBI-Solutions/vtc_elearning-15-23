@@ -175,8 +175,8 @@
              <tree editable="bottom" >
                  <field name="name"/>
                  <field name="login"/>
-                 <field name="role_user"/>
-                 <field name="res_country_state"/>
+<!--                 <field name="role_user"/>-->
+<!--                 <field name="res_country_state"/>-->
                  <button name="preference_change_password" type="object" string="Change password" class="btn btn-secondary"/>
              </tree>
          </field>
