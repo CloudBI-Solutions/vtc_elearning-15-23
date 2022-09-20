@@ -243,12 +243,12 @@
         <menuitem name="ORA Responses"
             id="menu_ora_responses"
             action="action_ora_response"
-            parent="website_slides.website_slides_menu_courses"
+            parent="base.group_system"
             sequence="10"/>
         <menuitem name="ORA Responses"
             id="menu_ora_responses_reporting"
             action="action_ora_response_reporting"
-            parent="website_slides.website_slides_menu_report"
+            parent="base.group_system"
             sequence="100"/>
     </data>
 </odoo>
