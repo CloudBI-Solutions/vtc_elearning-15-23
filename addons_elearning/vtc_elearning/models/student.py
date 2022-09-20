@@ -32,6 +32,21 @@ class Student(models.Model):
     progress_ids = fields.One2many('progress.slide', 'student_id', string='Progress')
     comment_slide_ids = fields.One2many('comment.slide', 'student_id', string='Comment slide')
     comment_source_ids = fields.One2many('comment.course', 'student_id', string='Comment source')
+    partner_id = fields.Many2one('res.partner', string='Partner')
+
+    @api.model
+    def create(self, vals):
+        res = super(Student, self).create(vals)
+        res.partner_id = self.env['res.partner'].create({
+            'name': vals['name'],
+            'phone': vals['phone'],
+            'image_1920': vals['avatar'],
+            'email': vals['email'],
+            # 'function': vals['position'],
+            'street': vals['address'],
+        })
+        return res
+
 
     def check_email_login_user(self):
         if self.email:
@@ -54,6 +69,12 @@ class ProgressSlide(models.Model):
     progress = fields.Integer('Progress')
     slide_id = fields.Many2one('slide.slide', string='Slide')
     student_id = fields.Many2one('student.student', string='Student')
+
+class SlideChannelPartner(models.Model):
+    _inherit = 'slide.channel.partner'
+
+    student_id = fields.Many2one('student.student', string="Student")
+
 
     # @api.onchange('email')
 

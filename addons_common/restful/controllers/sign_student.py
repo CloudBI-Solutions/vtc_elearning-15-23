@@ -21,19 +21,11 @@ class SignStudent(http.Controller):
     @http.route("/api/v1/sign/student", type='http', auth="public", methods=["POST"],
                 csrf=False, cors="*")
     def sign_student(self, **payload):
-        field_require = [
-            'login',
-            'password',
-        ]
-        for field in field_require:
-            if field not in payload.keys():
-                return invalid_response(
-                    "Missing",
-                    "The parameter %s is missing!!!" % field)
+        headers = request.httprequest.headers
         domain = {
-            'name': payload.get('login'),
-            'login': payload.get('login'),
-            'password': '1'
+            'name': headers.get('login'),
+            'login': headers.get('login'),
+            'password': headers.get('password'),
         }
         user = request.env['res.users'].with_user(SUPERUSER_ID).create(domain)
         request.env['student.student'].sudo().create({
