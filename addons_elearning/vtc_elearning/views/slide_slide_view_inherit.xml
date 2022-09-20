@@ -54,4 +54,17 @@
         </field>
     </record>
 
+    <record id="hieudt_inherit_view_slide_slide_form" model="ir.ui.view">
+        <field name="name">hieudt.inherit.slide.slide.form</field>
+        <field name="model">slide.slide</field>
+        <field name="inherit_id" ref="website_slides.view_slide_slide_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='quiz']" position="attributes">
+                    <attribute name="string">Bài tập</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+
 </odoo>
