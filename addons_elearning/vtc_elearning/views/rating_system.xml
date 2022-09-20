@@ -8,6 +8,7 @@
          <field name="arch" type="xml">
              <tree>
                  <field name="user_id"/>
+                 <field name="slide_id"/>
                  <field name="system_onetouch" widget="priority"/>
                  <field name="rating_lecturers" widget="priority"/>
                  <field name="content_slide" widget="priority"/>
@@ -30,6 +31,9 @@
                         <h1 class="d-flex">
                             <field name="user_id" placeholder="Người đánh giá" required="True"/>
                         </h1>
+                        <h2 class="d-flex">
+                            <field name="slide_id" placeholder="Khóa học" required="True"/>
+                        </h2>
                     </div>
                     <group>
                         <group>

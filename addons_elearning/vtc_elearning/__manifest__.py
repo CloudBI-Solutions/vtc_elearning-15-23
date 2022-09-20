@@ -16,6 +16,7 @@
         'views/course_level.xml',
         'views/slide_channel_inherit.xml',
         'views/rating_system.xml',
+        'views/report_view_inherit.xml',
         'views/menu_action.xml',
     ],
     'demo': [],

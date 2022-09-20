@@ -35,6 +35,14 @@
                  <field name="birth"/>
                  <field name="identity_card"/>
                  <field name="address"/>
+                 <field name="state"/>
+                 <field name="user_id" invisible="1"/>
+                 <button name="active_user"
+                            string="Confirm"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state','!=', 'pending')]}"
+                    />
              </tree>
          </field>
      </record>
@@ -51,6 +59,25 @@
                             class="oe_highlight"
                             attrs="{'invisible': [('user_id','!=', False)]}"
                     />
+                    <button name="active_user"
+                            string="Confirm"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state','!=', 'pending')]}"
+                    />
+                    <button name="cancel_user"
+                            string="Cancel user"
+                            type="object"
+                            class="btn-warning"
+                            attrs="{'invisible': [('state','!=', 'pending')]}"
+                    />
+                    <button name="recall_user"
+                            string="Recall user"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state','!=', 'confirm')]}"
+                    />
+                    <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <div name="button_box" class="oe_button_box">
@@ -90,7 +117,7 @@
                         <group string="Information work">
                             <field name="position" required="1"/>
                             <field name="work_unit" required="1"/>
-                            <field name="user_id"/>
+                            <field name="user_id" readonly="1"/>
                             <field name="partner_id"/>
                         </group>
                         <group string="Address">

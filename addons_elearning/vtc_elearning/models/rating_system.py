@@ -6,6 +6,7 @@ class RatingSystem(models.Model):
     user_id = fields.Many2one('res.users', string='User')
     name = fields.Char(related='user_id.name')
     student_id = fields.Many2one('student.student', string='Student')
+    slide_id = fields.Many2one('slide.channel', string='Slide channel')
     system_onetouch = fields.Selection([('0', '0'),
                                         ('1', '1'),
                                         ('2', '2'),

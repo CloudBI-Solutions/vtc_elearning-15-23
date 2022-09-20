@@ -68,6 +68,22 @@
         </field>
     </record>
 
+    <record id="hieudt_inherit_slide_question_view_tree_report" model="ir.ui.view">
+        <field name="name">hieudt.inherit.slide.question.view.tree.report</field>
+        <field name="model">slide.question</field>
+        <field name="inherit_id" ref="website_slides.slide_question_view_tree_report"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='attempts_count']" position="attributes">
+                    <attribute name="string">Số lượt làm</attribute>
+            </xpath>
+            <xpath expr="//field[@name='attempts_avg']" position="attributes">
+                    <attribute name="string">Số lượt làm trung bình</attribute>
+            </xpath>
+            <xpath expr="//field[@name='attempts_avg']" position="attributes">
+                    <attribute name="string">Số lượt làm đã xong</attribute>
+            </xpath>
+        </field>
+    </record>
 
 
 
