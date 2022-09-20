@@ -6,3 +6,4 @@ class Rating(models.Model):
 
     star = fields.Float('Star')
     course_id = fields.Many2one('slide.channel')
+    student_id = fields.Many2one('student.student')

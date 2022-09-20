@@ -71,7 +71,7 @@
                                 string="Certificate"
                                 icon="fa-star"/>
                     </div>
-                    <field name="avatar" widget="image" class="oe_avatar" options="{&quot;zoom&quot;: true, &quot;preview_image&quot;:&quot;avatar_128&quot;}"/>
+                        <field name="avatar" widget="image" class="oe_avatar" />
                     <div class="oe_title">
                         <h1 class="d-flex">
                             <field name="name" placeholder="Tên học viên" required="True"/>

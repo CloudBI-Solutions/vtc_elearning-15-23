@@ -22,7 +22,7 @@ class Student(models.Model):
     identity_card = fields.Char('Identity card')
     certificate_ids = fields.One2many('certificate', 'student_id', string='Certificate')
     position = fields.Many2one('position', string='Position')
-    avatar = fields.Image('Avatar')
+    avatar = fields.Image('Avatar', max_width=128, max_height=128)
     work_unit = fields.Char('Work unit')
     res_country_state = fields.Many2one('res.country.state', string='Country state',
                                         domain="[('country_id', '=', 'VN')]")
