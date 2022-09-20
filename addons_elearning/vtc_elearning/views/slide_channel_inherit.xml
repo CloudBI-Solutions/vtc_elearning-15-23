@@ -1,16 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-    <record id="slide_channel_to_course_level" model="ir.ui.view">
-			<field name="name">slide.channel.inherit</field>
-			<field name="model">slide.channel</field>
-			<field name="inherit_id" ref="website_slides.view_slide_channel_form"/>
-			<field name="arch" type="xml">
-                    <xpath expr="//field[@name='name']" position="after">
-                        <field name="course_level_id" string="Course level"/>
-				    </xpath>
-            </field>
-    </record>
+        <record id="student_join_slide_channel_action" model="ir.actions.act_window">
+            <field name="name">Student Join Slide Channel</field>
+            <field name="res_model">student.student</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('source_ids', 'in', [active_id])]</field>
+        </record>
+
+<!--        <record id="slide_channel_to_course_level" model="ir.ui.view">-->
+<!--                <field name="name">slide.channel.inherit</field>-->
+<!--                <field name="model">slide.channel</field>-->
+<!--                <field name="inherit_id" ref="website_slides.view_slide_channel_form"/>-->
+<!--                <field name="arch" type="xml">-->
+<!--                    <xpath expr="//field[@name='name']" position="after">-->
+<!--                        <field name="course_level_id" string="Course level"/>-->
+<!--                    </xpath>-->
+<!--&lt;!&ndash;                    <xpath expr="//button[@name='action_redirect_to_members']" position="attributes">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <attribute name="invisible">1</attribute>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </xpath>&ndash;&gt;-->
+<!--                    <xpath expr="//button[@name='action_redirect_to_members']" position="after">-->
+<!--                        <button name="%(student_join_slide_channel_action)d"-->
+<!--                                type="action"-->
+<!--                                icon="fa-users"-->
+<!--                                class="oe_stat_button"-->
+<!--                                groups="website_slides.group_website_slides_officer">-->
+<!--                                <field name="count_student" string="Student" widget="statinfo"/>-->
+<!--                        </button>-->
+<!--                    </xpath>-->
+<!--                </field>-->
+<!--        </record>-->
+
+        <record id="hieudt_inherit_slide_channel_view_tree_report" model="ir.ui.view">
+                <field name="name">hieudt.slide.channel.inherit</field>
+                <field name="model">slide.channel</field>
+                <field name="inherit_id" ref="website_slides.slide_channel_view_tree_report"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//field[@name='members_count']" position="replace">
+                        <field name="count_student"/>
+                    </xpath>
+                </field>
+        </record>
 
     </data>
 </odoo>

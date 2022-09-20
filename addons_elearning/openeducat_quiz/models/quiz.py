@@ -74,7 +74,7 @@ class OpQuiz(models.Model):
         ('normal', 'Manual'),
         ('quiz_bank_selected', 'Quiz Bank with Selected Question'),
         ('quiz_bank_random', 'Quiz Bank with Random Quesiton')],
-        'Configuration', default='normal')
+        'Configuration', default='quiz_bank_selected')
     no_of_question = fields.Integer(
         'No of Question from each Question Bank', default=5)
     config_ids = fields.One2many('op.quiz.config', 'quiz_id',
@@ -116,7 +116,7 @@ class OpQuiz(models.Model):
     type = fields.Selection([
         ('integration_exam', 'Integration exam'),
         ('channel_slide', 'Channel slide'),
-        ('all_employee', 'All employee')], 'Type')
+        ('all_employee', 'All employee')], 'Type', default='channel_slide')
 
     @api.constrains('type', 'department_id', 'slide_channel_id')
     def render_employee_participating(self):
@@ -357,6 +357,12 @@ class OpQuizConfig(models.Model):
     quiz_id = fields.Many2one('op.quiz', 'Quiz')
     bank_id = fields.Many2one('op.question.bank', 'Question Bank')
     no_of_question = fields.Integer('Number of Question')
+
+    @api.constrains('no_of_question')
+    def check_no_of_question(self):
+        for record in self:
+            if record.no_of_question > record.bank_id.total_question:
+                raise UserError(_('Số lượng câu hỏi trong ngân hàng câu hỏi không đủ.'))
 
 class SlideChannel(models.Model):
     _inherit = 'slide.channel'

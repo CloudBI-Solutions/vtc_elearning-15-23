@@ -452,7 +452,7 @@ msgstr "Đánh giá"
 #. module: vtc_elearning
 #: model:ir.actions.act_window,name:vtc_elearning.comment_lecturers_view_action
 msgid "Rating Lecturers"
-msgstr ""
+msgstr "Đánh giá giảng viên"
 
 #. module: vtc_elearning
 #: model:ir.model,name:vtc_elearning.model_rat_lecturers

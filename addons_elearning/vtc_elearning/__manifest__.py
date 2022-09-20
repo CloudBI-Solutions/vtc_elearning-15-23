@@ -16,6 +16,7 @@
         'views/course_level.xml',
         'views/slide_channel_inherit.xml',
         'views/rating_system.xml',
+        'views/menu_action.xml',
     ],
     'demo': [],
     'depends': [
@@ -23,6 +24,7 @@
         'openeducat_quiz',
         'base_unit_vn',
         'rating'
+        'contacts',
     ],
     'images':[
 
