@@ -77,7 +77,7 @@ msgstr "Chứng chỉ"
 #. module: vtc_elearning
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.user_student_tree_view
 msgid "Change password"
-msgstr ""
+msgstr "Đổi mật khẩu"
 
 #. module: vtc_elearning
 #: model:ir.model,name:vtc_elearning.model_slide_channel_partner
