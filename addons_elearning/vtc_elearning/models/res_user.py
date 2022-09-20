@@ -1,7 +1,7 @@
 from odoo import fields, models, api
 
-class ResUsers(models.Model):
-    _inherit = 'res.users'
+# class ResUsers(models.Model):
+#     _inherit = 'res.users'
 
     # res_country_state = fields.Many2one('res.country.state', string='Country state',
     #                                     domain="[('country_id', '=', 'VN')]")
