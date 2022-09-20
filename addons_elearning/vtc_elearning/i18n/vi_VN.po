@@ -216,6 +216,15 @@ msgstr "Đánh giá giảng viên"
 msgid "Quiz"
 msgstr "Bài kiểm tra"
 
+#. module: website_slides
+#: model:ir.actions.act_window,name:website_slides.slide_question_action_report
+#: model:ir.ui.menu,name:website_slides.website_slides_menu_report_quizzes
+#: model_terms:ir.ui.view,arch_db:website_slides.slide_question_view_search
+#: model_terms:ir.ui.view,arch_db:website_slides.slide_question_view_tree
+#: model_terms:ir.ui.view,arch_db:website_slides.slide_question_view_tree_report
+msgid "Quizzes"
+msgstr "Bài tập"
+
 #. module: vtc_elearning
 #: model:ir.model,name:vtc_elearning.model_rat_lecturers
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.rat_lecturers_form_view
