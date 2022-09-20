@@ -217,6 +217,15 @@ msgid "Quiz"
 msgstr "Bài kiểm tra"
 
 #. module: website_slides
+#: model:ir.actions.act_window,name:website_slides.slide_channel_partner_action
+#: model:ir.actions.act_window,name:website_slides.slide_channel_partner_action_report
+#: model:ir.ui.menu,name:website_slides.website_slides_menu_report_attendees
+#: model_terms:ir.ui.view,arch_db:website_slides.slide_channel_partner_view_tree
+#: model_terms:ir.ui.view,arch_db:website_slides.view_slide_channel_form
+msgid "Attendees"
+msgstr "Học viên"
+
+#. module: website_slides
 #: model:ir.actions.act_window,name:website_slides.slide_question_action_report
 #: model:ir.ui.menu,name:website_slides.website_slides_menu_report_quizzes
 #: model_terms:ir.ui.view,arch_db:website_slides.slide_question_view_search
