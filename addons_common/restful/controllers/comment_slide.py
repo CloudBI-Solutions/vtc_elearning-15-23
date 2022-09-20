@@ -36,10 +36,10 @@ class CommentSlide(http.Controller):
                 'id': record.id,
                 'content': record.name,
                 'user_id': {'id': record.user_id.id, 'name': record.user_id.name, 'avatar': urls.url_join(base_url,
-                                            '/web/image?model=res.users&id={0}&field=image_1920'.format(
+                                            '/web/image?model=res.users&id={}&field=image_1920'.format(
                                                 record.user_id.id))} or '',
                 'student': {'id': record.student_id.id, 'name': record.student_id.name, 'avatar': urls.url_join(base_url,
-                                                                                                          '/web/image?model=student.students&id={0}&field=avatar'.format(
+                                                                                                          '/web/image?model=student.students&id={}&field=avatar'.format(
                                                                                                               record.student_id.id))} or '',
                 # 'content': record.name,
             }

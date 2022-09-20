@@ -66,7 +66,7 @@
 
     <menuitem id="rating_system_menu_item"
               name="Rating system"
-              parent="website_slides.website_slides_menu_configuration"
+              parent="website_slides.website_slides_menu_courses"
               action="rating_system_view_action"/>
 
 </odoo>

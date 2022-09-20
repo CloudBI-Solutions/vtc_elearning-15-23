@@ -45,7 +45,12 @@
         <field name="arch" type="xml">
             <form string="Student">
                 <header>
-                    <button name="check_email_login_user" string="Tạo tài khoản" type="object" class="oe_highlight"/>
+                    <button name="check_email_login_user"
+                            string="Tạo tài khoản"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('user_id','!=', False)]}"
+                    />
                 </header>
                 <sheet>
                     <div name="button_box" class="oe_button_box">
@@ -74,8 +79,8 @@
                     </div>
                     <group>
                         <group string="Contact">
-                            <field name="phone"/>
-                            <field name="email"/>
+                            <field name="phone" required="1"/>
+                            <field name="email" required="1"/>
                         </group>
                         <group string="Personal information">
                             <field name="birth"/>
@@ -83,9 +88,10 @@
                             <field name="address"/>
                         </group>
                         <group string="Information work">
-                            <field name="position"/>
-                            <field name="work_unit"/>
+                            <field name="position" required="1"/>
+                            <field name="work_unit" required="1"/>
                             <field name="user_id"/>
+                            <field name="partner_id"/>
                         </group>
                         <group string="Address">
                             <field name="res_country_state"/>
@@ -134,23 +140,17 @@
         </field>
     </record>
 
-    <record id="comment_slide_view_action" model="ir.actions.act_window">
-        <field name="name">Student comment slide</field>
-        <field name="res_model">comment.slide</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
-    <menuitem id="student_comment_slide_menu_item"
-              name="Bình luận bài học"
-              parent="website_slides.website_slides_menu_root"
-              sequence="5"
-              action="comment_slide_view_action"/>
-
     <menuitem id="student_menu_item"
               name="Student"
               parent="website_slides.website_slides_menu_root"
               sequence="3"
-              action="student_view_action"/>
+              />
+
+        <menuitem id="infor_student_menu_item"
+                  name="Student"
+                  parent="student_menu_item"
+                  sequence="1"
+                  action="student_view_action"/>
 
 <!--    <record id="student_comment_slide_view_action" model="ir.actions.act_window">-->
 <!--        <field name="name">Student comment slide</field>-->

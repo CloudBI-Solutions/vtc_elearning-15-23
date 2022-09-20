@@ -31,23 +31,13 @@
                 <field name="start_date"/>
                 <field name="end_date"/>
             </xpath>
+            <xpath expr="//field[@name='is_published']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
             <xpath expr="//field[@name='channel_type']" position="before">
                 <field name="is_published"/>
             </xpath>
             <xpath expr="//page[@name='karma_rules']" position="replace">
-                <page string="Student" name="students">
-                    <field name="student_ids">
-                        <tree>
-                            <field name="name"/>
-                            <field name="phone" widget="phone"/>
-                            <field name="email"/>
-                            <field name="gender"/>
-                            <field name="birth"/>
-                            <field name="identity_card"/>
-                            <field name="address"/>
-                        </tree>
-                    </field>
-                </page>
                 <page name="Lecturers" string="Lecturers">
                     <field name="lecturers_ids">
                         <tree>

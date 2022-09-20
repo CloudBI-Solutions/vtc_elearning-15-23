@@ -5,7 +5,7 @@ from . import attachment
 # from . import blog
 # from . import device
 from . import elearning
-# from . import employee
+from . import employee
 # from . import helpdesk
 # from . import kpis
 from . import main, token

@@ -22,7 +22,6 @@ class StudentInfor(http.Controller):
     @http.route("/api/get/infor-student", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_infor_student_by_id(self, **payload):
         values = []
-        print(payload)
         base_url = StudentInfor.get_url_base(self)
         student = request.env['student.student'].sudo().search([('id', '=', payload.get('student_id'))])
         # cấp độ học

@@ -66,6 +66,15 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="lecturers_menu_item" name="Lecturers" sequence="4" parent="website_slides.website_slides_menu_root" action="lecturers_view_action"/>
+    <menuitem id="lecturers_menu_item"
+              name="Lecturers"
+              sequence="4"
+              parent="website_slides.website_slides_menu_root" />
+
+    <menuitem id="infor_lecturers_menu_item"
+              name="Lecturers"
+              sequence="1"
+              parent="lecturers_menu_item"
+              action="lecturers_view_action"/>
 
 </odoo>
