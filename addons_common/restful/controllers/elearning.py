@@ -1,6 +1,7 @@
 """Part of odoo. See LICENSE file for full copyright and licensing details."""
 
 import logging
+from odoo.addons.website_slides.controllers.main import WebsiteSlides
 
 from odoo.addons.restful.common import (
     invalid_response,
@@ -27,7 +28,7 @@ class ElearningController(http.Controller):
             return config
         return 'https://test.diligo.vn:15000'
 
-    @http.route("/api/v1/slide_channel", type="http", auth="public", methods=["GET","OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_channel", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_source(self, **payload):
         """ API 1.13 Danh sách khóa học"""
         values = []
@@ -156,7 +157,8 @@ class ElearningController(http.Controller):
         return valid_response(values)
 
     @validate_token
-    @http.route("/api/v1/slide_channel/join_course", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_channel/join_course", type="http", auth="public", methods=["POST", "OPTIONS"],
+                csrf=False, cors='*')
     def join_course(self, **payload):
         field_require = [
             'course_id',
@@ -168,20 +170,21 @@ class ElearningController(http.Controller):
                     "The parameter %s is missing!!!" % field)
         headers = request.httprequest.headers
         slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['course_id'])])
-        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
+        user = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
         if user.self not in slide_channel.channel_partner_ids.partner_id:
             channel_partner = request.env['slide.channel.partner'].with_user(SUPERUSER_ID).create({
                 'channel_id': slide_channel.id,
-                'partner_id': user.self.id,
+                'partner_id': user.partner_id.id,
             })
-        return invalid_response("Bạn đã tham gia thành công khóa học %s." % slide_channel.name)
+        return valid_response("ok")
 
     @validate_token
-    @http.route("/api/v1/slide_channel/rating", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_channel/rating", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False,
+                cors='*')
     def update_rating_slide_channel(self, **payload):
         slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['course_id'])])
         user = request.env['res.users'].sudo().search([('id', '=', payload.get('uid'))])
-        student = request.env['student.student'].sudo().search([('user_id','=',user.id)])
+        student = request.env['student.student'].sudo().search([('user_id', '=', user.id)])
         rating = request.env['rating.rating'].sudo().create({
             'res_id': slide_channel.id,
             'rating': int(payload['star']),
@@ -195,7 +198,8 @@ class ElearningController(http.Controller):
         return valid_response("Bạn đã đánh giá vào khóa học %s." % slide_channel.name)
 
     @validate_token
-    @http.route("/api/v1/slide_channel/comment", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_channel/comment", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False,
+                cors='*')
     def update_comment_slide_channel(self, **payload):
         field_require = [
             'res_id',
@@ -222,7 +226,8 @@ class ElearningController(http.Controller):
         return invalid_response("Bạn đã bình luận vào khóa học %s." % slide_channel.name)
 
     @validate_token
-    @http.route("/api/v1/slide_channel/apply_member", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_channel/apply_member", type="http", auth="public", methods=["POST", "OPTIONS"],
+                csrf=False, cors='*')
     def apply_member_slide_channel(self, **payload):
         field_require = [
             'channel_id',
@@ -239,7 +244,8 @@ class ElearningController(http.Controller):
         })
 
     @validate_token
-    @http.route("/api/v1/slide_channel/completion", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_channel/completion", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False,
+                cors='*')
     def get_completion_slide_channel_partner(self, **payload):
         field_require = [
             'channel_id',
@@ -252,7 +258,8 @@ class ElearningController(http.Controller):
         slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['channel_id'])])
         user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
         if user.self in slide_channel.channel_partner_ids.partner_id:
-            channel_partner = request.env['slide.channel.partner'].sudo().search([('channel_id', '=', payload['channel_id']), ('partner_id', '=', user.self.id)])
+            channel_partner = request.env['slide.channel.partner'].sudo().search(
+                [('channel_id', '=', payload['channel_id']), ('partner_id', '=', user.self.id)])
             if channel_partner.completion:
                 return valid_response(channel_partner.completion)
             else:
@@ -261,7 +268,8 @@ class ElearningController(http.Controller):
             return invalid_response("Bạn chưa tham gia khóa học %s." % slide_channel.name)
 
     @validate_token
-    @http.route("/api/v1/slide_channel/completed", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_channel/completed", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False,
+                cors='*')
     def get_completed_slide_channel_partner(self, **payload):
         field_require = [
             'channel_id',
@@ -273,14 +281,16 @@ class ElearningController(http.Controller):
                     "The parameter %s is missing!!!" % field)
         slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['channel_id'])])
         user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
-        channel_partner = request.env['slide.channel.partner'].sudo().search([('channel_id', '=', payload['channel_id']), ('partner_id', '=', user.self.id)])
+        channel_partner = request.env['slide.channel.partner'].sudo().search(
+            [('channel_id', '=', payload['channel_id']), ('partner_id', '=', user.self.id)])
         if channel_partner.completed:
             return valid_response("Bạn đã hoàn thành khóa học %s." % slide_channel.name)
         else:
             return invalid_response("Bạn chưa hoàn thành khóa học %s." % slide_channel.name)
 
     @validate_token
-    @http.route("/api/v1/slide_channel/allcomment", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_channel/allcomment", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False,
+                cors='*')
     def get_comment_slide_channel(self, **payload):
         field_require = [
             'channel_id',
@@ -293,7 +303,8 @@ class ElearningController(http.Controller):
         slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['channel_id'])])
         user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
         if user.self in slide_channel.channel_partner_ids.partner_id:
-            mail_message = request.env['mail.message'].sudo().search([('res_id', '=', payload['channel_id']), ('model', '=', 'slide.channel')])
+            mail_message = request.env['mail.message'].sudo().search(
+                [('res_id', '=', payload['channel_id']), ('model', '=', 'slide.channel')])
             values = []
             for msg in mail_message:
                 values.append({
@@ -308,7 +319,8 @@ class ElearningController(http.Controller):
             return invalid_response("Bạn chưa tham gia khóa học %s." % slide_channel.name)
 
     @validate_token
-    @http.route("/api/v1/slide_channel/content", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_channel/content", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False,
+                cors='*')
     def get_content_slide_channel(self, **payload):
         field_require = [
             'channel_id',
@@ -339,7 +351,8 @@ class ElearningController(http.Controller):
             return invalid_response("Bạn chưa tham gia khóa học %s." % slide_channel.name)
 
     @validate_token
-    @http.route("/api/v1/slide_channel/completion_time", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_channel/completion_time", type="http", auth="public", methods=["GET", "OPTIONS"],
+                csrf=False, cors='*')
     def get_completion_time_slide_channel(self, **payload):
         field_require = [
             'channel_id',
@@ -365,23 +378,19 @@ class ElearningController(http.Controller):
             return invalid_response("Bạn chưa tham gia khóa học %s." % slide_channel.name)
 
     @validate_token
-    @http.route("/api/v1/slide_slide/completed", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_slide/completed", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False,
+                cors='*')
     def get_completed_slide_slide_partner(self, **payload):
-        field_require = [
-            'slide_id',
-        ]
-        for field in field_require:
-            if field not in payload.keys():
-                return invalid_response(
-                    "Missing",
-                    "The parameter %s is missing!!!" % field)
-        slide_slide = request.env['slide.slide'].sudo().search([('id', '=', payload['slide_id'])])
-        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
-        slide_partner = request.env['slide.slide.partner'].sudo().search([('slide_id', '=', payload['slide_id']), ('partner_id', '=', user.self.id)])
-        if slide_partner.completed:
-            return valid_response("Bạn đã hoàn thành bài học %s." % slide_slide.name)
-        else:
-            return invalid_response("Bạn chưa hoàn thành bài học %s." % slide_slide.name)
+        print(payload)
+        userlogin = request.env['res.users'].sudo().search([('id', '=', payload.get('uid'))])
+        slide = request.env['slide.slide'].sudo().search([('id', '=', int(payload.get('slide_id')))])
+        slide.sudo().with_context(partner=userlogin.partner_id).action_set_completed()
+        slide_partner = request.env['slide.channel.partner'].sudo().search(
+            [('partner_id', '=', userlogin.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))])
+        print(slide_partner)
+        return valid_response({
+            'progress': slide_partner.completion
+        })
 
     @http.route("/api/v1/op_quiz", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_op_quiz(self, **payload):
@@ -446,7 +455,8 @@ class ElearningController(http.Controller):
         return valid_response(values)
 
     @validate_token
-    @http.route("/api/v1/question_bank_line", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/question_bank_line", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False,
+                cors='*')
     def get_question_bank_line(self, **payload):
         question_bank_line = request.env['op.question.bank.line'].sudo().search([])
         values = []
@@ -460,7 +470,8 @@ class ElearningController(http.Controller):
         return valid_response(values)
 
     @validate_token
-    @http.route("/api/v1/question_bank_answer", type="http", auth="public", methods=["GET","OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/question_bank_answer", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False,
+                cors='*')
     def get_question_bank_answer(self, **payload):
         question_bank_answer = request.env['op.question.bank.answer'].sudo().search([])
         values = []
@@ -474,7 +485,8 @@ class ElearningController(http.Controller):
         return valid_response(values)
 
     @validate_token
-    @http.route("/api/v1/slide_slide_partner/completed", type="http", auth="public", methods=["POST","OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/slide_slide_partner/completed", type="http", auth="public", methods=["POST", "OPTIONS"],
+                csrf=False, cors='*')
     def update_completed_slide_slide_partner(self, **payload):
         field_require = [
             'slide_id',
@@ -487,7 +499,8 @@ class ElearningController(http.Controller):
         headers = request.httprequest.headers
         slide_slide = request.env['slide.slide'].sudo().search([('id', '=', payload['slide_id'])])
         user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
-        slide_partner = request.env['slide.slide.partner'].sudo().search([('slide_id', '=', payload['slide_id']), ('partner_id', '=', user.self.id)])
+        slide_partner = request.env['slide.slide.partner'].sudo().search(
+            [('slide_id', '=', payload['slide_id']), ('partner_id', '=', user.self.id)])
         if slide_partner.completed:
             return invalid_response("Bạn đã hoàn thành bài học %s." % slide_slide.name)
         else:

@@ -36,6 +36,7 @@ class CourseByIdController(http.Controller):
     @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_course_by_id(self, **payload):
         values = []
+        user_login = request.env['res.users'].sudo().search([('id','=',int(payload.get('uid')))])
         base_url = CourseByIdController.get_url_base(self)
         list_courses = request.env['slide.channel'].sudo().search([('id', '=', payload.get('course_id'))])
         ratings = request.env['rating.rating'].sudo().search([('res_id', '=', payload.get('course_id'))])
@@ -46,6 +47,7 @@ class CourseByIdController(http.Controller):
             list_students.append(request.env['student.student'].sudo().search([('user_id', '=', rec.id)]))
         rating_response = []
         avg_rating = [r.star for r in ratings]
+        process = request.env['slide.channel.partner'].sudo().search([('partner_id','=',user_login.partner_id.id),('channel_id','=', int(payload.get('course_id')))])
         for r in ratings:
             rating_response.append({
                 'customer_name': r.partner_id.name,
@@ -55,7 +57,6 @@ class CourseByIdController(http.Controller):
                 'star': r.star,
                 'time': r.create_date,
                 'comment': r.feedback,
-                'avt_star': self.Average(avg_rating)
             })
         # cấp độ học
         datas = {'id': list_courses.id,
@@ -64,7 +65,9 @@ class CourseByIdController(http.Controller):
                  'total_student': list_courses.count_student,
                  'level': list_courses.course_level_id,
                  'final': list_courses.final_quiz_ids.ids,
-                 'rating_course': rating_response
+                 'rating_course': rating_response,
+                 'avt_star': self.Average(avg_rating) if avg_rating else 'Chưa có đánh giá nào',
+                 'process': process.completion
                  }
         # list giảng viên
         list_lecturers = []
@@ -114,18 +117,6 @@ class CourseByIdController(http.Controller):
             # print(c.slide_ids)
         datas['category'] = list_cate
         # tổng học viên
-        # total_students = len(list_courses.student_ids)
-        # dates['total_students'] = total_students
-
-        # đánh giá
-        # ratings = []
-        # for rate in list_courses.sudo().rating_ids:
-        #     rating_detail = {
-        #         'id': rate.id,
-        #         'feedback': rate.feedback,
-        #     }
-        #     ratings.append(rating_detail)
-        # datas['rating_ids'] = ratings
 
         # tài liệu
         list_attachment_files = request.env['ir.attachment'].sudo().search(
