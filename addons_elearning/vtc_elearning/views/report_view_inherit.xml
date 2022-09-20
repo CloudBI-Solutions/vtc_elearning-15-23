@@ -32,4 +32,36 @@
         </field>
     </record>
 
+    <record id="report_total_view_graph_slide_channel" model="ir.ui.view">
+        <field name="name">report.total.view.graph.slides</field>
+        <field name="model">slide.channel</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <graph string="Total view" sample="1">
+                <field name="name"/>
+                <field name="total_views" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+
+    <record id="report_total_view_slide_channel_action" model="ir.actions.act_window">
+        <field name="name">Report Total Views Slide Channel</field>
+        <field name="res_model">slide.channel</field>
+        <field name="view_mode">graph</field>
+    </record>
+
+    <record id="report_total_view_graph_slide_channel_action" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="report_total_view_slide_channel_action"/>
+        <field name="sequence">1</field>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="report_total_view_graph_slide_channel"/>
+    </record>
+
+    <menuitem id="report_total_view_slide_channel_menuitem"
+          name="Báo cáo số lượt truy cập theo khóa học"
+          parent="website_slides.website_slides_menu_report"
+          action="report_total_view_slide_channel_action"
+        />
+
 </odoo>
