@@ -46,7 +46,7 @@
 
 
     <record id="report_total_view_slide_channel_action" model="ir.actions.act_window">
-        <field name="name">Report Total Views Slide Channel</field>
+        <field name="name">Báo cáo số lượt truy cập theo khóa học</field>
         <field name="res_model">slide.channel</field>
         <field name="view_mode">graph</field>
     </record>
