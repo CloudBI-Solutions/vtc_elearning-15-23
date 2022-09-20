@@ -6,7 +6,7 @@
         <field name="model">rating.system</field>
          <field eval="8" name="priority"/>
          <field name="arch" type="xml">
-             <tree>
+             <tree create="false">
                  <field name="user_id"/>
                  <field name="system_onetouch" widget="priority"/>
                  <field name="rating_lecturers" widget="priority"/>
