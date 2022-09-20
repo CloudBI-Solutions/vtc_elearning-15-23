@@ -21,3 +21,4 @@ from . import sign_student
 from . import comment_slide
 from . import student_infor
 from . import res_country
+from . import position_student
