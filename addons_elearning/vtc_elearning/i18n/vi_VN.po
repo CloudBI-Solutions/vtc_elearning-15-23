@@ -552,7 +552,7 @@ msgstr "Bài kiểm tra"
 #. module: vtc_elearning
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.slide_channel_inherit_view_form
 msgid "Quiz Final"
-msgstr ""
+msgstr "Bài kiểm tra"
 
 #. module: vtc_elearning
 #: model:ir.model,name:vtc_elearning.model_op_quiz_result
@@ -604,7 +604,7 @@ msgstr ""
 #. module: vtc_elearning
 #: model:ir.model.fields,field_description:vtc_elearning.field_res_users__role_user
 msgid "Role user"
-msgstr ""
+msgstr "Quyền quản trị"
 
 #. module: vtc_elearning
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__rat_lecturers__rating__2
