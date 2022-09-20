@@ -22,7 +22,7 @@ class Student(models.Model):
     identity_card = fields.Char('Identity card')
     certificate_ids = fields.One2many('certificate', 'student_id', string='Certificate')
     position = fields.Many2one('position', string='Position')
-    avatar = fields.Image('Avatar')
+    avatar = fields.Image('Avatar', max_width=128, max_height=128)
     work_unit = fields.Char('Work unit')
     res_country_state = fields.Many2one('res.country.state', string='Country state',
                                         domain="[('country_id', '=', 'VN')]")
@@ -33,6 +33,18 @@ class Student(models.Model):
     comment_slide_ids = fields.One2many('comment.slide', 'student_id', string='Comment slide')
     comment_source_ids = fields.One2many('comment.course', 'student_id', string='Comment source')
     partner_id = fields.Many2one('res.partner', string='Partner')
+    state = fields.Selection([('confirm', 'Confirm'), ('pending', 'Pending'), ('cancel', 'Cancel'), ('recall', 'Recall')], string='State', default='pending')
+    favorite_course_ids = fields.One2many('favorite.course', 'student_id', string='Favorite course')
+    def active_user(self):
+        self.user_id.active = True
+        self.state = 'confirm'
+
+    def cancel_user(self):
+        self.state = 'cancel'
+
+    def recall_user(self):
+        self.state = 'recall'
+        self.user_id.active = False
 
     @api.model
     def create(self, vals):
@@ -45,6 +57,7 @@ class Student(models.Model):
             # 'function': vals['position'],
             'street': vals['address'],
         })
+
         return res
 
 
@@ -56,7 +69,8 @@ class Student(models.Model):
             self.user_id = self.env['res.users'].sudo().create({
                 'name': self.name,
                 'login': self.email,
-                'password': '1'
+                'password': '1',
+                'active': False,
             })
         else:
             raise UserError(_('Vui lòng nhập email để được tạo tài khoản học trực tuyến.'))
@@ -77,5 +91,10 @@ class SlideChannelPartner(models.Model):
 
 
     # @api.onchange('email')
+class FavoriteCourse(models.Model):
+    _name = 'favorite.course'
+    _description = 'Favorite course'
 
+    slide_channel_id = fields.Many2one('slide.channel', string='Slide channel')
+    student_id = fields.Many2one('student.student', string='Student')
 

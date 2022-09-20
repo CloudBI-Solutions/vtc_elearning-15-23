@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hieudt_inherit_rating_rating_view_tree" model="ir.ui.view">
+        <field name="name">hieudt.inherit.rating.rating.tree</field>
+        <field name="model">rating.rating</field>
+        <field name="inherit_id" ref="rating.rating_rating_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='res_name']" position="attributes">
+                    <attribute name="string">Tên khóa học</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="string">Người tham dự</attribute>
+            </xpath>
+            <xpath expr="//field[@name='rating_text']" position="attributes">
+                    <attribute name="string">Đánh giá khóa học</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hieudt_inherit_view_slide_slide_tree" model="ir.ui.view">
+        <field name="name">hieudt.inherit.slide.slide.tree</field>
+        <field name="model">slide.slide</field>
+        <field name="inherit_id" ref="website_slides.view_slide_slide_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="string">Tên nội dung bài học</attribute>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="attributes">
+                    <attribute name="string">Chương khóa học</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

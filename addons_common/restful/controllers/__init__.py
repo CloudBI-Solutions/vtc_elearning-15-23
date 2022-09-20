@@ -10,7 +10,7 @@ from . import employee
 # from . import kpis
 from . import main, token
 # from . import project
-# from . import quiz
+from . import quiz
 # from . import recruitment
 from . import user
 from . import token
@@ -20,3 +20,4 @@ from . import get_lesson_by_id
 from . import sign_student
 from . import comment_slide
 from . import student_infor
+from . import res_country

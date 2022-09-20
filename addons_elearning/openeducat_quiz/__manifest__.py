@@ -31,6 +31,7 @@
     'data': [
         # 'data/quiz_data.xml',
         'data/answer_grade.xml',
+        'data/op_quiz_category_sequence.xml',
         'security/quiz_security.xml',
         'security/ir.model.access.csv',
         'security/quiz.xml',

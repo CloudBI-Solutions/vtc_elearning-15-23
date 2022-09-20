@@ -14,6 +14,17 @@
         <field name="domain">[('student_ids', 'in', [active_id])]</field>
     </record>
 
+    <record id="quiz_result" model="ir.ui.view">
+        <field name="name">quiz.result</field>
+        <field name="model">op.quiz.result</field>
+        <field name="inherit_id" ref="openeducat_quiz.view_op_quiz_result_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='total_incorrect']" position="after">
+                <field name="time_spent" widget="float_time" />
+            </xpath>
+        </field>
+    </record>
+
     <record id="quiz_inherit_view_form" model="ir.ui.view">
         <field name="name">Quiz inherit view form</field>
         <field name="model">op.quiz</field>

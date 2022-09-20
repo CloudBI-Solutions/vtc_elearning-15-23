@@ -1,7 +1,19 @@
 from odoo import models, fields, api
 
+
 class OpQuiz(models.Model):
     _inherit = 'op.quiz'
+
+    @api.model
+    def create(self, vals_list):
+        res = super(OpQuiz, self).create(vals_list)
+        if 'slide_channel_id' in vals_list and vals_list['slide_channel_id']:
+            slide_channel = self.env['slide.channel'].search([('id', '=', vals_list['slide_channel_id'])])
+            self.env['slide.quiz.line'].create({
+                'op_quiz_id':res.id,
+                'slide_channel_id':slide_channel.id
+            })
+        return res
 
     student_ids = fields.Many2many('student.student', string='Student')
     lecturers_id = fields.Many2one('lecturers', string='Lecturers')
@@ -15,7 +27,9 @@ class OpQuiz(models.Model):
         else:
             self.list_candidates = self.env['hr.employee'].search([])
 
+
 class OpQuizResult(models.Model):
     _inherit = 'op.quiz.result'
 
     student_id = fields.Many2one('student.student', string='Student')
+    time_spent = fields.Float('Time Spent')

@@ -84,8 +84,8 @@
                                             <field name="question_mark" readonly="1"/>
                                             <field name="mark"/>
                                             <field name="que_type" readonly="1"/>
-                                            <field name="case_sensitive"
-                                                   attrs="{'invisible': [('que_type', '!=', 'blank')]}"/>
+<!--                                            <field name="case_sensitive"-->
+<!--                                                   attrs="{'invisible': [('que_type', '!=', 'blank')]}"/>-->
                                             <field name="grade_true_id"
                                                    attrs="{'invisible': [('que_type', '!=', 'blank')]}"/>
                                             <field name="grade_false_id"

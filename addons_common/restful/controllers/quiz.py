@@ -19,6 +19,41 @@ _logger = logging.getLogger(__name__)
 
 class QuizController(http.Controller):
 
+
+    @validate_token
+    @http.route("/api/get/quiz_by_id", type="http", auth="public", methods=["GET","OPTIONS"], csrf=False, cors='*')
+    def get_quiz_by_id(self, **kwargs):
+        quiz = request.env['op.quiz'].sudo().search([('id','=', kwargs.get('quiz_id'))])
+        line_ids = []
+        if quiz.line_ids:
+            for r in quiz.line_ids:
+                line_ids.append({
+                    'question_name': r.name,
+                    'mark': r.mark,
+                    'answer':[{'answer_name': i.name,'grade': i.grade_id.name}for i in r.line_ids]
+                })
+        if quiz.config_ids:
+            for r in quiz.config_ids:
+                for re in r.bank_id:
+                    for q in re.line_ids:
+                        line_ids.append({
+                            'question_name': q.name,
+                            'mark': q.mark,
+                            'answer': [{'answer_name': i.name,'grade': i.grade_id.name} for i in q.line_ids]
+                        })
+        date = {
+            'name': quiz.name,
+            'slide_channel_id': quiz.slide_channel_id.id,
+            'categ': quiz.categ_id.id,
+            'start_date': quiz.start_date,
+            'end_date': quiz.end_date,
+            'total_marks':quiz.total_marks,
+            'line_ids': line_ids,
+            'time_limit_hr': quiz.time_limit_hr if quiz.time_limit_hr else False,
+            'time_limit_minute': quiz.time_limit_minute if quiz.time_limit_minute else False,
+        }
+        return valid_response(date)
+
     @validate_token
     @http.route("/api/v1/quiz", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
     def get_source(self, **payload):
