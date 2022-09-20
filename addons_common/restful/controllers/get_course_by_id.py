@@ -18,6 +18,9 @@ _logger = logging.getLogger(__name__)
 
 class CourseByIdController(http.Controller):
 
+    def Average(self, lst):
+        return sum(lst) / len(lst)
+
     def get_url_base(self):
         config = request.env['ir.config_parameter'].sudo().get_param('web.base.url')
         if config:
@@ -36,13 +39,23 @@ class CourseByIdController(http.Controller):
         base_url = CourseByIdController.get_url_base(self)
         list_courses = request.env['slide.channel'].sudo().search([('id', '=', payload.get('course_id'))])
         ratings = request.env['rating.rating'].sudo().search([('res_id', '=', payload.get('course_id'))])
-        rating_response = []
+        list_users, list_students, rating_response = [], [], []
         for rec in ratings:
+            list_users.append(request.env['res.users'].sudo().search([('partner_id', '=', rec.partner_id.id)]))
+        for rec in list_users:
+            list_students.append(request.env['student.student'].sudo().search([('user_id', '=', rec.id)]))
+        rating_response = []
+        avg_rating = [r.star for r in ratings]
+        for r in ratings:
             rating_response.append({
-                'customer_name': rec.partner_id,
+                'customer_name': r.partner_id.name,
                 'avatar': urls.url_join(base_url,
-                                        '/web/image?model=hr.employee.public&id={0}&field=image_1920'.format(
-                                            rec.id)),
+                                        '/web/image?model=student.student&id={}&field=avatar'.format(
+                                            r.student_id.id)),
+                'star': r.star,
+                'time': r.create_date,
+                'comment': r.feedback,
+                'avt_star': self.Average(avg_rating)
             })
         # cấp độ học
         datas = {'id': list_courses.id,
@@ -50,7 +63,8 @@ class CourseByIdController(http.Controller):
                  'description': list_courses.description,
                  'total_student': list_courses.count_student,
                  'level': list_courses.course_level_id,
-                 'final_quiz': list_courses.final_quiz.id
+                 'final': list_courses.final_quiz_ids.ids,
+                 'rating_course': rating_response
                  }
         # list giảng viên
         list_lecturers = []
@@ -104,14 +118,14 @@ class CourseByIdController(http.Controller):
         # dates['total_students'] = total_students
 
         # đánh giá
-        ratings = []
-        for rate in list_courses.sudo().rating_ids:
-            rating_detail = {
-                'id': rate.id,
-                'feedback': rate.feedback,
-            }
-            ratings.append(rating_detail)
-        datas['rating_ids'] = ratings
+        # ratings = []
+        # for rate in list_courses.sudo().rating_ids:
+        #     rating_detail = {
+        #         'id': rate.id,
+        #         'feedback': rate.feedback,
+        #     }
+        #     ratings.append(rating_detail)
+        # datas['rating_ids'] = ratings
 
         # tài liệu
         list_attachment_files = request.env['ir.attachment'].sudo().search(
@@ -123,6 +137,13 @@ class CourseByIdController(http.Controller):
 
         values.append(datas)
         return valid_response(values)
+
+    @validate_token
+    @http.route("/api/v1/cource/process", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
+    def get_process_percent_of_course(self, **kwargs):
+        user = request.env['res.users'].sudo().search([('id', '=', kwargs.get('uid'))])
+        slide_partner = request.env['slide.slide.partner'].sudo().search(
+            [('channel_id', '=', kwargs['cource_id']), ('partner_id', '=', user.self.id)])
 
     @http.route("/api/get/lesson_by_id", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_lesson_by_id(self, **payload):

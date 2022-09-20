@@ -4,7 +4,7 @@ class SlideChannel(models.Model):
     _inherit = 'slide.channel'
 
     course_level_id = fields.Many2one('course.level', string='course level')
-    final_quiz = fields.Many2one('op.quiz', "The Final test")
+    final_quiz_ids = fields.One2many('slide.quiz.line','slide_channel_id')
     student_ids = fields.Many2many('student.student', string='Student')
     lecturers_ids = fields.Many2many('lecturers', string='Lecturers')
     start_date = fields.Date('Start date')

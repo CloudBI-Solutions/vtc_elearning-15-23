@@ -10,7 +10,7 @@ from . import employee
 # from . import kpis
 from . import main, token
 # from . import project
-# from . import quiz
+from . import quiz
 # from . import recruitment
 from . import user
 from . import token
