@@ -42,6 +42,17 @@
                 </field>
         </record>
 
+        <record id="hieudt_inherit_slide_channel_partner_view_tree" model="ir.ui.view">
+                <field name="name">hieudt.slide.channel.partner.inherit</field>
+                <field name="model">slide.channel.partner</field>
+                <field name="inherit_id" ref="website_slides.slide_channel_partner_view_tree"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//field[@name='channel_user_id']" position="replace">
+                        <field name="student_id" string="Học viên" readonly="1"/>
+                    </xpath>
+                </field>
+        </record>
+
     </data>
 </odoo>
 
