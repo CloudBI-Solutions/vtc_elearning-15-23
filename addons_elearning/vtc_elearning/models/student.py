@@ -78,7 +78,7 @@ class ProgressSlide(models.Model):
 class SlideChannelPartner(models.Model):
     _inherit = 'slide.channel.partner'
 
-    # student_id = fields.Many2one(related='partner_id.student_id', string="Student")
+    student_id = fields.Many2one('student.student', string="Student")
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
