@@ -48,7 +48,10 @@
                 <field name="inherit_id" ref="website_slides.slide_channel_partner_view_tree"/>
                 <field name="arch" type="xml">
                     <xpath expr="//field[@name='channel_user_id']" position="attributes">
-                        <attribute name="string">Thời gian hoạt động cuối</attribute>
+                        <attribute name="string">Học viên</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='write_date']" position="attributes">
+                        <attribute name="string">Thoời gian hoạt động cuối</attribute>
                     </xpath>
                 </field>
         </record>
