@@ -8,3 +8,4 @@ from . import position
 from . import position
 from . import course_level
 from . import rating_system
+from . import rating

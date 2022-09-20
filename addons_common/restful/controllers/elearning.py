@@ -179,25 +179,17 @@ class ElearningController(http.Controller):
     @validate_token
     @http.route("/api/v1/slide_channel/rating", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
     def update_rating_slide_channel(self, **payload):
-        field_require = [
-            'res_id',
-            'rating',
-        ]
-        for field in field_require:
-            if field not in payload.keys():
-                return invalid_response(
-                    "Missing",
-                    "The parameter %s is missing!!!" % field)
-        headers = request.httprequest.headers
-        slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['res_id'])])
-        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
+        slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['course_id'])])
+        user = request.env['res.users'].sudo().search([('id', '=', payload.get('uid'))])
         rating = request.env['rating.rating'].sudo().create({
             'res_id': slide_channel.id,
-            'rating': payload['rating'],
-            'partner_id': user.self.id,
+            'rating': int(payload['star']),
+            'feedback': payload.get('rating'),
+            'star': int(payload['star']),
+            'partner_id': user.partner_id.id,
             'res_model_id': request.env['ir.model']._get_id('slide.channel'),
         })
-        return invalid_response("Bạn đã đánh giá vào khóa học %s." % slide_channel.name)
+        return valid_response("Bạn đã đánh giá vào khóa học %s." % slide_channel.name)
 
     @validate_token
     @http.route("/api/v1/slide_channel/comment", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
@@ -388,7 +380,7 @@ class ElearningController(http.Controller):
         else:
             return invalid_response("Bạn đã chưa hoàn thành bài học %s." % slide_slide.name)
 
-    @http.route("/api/v1/op_quiz", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    @http.route("/api/v1/op_quiz", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_op_quiz(self, **payload):
         field_require = [
             'slide_id',

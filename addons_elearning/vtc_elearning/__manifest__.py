@@ -22,6 +22,7 @@
         'website_slides',
         'openeducat_quiz',
         'base_unit_vn',
+        'rating'
     ],
     'images':[
 
