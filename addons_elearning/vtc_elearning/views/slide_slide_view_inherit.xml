@@ -56,6 +56,9 @@
                         </tree>
                     </field>
                 </page>
+                <page string="Người vận hành" name="user_support_student">
+                    <field name="user_support"/>
+                </page>
             </xpath>
         </field>
     </record>

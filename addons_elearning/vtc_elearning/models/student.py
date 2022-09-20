@@ -32,7 +32,7 @@ class Student(models.Model):
     progress_ids = fields.One2many('progress.slide', 'student_id', string='Progress')
     comment_slide_ids = fields.One2many('comment.slide', 'student_id', string='Comment slide')
     comment_source_ids = fields.One2many('comment.course', 'student_id', string='Comment source')
-    partner_id = fields.Many2one('res.partner', string='Partner')
+    partner_id = fields.One2many('res.partner', 'student_id', string='Partner')
     state = fields.Selection([('confirm', 'Confirm'), ('pending', 'Pending'), ('cancel', 'Cancel'), ('recall', 'Recall')], string='State', default='pending')
     favorite_course_ids = fields.One2many('favorite.course', 'student_id', string='Favorite course')
     def active_user(self):
@@ -78,8 +78,12 @@ class ProgressSlide(models.Model):
 class SlideChannelPartner(models.Model):
     _inherit = 'slide.channel.partner'
 
-    student_id = fields.Many2one('student.student', string="Student")
+    student_id = fields.Many2one(related='partner_id.student_id', string="Student")
 
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    student_id = fields.Many2one('student.student', string='Student')
 
     # @api.onchange('email')
 class FavoriteCourse(models.Model):

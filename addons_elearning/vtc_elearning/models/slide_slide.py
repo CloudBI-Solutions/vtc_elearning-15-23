@@ -18,7 +18,7 @@ class SlideChannel(models.Model):
         default='public', string='Enroll Policy', required=True,
         help='Condition to enroll: everyone, on invite, on payment (sale bridge).')
     count_student = fields.Integer('Student count', compute='calculate_count_student', store=True)
-
+    user_support = fields.Many2many('res.users', string='User support')
 
     @api.depends('student_ids')
     def calculate_count_student(self):
@@ -26,6 +26,13 @@ class SlideChannel(models.Model):
             if record.student_ids:
                 student = self.env['student.student'].search([('source_ids', 'in', [record.id])])
                 record.count_student = len(student)
+
+    @api.model
+    def create(self, vals):
+        res = super(SlideChannel, self).create(vals)
+        res.user_support += res.create_uid
+        res.channel_partner_ids = None
+        return res
 
 class SlideSlide(models.Model):
     _inherit = 'slide.slide'

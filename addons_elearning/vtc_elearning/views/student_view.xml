@@ -118,7 +118,7 @@
                             <field name="position" required="1"/>
                             <field name="work_unit" required="1"/>
                             <field name="user_id" readonly="1"/>
-                            <field name="partner_id"/>
+                            <field name="partner_id" widget="many2many_tags"/>
                         </group>
                         <group string="Address">
                             <field name="res_country_state"/>
@@ -167,6 +167,33 @@
         </field>
     </record>
 
+    <record id="user_student_tree_view" model="ir.ui.view">
+         <field name="name">User Student view tree</field>
+        <field name="model">res.users</field>
+         <field eval="8" name="priority"/>
+         <field name="arch" type="xml">
+             <tree editable="bottom" >
+                 <field name="name"/>
+                 <field name="login"/>
+                 <field name="role_user"/>
+                 <field name="res_country_state"/>
+                 <button name="preference_change_password" type="object" string="Change password" class="btn btn-secondary"/>
+             </tree>
+         </field>
+     </record>
+
+    <record id="user_student_view_action" model="ir.actions.act_window">
+        <field name="name">User student</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="user_student_tree_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a course
+            </p>
+        </field>
+    </record>
+
     <menuitem id="student_menu_item"
               name="Student"
               parent="website_slides.website_slides_menu_root"
@@ -178,6 +205,12 @@
                   parent="student_menu_item"
                   sequence="1"
                   action="student_view_action"/>
+
+        <menuitem id="user_student_menu_item"
+                  name="User student"
+                  parent="student_menu_item"
+                  sequence="1"
+                  action="user_student_view_action"/>
 
 <!--    <record id="student_comment_slide_view_action" model="ir.actions.act_window">-->
 <!--        <field name="name">Student comment slide</field>-->
