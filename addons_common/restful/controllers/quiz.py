@@ -72,7 +72,7 @@ class QuizController(http.Controller):
                     'total_marks': rec.quiz_config or '',
                     'start_date': rec.start_date or '',
                     'total_result_user': request.env['op.quiz.result'].search_count([('quiz_id', '=', rec.id),
-                                                                                     ('user_id', '=', request.uid)]),
+                                                                                     ('user_id', '=', int(payload.get('uid')))]),
                     'end_date': rec.end_date or '',
                     'quiz_title': rec.quiz_html or '',
                     'quiz_description': rec.description or '',

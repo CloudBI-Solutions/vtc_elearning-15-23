@@ -4,7 +4,7 @@ class SlideChannel(models.Model):
     _inherit = 'slide.channel'
 
     course_level_id = fields.Many2one('course.level', string='course level')
-    final_quiz_ids = fields.One2many('slide.quiz.line','slide_channel_id')
+    final_quiz_ids = fields.One2many('slide.quiz.line','slide_channel_id', readonly=True)
     student_ids = fields.Many2many('student.student', string='Student')
     lecturers_ids = fields.Many2many('lecturers', string='Lecturers')
     start_date = fields.Date('Start date')
@@ -36,5 +36,12 @@ class SlideChannel(models.Model):
 
 class SlideSlide(models.Model):
     _inherit = 'slide.slide'
+
+    def action_set_completed(self):
+        if self._context.get('partner'):
+            return self._action_set_completed(self._context.get('partner'))
+        if any(not slide.channel_id.is_member for slide in self):
+            raise UserError(_('You cannot mark a slide as completed if you are not among its members.'))
+        return self._action_set_completed(self.env.user.partner_id)
 
     quiz_id = fields.Many2one('op.quiz', string='Quiz')

@@ -8,7 +8,7 @@ import werkzeug.wrappers
 import werkzeug.wrappers
 import werkzeug.wsgi
 from odoo.addons.restful.common import invalid_response, valid_response
-
+from werkzeug import urls
 from odoo import http
 from odoo.exceptions import AccessDenied, AccessError
 from odoo.http import request
@@ -88,6 +88,7 @@ class AccessToken(http.Controller):
             return invalid_response("wrong database name", error, 403)
 
         uid = request.session.uid
+        print(uid)
         # print(uid.has_group('base.group_user'))
         # odoo login failed:
         if not uid:
@@ -129,7 +130,9 @@ class AccessToken(http.Controller):
                     "country": request.env.user.country_id.name,
                     "contact_address": request.env.user.contact_address,
                     "customer_rank": request.env.user.customer_rank,
-                    'cource_join': cource_join
+                    'cource_join': cource_join,
+                    'avatar': urls.url_join(base_url, '/web/image?model=res.users&id={}&field=avatar_128'.format(
+                        uid)) if uid else ''
                 }
             ),
         )

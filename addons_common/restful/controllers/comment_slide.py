@@ -25,22 +25,21 @@ class CommentSlide(http.Controller):
         return 'https://test.diligo.vn:15000'
 
     @validate_token
-    @http.route("/api/v1/comment/slide", type='http', auth="none", methods=["GET", "OPTIONS"], website=False, cors="*")
+    @http.route("/api/v1/comment/slide", type='http', auth="public", methods=["GET", "OPTIONS"], website=False,
+                cors="*")
     def get_comment_slide_by_id(self, **payload):
         values = []
         base_url = CommentSlide.get_url_base(self)
-        comment1 = request.env['comment.slide'].sudo().search([('slide_id.id', '=', payload.get('slide_id'))])
-        list_comment = request.env['comment.slide'].sudo().search([('slide_id.id', '=', payload.get('slide_id')), ('comment_ids', '!=', False)])
+        # comment1 = request.env['comment.slide'].sudo().search([('slide_id', '=', int(payload.get('lesson_id')))])
+        list_comment = request.env['comment.slide'].sudo().search([('slide_id', '=', int(payload.get('lesson_id')))])
+        print(list_comment)
         for record in list_comment:
             data = {
                 'id': record.id,
                 'content': record.name,
                 'user_id': {'id': record.user_id.id, 'name': record.user_id.name, 'avatar': urls.url_join(base_url,
-                                            '/web/image?model=res.users&id={}&field=image_1920'.format(
-                                                record.user_id.id))} or '',
-                'student': {'id': record.student_id.id, 'name': record.student_id.name, 'avatar': urls.url_join(base_url,
-                                                                                                          '/web/image?model=student.students&id={}&field=avatar'.format(
-                                                                                                              record.student_id.id))} or '',
+                                                                                                          '/web/image?model=res.users&id={}&field=image_1920'.format(
+                                                                                                              record.user_id.id))} or '',
                 # 'content': record.name,
             }
             comments_below = []
@@ -49,16 +48,11 @@ class CommentSlide(http.Controller):
                     'id': rec.id,
                     'content': rec.name,
                     'user_id': {'id': rec.user_id.id, 'name': rec.user_id.name, 'avatar': urls.url_join(base_url,
-                                                                                                              '/web/image?model=res.users&id={0}&field=image_1920'.format(
-                                                                                                                  record.user_id.id))} or '',
-                    'student': {'id': rec.student_id.id, 'name': rec.student_id.name,
-                                'avatar': urls.url_join(base_url,
-                                                        '/web/image?model=student.students&id={0}&field=avatar'.format(
-                                                            rec.student_id.id))} or '',
+                                                                                                        '/web/image?model=res.users&id={0}&field=image_1920'.format(
+                                                                                                            record.user_id.id))} or '',
                 }
                 comments_below.append(comment_ids)
                 data['comments_below'] = comments_below
-
 
             values.append(data)
         return valid_response(values)
@@ -69,7 +63,6 @@ class CommentSlide(http.Controller):
         field_require = [
             'name',
             'slide_id',
-            'student_id',
             'comment_id',
         ]
         for field in field_require:
@@ -79,9 +72,10 @@ class CommentSlide(http.Controller):
                     "The parameter %s is missing!!!" % field)
         domain = {
             'name': payload.get('name'),
-            'slide_id': payload.get('slide_id'),
-            'student_id': int(payload.get('student_id')),
+            'slide_id': int(payload.get('slide_id')),
             'comment_id': payload.get('comment_id'),
         }
-        request.env['comment.slide'].with_user(SUPERUSER_ID).create(domain)
-        return invalid_response("Bạn đã ứng tuyển thành công vào vị trí %s." % payload.get('job_name'))
+        ress = request.env['comment.slide'].sudo().create(domain)
+        return valid_response({
+            'ok': 'ok'
+        })
