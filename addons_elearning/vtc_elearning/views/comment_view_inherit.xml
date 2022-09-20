@@ -60,7 +60,7 @@
 
     <menuitem id="comment_lecturers_menu_item"
               name="Comment lecturers"
-              parent="website_slides.website_slides_menu_configuration"
+              parent="lecturers_menu_item"
               action="comment_lecturers_view_action"/>
 
 </odoo>
