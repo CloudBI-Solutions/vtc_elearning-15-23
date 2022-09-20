@@ -32,7 +32,7 @@ class Student(models.Model):
     progress_ids = fields.One2many('progress.slide', 'student_id', string='Progress')
     comment_slide_ids = fields.One2many('comment.slide', 'student_id', string='Comment slide')
     comment_source_ids = fields.One2many('comment.course', 'student_id', string='Comment source')
-    partner_id = fields.One2many('res.partner', 'student_id', string='Partner')
+    partner_id = fields.Many2one('res.partner', string='Partner')
     state = fields.Selection([('confirm', 'Confirm'), ('pending', 'Pending'), ('cancel', 'Cancel'), ('recall', 'Recall')], string='State', default='pending')
     favorite_course_ids = fields.One2many('favorite.course', 'student_id', string='Favorite course')
     def active_user(self):
