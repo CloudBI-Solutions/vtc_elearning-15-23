@@ -35,7 +35,7 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//field[@name='channel_type']" position="before">
-                <field name="is_published"/>
+                <field name="is_published" string="Đăng lên website"/>
             </xpath>
             <xpath expr="//page[@name='karma_rules']" position="replace">
                 <page name="Lecturers" string="Lecturers">
