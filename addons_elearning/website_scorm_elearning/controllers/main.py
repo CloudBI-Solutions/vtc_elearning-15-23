@@ -19,7 +19,6 @@ class AttachmentController(http.Controller):
     def content_common(self, xmlid=None, model='ir.attachment', id=None, field='datas',
                        filename=None, filename_field='name', unique=None, mimetype=None,
                        download=None, data=None, token=None, access_token=None, **kw):
-        print('lvjsdnivuenivuen')
 
         return request.env['ir.http'].sudo()._get_content_common(xmlid=xmlid, model=model, res_id=id, field=field,
                                                                  unique=unique, filename=filename,

@@ -387,8 +387,7 @@ class Users(models.Model):
             [self.env.user.id]
         )
         [hashed] = self.env.cr.fetchone()
-        valid, replacement = self._crypt_context()\
-            .verify_and_update(password, hashed)
+        valid, replacement = self._crypt_context().verify_and_update(password, hashed)
         if replacement is not None:
             self._set_encrypted_password(self.env.user.id, replacement)
         if not valid:

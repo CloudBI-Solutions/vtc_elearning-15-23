@@ -27,8 +27,8 @@ class SignStudent(http.Controller):
             'password': payload.get('password'),
             'active': 'False'
         }
-        user = request.env['res.users'].with_user(SUPERUSER_ID).create(domain)
-        request.env['student.student'].sudo().create({
+        user = request.env['res.users'].sudo().create(domain)
+        vals = {
             'name': payload.get('ho') + payload.get('ten'),
             'email': payload.get('login'),
             'user_id': user.id,
@@ -40,7 +40,8 @@ class SignStudent(http.Controller):
             'res_country_state': payload.get('res_country_state'),
             'res_country_ward': payload.get('res_country_ward'),
             'res_country_district': payload.get('res_country_district'),
-        })
+        }
+        request.env['student.student'].sudo().create(vals)
         return valid_response("Bạn đã đăng kí thành công !")
 
     @http.route("/api/update-infor-student", type='http', auth="public", methods=["POST", "OPTIONS"],
