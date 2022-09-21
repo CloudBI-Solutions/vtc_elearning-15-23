@@ -1009,3 +1009,8 @@ msgstr "Chuyên sâu"
 #: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__is_special
 msgid "Course Special"
 msgstr "Khóa học đặc biệt"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_lecturers__total_course
+msgid "Total course"
+msgstr "Tổng khóa học"

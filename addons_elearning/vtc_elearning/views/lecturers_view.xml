@@ -41,6 +41,7 @@
                             <field name="email"/>
                         </group>
                         <group>
+                            <field name="gender"/>
                             <field name="birth"/>
 <!--                            <field name="identity_card"/>-->
 <!--                            <field name="address"/>-->
