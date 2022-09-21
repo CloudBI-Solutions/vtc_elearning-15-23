@@ -50,8 +50,11 @@
                     <xpath expr="//field[@name='partner_id']" position="attributes">
                         <attribute name="invisible">1</attribute>
                     </xpath>
+                    <xpath expr="//field[@name='partner_id']" position="after">
+                        <field name="student_id"/>
+                    </xpath>
                     <xpath expr="//field[@name='channel_user_id']" position="attributes">
-                        <attribute name="string">Học viên</attribute>
+                        <attribute name="invisible">1</attribute>
                     </xpath>
                     <xpath expr="//field[@name='write_date']" position="attributes">
                         <attribute name="string">Thời gian hoạt động cuối</attribute>

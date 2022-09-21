@@ -86,12 +86,23 @@ class ProgressSlide(models.Model):
 class SlideChannelPartner(models.Model):
     _inherit = 'slide.channel.partner'
 
-    student_id = fields.Many2one(related='partner_id.student_id', string="Student")
+    student_id = fields.Many2one('student.student', string="Student")
+    # partner_id = fields.Many2one('res.partner', index=True, required=True, ondelete='cascade')
+
+    @api.onchange('student_id')
+    def onchange_partner_id(self):
+        if self.student_id and self.student_id.partner_id:
+            self.partner_id = self.student_id.partner_id[0]
+        else:
+            self.partner_id = self.env.uid
+
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     student_id = fields.Many2one('student.student', string='Student')
+
 
     # @api.onchange('email')
 class FavoriteCourse(models.Model):
