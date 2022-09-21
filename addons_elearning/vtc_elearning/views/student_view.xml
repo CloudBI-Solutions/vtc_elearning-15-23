@@ -114,6 +114,7 @@
                             <field name="birth"/>
                             <field name="identity_card"/>
                             <field name="address"/>
+                            <field name="gender"/>
                         </group>
                         <group string="Information work">
                             <field name="position" required="1"/>
