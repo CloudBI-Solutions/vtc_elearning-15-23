@@ -76,6 +76,7 @@
                 <tree string="Quiz" delete="0">
                     <field name="name"/>
                     <field name="categ_id"/>
+                    <field name="slide_channel_id"/>
                 </tree>
             </field>
         </record>
