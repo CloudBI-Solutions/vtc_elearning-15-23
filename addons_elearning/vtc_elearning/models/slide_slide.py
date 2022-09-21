@@ -10,6 +10,7 @@ class SlideChannel(models.Model):
     studied = fields.Integer('studying', store=True)
     exam = fields.Integer('Exam', store=True)
     done_course = fields.Integer('Done course', store=True)
+    price_course = fields.Float('Price')
     level = fields.Selection([
         ('basic', 'Basic'),
         ('common', 'Common'),
