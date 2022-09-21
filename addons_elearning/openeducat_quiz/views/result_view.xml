@@ -59,6 +59,13 @@
                                 <field name="total_question" readonly="1"/>
                                 <field name="total_correct" readonly="1"/>
                                 <field name="total_incorrect" readonly="1"/>
+                                <label for="hr_time_quiz" string="Time Limit"/>
+                                <div>
+                                    <field name="hr_time_quiz" style="width: 30%;"/>
+                                    <label string="Hr" style="width: 8%;" for="hr_time_quiz"/>
+                                    <field name="minute_time_quiz" style="width: 30%;"/>
+                                    <label string="Min" style="width: 20%;" for="minute_time_quiz"/>
+                                </div>
                             </group>
                         </group>
                         <notebook>

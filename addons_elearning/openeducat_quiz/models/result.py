@@ -266,6 +266,8 @@ class OpQuizResult(models.Model):
     time_spent_second = fields.Integer('Spent Seconds')
     company_id = fields.Many2one('res.company', string='Company')
     create_on = fields.Datetime('Create On', default=datetime.now())
+    hr_time_quiz = fields.Integer('Giờ')
+    minute_time_quiz = fields.Integer('Phút')
 
     # @api.depends('line_ids', 'line_ids.mark', 'line_ids.answer',
     #              'line_ids.given_answer')

@@ -274,6 +274,8 @@ class OpQuiz(models.Model):
             result_id = result_pool.create({
                 'name': self.name,
                 'quiz_id': self.id,
+                'hr_time_quiz': self.time_limit_hr,
+                'minute_time_quiz': self.time_limit_minute,
                 'user_id': user.id,
                 'company_id': user.company_id.id,
                 'line_ids': line_data,
