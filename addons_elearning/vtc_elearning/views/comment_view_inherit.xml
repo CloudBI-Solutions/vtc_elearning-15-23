@@ -58,9 +58,20 @@
         </field>
     </record>
 
+    <record id="comment_slide_view_action" model="ir.actions.act_window">
+        <field name="name">Comment Slide</field>
+        <field name="res_model">comment.slide</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
     <menuitem id="comment_lecturers_menu_item"
               name="Comment lecturers"
               parent="lecturers_menu_item"
               action="comment_lecturers_view_action"/>
+
+    <menuitem id="comment_slide_menu_item"
+              name="Comment slide"
+              parent="website_slides.website_slides_menu_courses"
+              action="comment_slide_view_action"/>
 
 </odoo>
