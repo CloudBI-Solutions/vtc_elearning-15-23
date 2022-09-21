@@ -35,6 +35,8 @@ class Student(models.Model):
     partner_id = fields.One2many('res.partner', 'student_id', string='Partner')
     state = fields.Selection([('confirm', 'Confirm'), ('pending', 'Pending'), ('cancel', 'Cancel'), ('recall', 'Recall')], string='State', default='pending')
     favorite_course_ids = fields.One2many('favorite.course', 'student_id', string='Favorite course')
+
+
     def active_user(self):
         self.user_id.active = True
         self.state = 'confirm'
@@ -49,6 +51,12 @@ class Student(models.Model):
     @api.model
     def create(self, vals):
         res = super(Student, self).create(vals)
+        partner = self.env['res.partner'].sudo().create({
+            'name': res.name,
+            'student_id': res.id,
+            'email': res.email,
+            'phone': res.phone,
+        })
         return res
 
 
