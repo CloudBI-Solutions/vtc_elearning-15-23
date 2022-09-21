@@ -9,6 +9,7 @@
         'security/ir.model.access.csv',
         'views/certificate_view.xml',
         'views/slide_slide_view_inherit.xml',
+        'views/comment_view_inherit.xml',
         'views/quiz_view_inherit.xml',
         'views/lecturers_view.xml',
         'views/student_view.xml',
@@ -18,7 +19,7 @@
         'views/report_view_inherit.xml',
         'views/menu_action.xml',
         'views/slide_channel_tag.xml',
-        'views/comment_view_inherit.xml',
+
     ],
     'demo': [],
     'depends': [

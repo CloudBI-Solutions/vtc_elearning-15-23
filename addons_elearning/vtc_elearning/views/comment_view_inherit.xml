@@ -66,7 +66,7 @@
 
     <menuitem id="comment_lecturers_menu_item"
               name="Comment lecturers"
-              parent="lecturers_menu_item"
+              parent="vtc_elearning.lecturers_menu_item"
               action="comment_lecturers_view_action"/>
 
 <!--    <menuitem id="comment_slide_menu_item"-->
