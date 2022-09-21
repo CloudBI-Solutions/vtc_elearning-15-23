@@ -146,12 +146,16 @@ class CourseByIdController(http.Controller):
 		# tổng học viên
 
 		# tài liệu
+		attachment = []
 		list_attachment_files = request.env['ir.attachment'].sudo().search(
-			[('res_model', '=', 'slide.channel'), ('res_id', '=', list_courses.id)]).ids
+			[('res_model', '=', 'slide.channel'), ('res_id', '=', list_courses.id)])
+		for rec in list_attachment_files:
+			attachment.append({'name': rec.name, 'url': urls.url_join(base_url, self.get_url_attachment(rec.id))})
 		# print('list attachment: ', list_attachment_files)
 		list_attachment = [urls.url_join(base_url, self.get_url_attachment(att_id)) for att_id in
 		                   list_attachment_files]
-		datas['files'] = list_attachment
+
+		datas['files'] = attachment
 
 		values.append(datas)
 		return valid_response(values)
