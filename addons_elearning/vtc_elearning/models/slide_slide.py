@@ -6,6 +6,10 @@ class SlideChannel(models.Model):
     _inherit = 'slide.channel'
 
     rating_avg = fields.Float('Rating AVG', compute='_compute_rating_avg', store=True)
+    not_studied = fields.Integer('Not studied', store=True)
+    studied = fields.Integer('studying', store=True)
+    exam = fields.Integer('Exam', store=True)
+    done_course = fields.Integer('Done course', store=True)
 
     def average(self, lst):
         return sum(lst) / len(lst)

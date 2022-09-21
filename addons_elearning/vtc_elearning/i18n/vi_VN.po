@@ -942,3 +942,28 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.slide_channel_inherit_view_form
 msgid "Đăng lên website"
 msgstr ""
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__not_studied
+msgid "Not studied"
+msgstr "Chưa học"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__studied
+msgid "studying"
+msgstr "Đang học"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__exam
+msgid "Exam"
+msgstr "Làm bài thi"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__done_course
+msgid "Done course"
+msgstr "Hoàn thành khóa học"
+
+#. module: vtc_elearning
+#: model_terms:ir.ui.view,arch_db:vtc_elearning.vtc_elearning_slides_chanel_form_view_inherit
+msgid "Statistical"
+msgstr "Thống kê"
