@@ -23,8 +23,9 @@ class SlideQuizLine(models.Model):
                 rec.count_question = 0
             if rec.op_quiz_id.config_ids:
                 for r in rec.op_quiz_id.config_ids:
-                    count.append(len(r.bank_id.line_ids))
-                rec.count_question = sum(count)
+                    rec.count_question += r.no_of_question
+                #     count.append(len(r.bank_id.line_ids))
+                # rec.count_question = sum(count)
             else:
                 rec.count_question = 0
 
