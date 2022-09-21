@@ -38,8 +38,7 @@ class SlideChannel(models.Model):
         line_ids = self.env['slide.quiz.line'].sudo().search([('op_quiz_id', '=', False)])
         print(line_ids)
         for record in line_ids:
-            for rec in record.final_quiz_ids:
-                rec.unlink()
+            record.unlink()
 
 
     course_level_id = fields.Many2one('course.level', string='course level')
