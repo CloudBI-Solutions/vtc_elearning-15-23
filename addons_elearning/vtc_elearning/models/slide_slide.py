@@ -74,10 +74,12 @@ class SlideChannel(models.Model):
         res = super(SlideChannel, self).create(vals)
         res.user_support += res.create_uid
         res.channel_partner_ids = None
+        res.is_published = True
         return res
 
 class SlideSlide(models.Model):
     _inherit = 'slide.slide'
+
 
     def action_set_completed(self):
         if self._context.get('partner'):
@@ -87,3 +89,9 @@ class SlideSlide(models.Model):
         return self._action_set_completed(self.env.user.partner_id)
 
     quiz_id = fields.Many2one('op.quiz', string='Quiz')
+
+    @api.model
+    def create(self, vals):
+        res = super(SlideSlide, self).create(vals)
+        res.is_published = True
+        return res
