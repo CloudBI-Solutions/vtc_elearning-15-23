@@ -32,7 +32,6 @@
             </xpath>
             <xpath expr="//field[@name='user_id']" position="replace">
                 <field name="type_course" required="1"/>
-                <button name="delete_line_ids" type="object" string="Delete"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
             </xpath>
