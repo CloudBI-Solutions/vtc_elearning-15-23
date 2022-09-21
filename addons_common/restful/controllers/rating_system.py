@@ -20,7 +20,7 @@ class StudentInfor(http.Controller):
                 csrf=False, cors="*")
     def rating_system(self, **payload):
         field_require = [
-            'user_id',
+            'uid',
             'system_onetouch'
             'rating_lecturers'
             'content_slide'
