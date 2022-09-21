@@ -59,6 +59,8 @@ class CourseByIdController(http.Controller):
                 'comment': r.feedback,
             })
         # cấp độ học
+        print(list_courses.final_quiz_ids)
+        print(list_courses.final_quiz_ids[0].op_quiz_id)
         datas = {'id': list_courses.id,
                  'name': list_courses.name,
                  'description': list_courses.description,
