@@ -133,7 +133,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_form_view
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_tree_view
 msgid "Confirm"
-msgstr "Duyệt tài khoản học viên"
+msgstr "Đã duyệt"
 
 #. module: vtc_elearning
 #: model:ir.model,name:vtc_elearning.model_res_partner
