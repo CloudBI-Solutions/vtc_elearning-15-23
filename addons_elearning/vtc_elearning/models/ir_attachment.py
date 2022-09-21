@@ -5,7 +5,7 @@ class IrAttachment(models.Model):
 
     @api.model
     def create(self, vals):
-        slide = self.env['slide.slide'].search([('id', '=', vals['res_id'])])
-        vals['name'] = slide.name
+        if not vals.get('name'):
+            vals['name'] = '.'
         res = super(IrAttachment, self).create(vals)
         return res
