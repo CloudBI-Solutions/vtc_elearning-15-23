@@ -123,11 +123,15 @@ class CourseByIdController(http.Controller):
 
         # tài liệu
         list_attachment_files = request.env['ir.attachment'].sudo().search(
-            [('res_model', '=', 'slide.channel'), ('res_id', '=', list_courses.id)]).ids
-        # print('list attachment: ', list_attachment_files)
-        list_attachment = [urls.url_join(base_url, self.get_url_attachment(att_id)) for att_id in
-                           list_attachment_files]
-        datas['files'] = list_attachment
+            [('res_model', '=', 'slide.channel'), ('res_id', '=', list_courses.id)])
+
+        attachment = []
+        for rec in list_attachment_files:
+            url = urls.url_join(base_url, self.get_url_attachment(rec.id))
+            name = rec.name
+            attachment.append({'name': name, 'url': url})
+
+        datas['files'] = attachment
 
         values.append(datas)
         return valid_response(values)
