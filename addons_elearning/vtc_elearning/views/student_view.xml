@@ -35,6 +35,14 @@
                  <field name="birth"/>
                  <field name="identity_card"/>
                  <field name="address"/>
+                 <field name="state"/>
+                 <field name="user_id" invisible="1"/>
+                 <button name="active_user"
+                            string="Confirm"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state','!=', 'pending')]}"
+                    />
              </tree>
          </field>
      </record>
@@ -45,16 +53,52 @@
         <field name="arch" type="xml">
             <form string="Student">
                 <header>
-                    <button name="check_email_login_user" string="Tạo tài khoản" type="object" class="oe_highlight"/>
+                    <button name="check_email_login_user"
+                            string="Tạo tài khoản"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('user_id','!=', False)]}"
+                    />
+                    <button name="active_user"
+                            string="Confirm"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state','!=', 'pending')]}"
+                    />
+                    <button name="cancel_user"
+                            string="Cancel user"
+                            type="object"
+                            class="btn-warning"
+                            attrs="{'invisible': [('state','!=', 'pending')]}"
+                    />
+                    <button name="recall_user"
+                            string="Recall user"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state','!=', 'confirm')]}"
+                    />
+                    <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <div name="button_box" class="oe_button_box">
-                        <button name="%(student_course_action)d" type="action" string="Course" icon="fa-solid fa-graduation-cap"/>
-                        <button name="%(student_quiz_action)d" type="action" string="Quiz" icon="fa-regular fa-pen-paintbrush"/>
-                        <button name="%(student_quiz_result_action)d" type="action" string="Quiz result" icon="fa-regular fa-file-certificate"/>
-                        <button name="%(certificate_student_view_action)d" type="action" string="Certificate" icon="fa-regular"/>
+                        <button name="%(student_course_action)d"
+                                type="action"
+                                string="Course"
+                                icon="fa-solid fa-graduation-cap"/>
+                        <button name="%(student_quiz_action)d"
+                                type="action"
+                                string="Quiz"
+                                icon="fa-solid fa-file"/>
+                        <button name="%(student_quiz_result_action)d"
+                                type="action"
+                                string="Quiz result"
+                                icon="fa-solid fa-check"/>
+                        <button name="%(certificate_student_view_action)d"
+                                type="action"
+                                string="Certificate"
+                                icon="fa-star"/>
                     </div>
-                    <field name="avatar" widget="image" class="oe_avatar" options="{&quot;zoom&quot;: true, &quot;preview_image&quot;:&quot;avatar_128&quot;}"/>
+                        <field name="avatar" widget="image" class="oe_avatar" />
                     <div class="oe_title">
                         <h1 class="d-flex">
                             <field name="name" placeholder="Tên học viên" required="True"/>
@@ -62,8 +106,8 @@
                     </div>
                     <group>
                         <group string="Contact">
-                            <field name="phone"/>
-                            <field name="email"/>
+                            <field name="phone" required="1"/>
+                            <field name="email" required="1"/>
                         </group>
                         <group string="Personal information">
                             <field name="birth"/>
@@ -71,9 +115,10 @@
                             <field name="address"/>
                         </group>
                         <group string="Information work">
-                            <field name="position"/>
-                            <field name="work_unit"/>
-                            <field name="user_id"/>
+                            <field name="position" required="1"/>
+                            <field name="work_unit" required="1"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="partner_id" widget="many2many_tags"/>
                         </group>
                         <group string="Address">
                             <field name="res_country_state"/>
@@ -90,7 +135,18 @@
 
                         </page>
                         <page string="Kết quả">
-                            <field name="quiz_result_ids"/>
+                            <field name="quiz_result_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="quiz_id"/>
+                                    <field name="finish_date"/>
+                                    <field name="total_question"/>
+                                    <field name="total_correct"/>
+                                    <field name="total_incorrect"/>
+                                    <field name="score"/>
+                                    <field name="create_on"/>
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
@@ -111,11 +167,62 @@
         </field>
     </record>
 
+    <record id="user_student_tree_view" model="ir.ui.view">
+         <field name="name">User Student view tree</field>
+        <field name="model">res.users</field>
+         <field eval="8" name="priority"/>
+         <field name="arch" type="xml">
+             <tree editable="bottom" >
+                 <field name="name"/>
+                 <field name="login"/>
+                 <field name="role_user"/>
+                 <field name="res_country_state"/>
+                 <button name="preference_change_password" type="object" string="Change password" class="btn btn-secondary"/>
+             </tree>
+         </field>
+     </record>
+
+    <record id="user_student_view_action" model="ir.actions.act_window">
+        <field name="name">User student</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="user_student_tree_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a course
+            </p>
+        </field>
+    </record>
 
     <menuitem id="student_menu_item"
               name="Student"
               parent="website_slides.website_slides_menu_root"
               sequence="3"
-              action="student_view_action"/>
+              />
+
+        <menuitem id="infor_student_menu_item"
+                  name="Student"
+                  parent="student_menu_item"
+                  sequence="1"
+                  action="student_view_action"/>
+
+        <menuitem id="user_student_menu_item"
+                  name="User student"
+                  parent="student_menu_item"
+                  sequence="1"
+                  action="user_student_view_action"/>
+
+<!--    <record id="student_comment_slide_view_action" model="ir.actions.act_window">-->
+<!--        <field name="name">Student comment slide</field>-->
+<!--        <field name="res_model">comment.slide</field>-->
+<!--        <field name="view_mode">tree,form</field>-->
+<!--    </record>-->
+
+
+<!--    <menuitem id="student_comment_slide_menu_item"-->
+<!--              name="Bình luận"-->
+<!--              parent="website_slides.website_slides_menu_root"-->
+<!--              sequence="3"-->
+<!--              action="student_comment_slide_view_action"/>-->
 
 </odoo>

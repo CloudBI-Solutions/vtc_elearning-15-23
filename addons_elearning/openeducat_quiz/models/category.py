@@ -8,7 +8,7 @@
 #
 ##############################################################################
 
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class OpQuizCategory(models.Model):
@@ -16,5 +16,10 @@ class OpQuizCategory(models.Model):
     _description = "Quiz Category"
 
     name = fields.Char('Name')
-    code = fields.Char('Code')
+    code = fields.Char('Code', readonly=True)
     description = fields.Text('Description')
+
+    @api.model
+    def create(self, vals):
+        vals['code'] = self.env['ir.sequence'].next_by_code('QUIZ_CATEGORY_SEQUENCE')
+        return super(OpQuizCategory, self).create(vals)

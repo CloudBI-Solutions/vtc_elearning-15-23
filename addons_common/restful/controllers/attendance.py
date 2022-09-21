@@ -19,7 +19,7 @@ _logger = logging.getLogger(__name__)
 class AttendanceController(http.Controller):
 
     @validate_token
-    @http.route("/api/v1/attendance", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    @http.route("/api/v1/attendance", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_attendance(self, **payload):
         values = []
         if not all([payload.get('date_from', False), payload.get('date_to', False)]):

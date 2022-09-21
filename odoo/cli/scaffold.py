@@ -129,7 +129,6 @@ class template(object):
                        .dump(f, encoding='utf-8')
 
 def die(message, code=1):
-    print(message, file=sys.stderr)
     sys.exit(code)
 
 def warn(message):

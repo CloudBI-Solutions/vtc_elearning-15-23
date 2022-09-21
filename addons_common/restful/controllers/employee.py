@@ -28,12 +28,12 @@ class EmployeeController(http.Controller):
         return 'https://test.diligo.vn:15000'
 
     @validate_token
-    @http.route("/api/v1/employee-info", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
+    @http.route("/api/v1/employee-info", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_employee_infor(self, **payload):
         base_url = EmployeeController.get_url_base(self)
         values = []
         list_employee = request.env['hr.employee'].sudo().search(
-            [('user_id', '=', request.uid)])  #
+            [('user_id', '=', payload.get('uid'))])  #
         # data = {}
         for rec in list_employee:
             data = {

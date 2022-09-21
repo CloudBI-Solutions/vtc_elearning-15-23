@@ -22,11 +22,41 @@ class AllCoursesController(http.Controller):
             return config
         return 'https://test.diligo.vn:15000'
 
-    @http.route("/api/all_courses", type="http", auth="public", methods=["GET"], csrf=False, cors="*")
+    @validate_token
+    @http.route("/api/get_course_by_user", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
+    def get_course_by_user(self, **kwargs):
+        base_url = AllCoursesController.get_url_base(self)
+        user_login = request.env['res.users'].sudo().search([('id', '=', int(kwargs.get('uid')))])
+        partner_channel = request.env['slide.channel.partner'].sudo().search(
+            [('partner_id', '=', user_login.partner_id.id)])
+        all_courses = [r.channel_id for r in partner_channel]
+        data = {}
+        vals = []
+        for rec in all_courses:
+            # cấp độ học
+            # tag_id = rec.tag_ids[0].id
+            course_level = rec.course_level_id
+
+            data = {'id': rec.id,
+                    'name': rec.name,
+                    'description': rec.description,
+                    'image': urls.url_join(base_url,
+                                           '/web/image?model=slide.channel&id={0}&field=image_1920'.format(
+                                               rec.id)),
+                    'course_level': course_level,  # cấp độ học
+                    'rating_avg_stars': rec.rating_avg,  # đánh giá trung bình, tự chia cho 5, vd 3/5
+                    'total_time': rec.total_time,
+                    }
+            vals.append(data)
+        for i in range(len(partner_channel)):
+            vals[i]['process'] = partner_channel[i].completion
+        return valid_response(vals)
+
+    @http.route("/api/all_courses", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
     def get_all_courses(self, **payload):
         values = []
         base_url = AllCoursesController.get_url_base(self)
-        all_courses = request.env['slide.channel'].search([('is_published', '=', True)])      # .sudo()
+        all_courses = request.env['slide.channel'].search([('is_published', '=', True)])  # .sudo()
         for rec in all_courses:
             # cấp độ học
             # tag_id = rec.tag_ids[0].id
@@ -36,11 +66,11 @@ class AllCoursesController(http.Controller):
                      'name': rec.name,
                      'description': rec.description,
                      'image': urls.url_join(base_url,
-                                        '/web/image?model=slide.channel&id={0}&field=image_1920'.format(
-                                            rec.id)),
-                     'course_level': course_level,                          # cấp độ học
+                                            '/web/image?model=slide.channel&id={0}&field=image_1920'.format(
+                                                rec.id)),
+                     'course_level': course_level,  # cấp độ học
                      'rating_avg_stars': rec.rating_avg_stars,  # đánh giá trung bình, tự chia cho 5, vd 3/5
-                     'total_time': rec.total_time,              # tổng thời lượng khoá học
+                     'total_time': rec.total_time,  # tổng thời lượng khoá học
                      }
 
             # list giảng viên
@@ -66,7 +96,7 @@ class AllCoursesController(http.Controller):
                     count_time_slide += slide.completion_time
             dates['total_slide'] = total_slide
             dates['count_time_slide'] = count_time_slide
-                #
+            #
             #     slide_info = {
             #         'name': slide.name,
             #         'slide_type': slide.slide_type,

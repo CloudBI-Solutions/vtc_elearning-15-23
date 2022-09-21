@@ -24,7 +24,6 @@ class AnnouncementController(http.Controller):
             return config
         return 'https://test.diligo.vn:15000'
 
-    @validate_token
     @http.route("/api/v1/announcement", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
     def get_announcement(self, **payload):
         values = []

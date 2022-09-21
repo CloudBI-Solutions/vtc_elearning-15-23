@@ -31,6 +31,7 @@
     'data': [
         # 'data/quiz_data.xml',
         'data/answer_grade.xml',
+        'data/op_quiz_category_sequence.xml',
         'security/quiz_security.xml',
         'security/ir.model.access.csv',
         'security/quiz.xml',
@@ -40,7 +41,7 @@
         # 'views/exam_view.xml',
         'views/quiz_view.xml',
         'views/result_view.xml',
-        'views/website_view.xml',
+        # 'views/website_view.xml',
         # 'views/quiz_asset.xml',
         'views/question_bank_view.xml',
         'views/question_bank_line_view.xml',
