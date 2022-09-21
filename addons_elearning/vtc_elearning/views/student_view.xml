@@ -37,6 +37,7 @@
                  <field name="address"/>
                  <field name="state"/>
                  <field name="user_id" invisible="1"/>
+
                  <button name="active_user"
                             string="Duyệt tài khoản học viên"
                             type="object"
@@ -177,7 +178,10 @@
                  <field name="login"/>
                  <field name="role_user"/>
                  <field name="res_country_state"/>
-                 <button name="preference_change_password" type="object" string="Change password" class="btn btn-secondary"/>
+                 <button name="%(base.change_password_wizard_action)d"
+                        type="action"
+                        string="Cấp mật khẩu"
+                        class="btn btn-secondary"/>
              </tree>
          </field>
      </record>
