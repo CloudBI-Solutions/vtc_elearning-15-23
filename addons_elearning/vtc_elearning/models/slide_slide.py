@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 class SlideChannel(models.Model):
     _inherit = 'slide.channel'
 
+    is_special = fields.Boolean('Course Special')
     rating_avg = fields.Float('Rating AVG', compute='_compute_rating_avg', store=True)
     not_studied = fields.Integer('Not studied', store=True)
     studied = fields.Integer('studying', store=True)

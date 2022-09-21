@@ -70,6 +70,7 @@ class AllCoursesController(http.Controller):
                                             '/web/image?model=slide.channel&id={0}&field=image_1920'.format(
                                                 rec.id)),
                      'level': level,
+                     'is_special': rec.is_special,
                      'course_level': course_level,  # cấp độ học
                      'rating_avg_stars': rec.rating_avg_stars,  # đánh giá trung bình, tự chia cho 5, vd 3/5
                      'total_time': rec.total_time,  # tổng thời lượng khoá học
