@@ -33,6 +33,15 @@ class SlideChannel(models.Model):
         help='Condition to enroll: everyone, on invite, on payment (sale bridge).')
     count_student = fields.Integer('Student count', compute='calculate_count_student', store=True)
     user_support = fields.Many2many('res.users', string='User support')
+    total_time_video = fields.Float(compute='calculate_total_time_video', string='Total time video', store=True)
+
+    @api.depends('slide_ids')
+    def calculate_total_time_video(self):
+        for record in self:
+            if record.slide_ids:
+                for rec in record.slide_ids:
+                    if rec.slide_type == 'video':
+                        record.total_time_video += rec.completion_time
 
     @api.depends('student_ids')
     def calculate_count_student(self):
