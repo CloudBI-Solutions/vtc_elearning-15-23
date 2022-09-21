@@ -64,6 +64,7 @@ class CourseByIdController(http.Controller):
                  'description': list_courses.description,
                  'total_student': list_courses.count_student,
                  'total_time': list_courses.total_time,
+                 'total_time_video': list_courses.total_time_video,
                  'total_slides': list_courses.total_slides,
                  'level': list_courses.course_level_id,
                  'final': list_courses.final_quiz_ids.ids,
