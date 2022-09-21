@@ -72,6 +72,7 @@
     <menuitem id="comment_slide_menu_item"
               name="Comment slide"
               parent="website_slides.website_slides_menu_courses"
+              groups="base.group_system"
               action="comment_slide_view_action"/>
 
 </odoo>
