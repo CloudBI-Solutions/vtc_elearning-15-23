@@ -10,6 +10,12 @@ class SlideChannel(models.Model):
     studied = fields.Integer('studying', store=True)
     exam = fields.Integer('Exam', store=True)
     done_course = fields.Integer('Done course', store=True)
+    level = fields.Selection([
+        ('basic', 'Basic'),
+        ('common', 'Common'),
+        ('advanced', 'Advanced'),
+        ('high_class', 'High class'),
+        ('depth', 'Depth')], string='Level')
 
     def average(self, lst):
         return sum(lst) / len(lst)

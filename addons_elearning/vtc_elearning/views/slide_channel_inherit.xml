@@ -78,6 +78,36 @@
                             </page>
                     </xpath>
 
+                     <xpath expr="//field[@name='active']" position="after">
+                         <div>
+                         <label for="level" string="Level"/>
+                         <field name="level" style="width: 20%" widget="selection"/>
+                         </div>
+                     </xpath>
+
+                    <xpath expr="//field[@name='tag_ids']" position="attributes">
+                         <attribute name="invisible">1</attribute>
+                     </xpath>
+
+                </field>
+        </record>
+
+        <record id="vtc_elearning_slides_chanel_kanban_view_inherit" model="ir.ui.view">
+                <field name="name">vtc_elearning_slides_chanel_kanban_view_inherit</field>
+                <field name="model">slide.channel</field>
+                <field name="inherit_id" ref="website_slides.slide_channel_view_kanban"/>
+                <field name="arch" type="xml">
+
+                     <xpath expr="//field[@name='tag_ids']" position="after">
+                        <div t-if="record.level"> Level:
+                            <field name="level" widget="selection" options="{'color_field': 'green'}"/>
+                         </div>
+
+                    </xpath>
+                    <xpath expr="//field[@name='tag_ids']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+
                 </field>
         </record>
 
