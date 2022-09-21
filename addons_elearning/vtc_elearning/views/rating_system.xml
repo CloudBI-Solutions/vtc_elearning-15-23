@@ -6,7 +6,7 @@
         <field name="model">rating.system</field>
          <field eval="8" name="priority"/>
          <field name="arch" type="xml">
-             <tree create="false">
+             <tree create="0" edit="0">
                  <field name="user_id"/>
                  <field name="slide_id" string="Khóa học"/>
                  <field name="system_onetouch" widget="priority"/>
@@ -25,7 +25,7 @@
         <field name="name">Rating system form view</field>
         <field name="model">rating.system</field>
         <field name="arch" type="xml">
-            <form string="Rating system" edit="0" credit="0">
+            <form string="Rating system" edit="0" create="0">
                 <sheet>
                     <div class="oe_title">
                         <h1 class="d-flex">
