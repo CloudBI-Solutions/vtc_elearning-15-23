@@ -118,7 +118,7 @@
                             <field name="position" required="1"/>
                             <field name="work_unit" required="1"/>
                             <field name="user_id" readonly="1"/>
-                            <field name="partner_id" widget="many2many_tags"/>
+<!--                            <field name="partner_id" widget="many2many_tags"/>-->
                         </group>
                         <group string="Address">
                             <field name="res_country_state"/>
