@@ -26,7 +26,7 @@
         <field name="model">rat.lecturers</field>
          <field eval="8" name="priority"/>
          <field name="arch" type="xml">
-             <tree string="rating lecturers">
+             <tree string="rating lecturers" edit="0" create="0">
                  <field name="name"/>
                  <field name="rating" widget="priority"/>
                  <field name="lecturers_id"/>
@@ -39,7 +39,7 @@
         <field name="name">Rat lecturers form view</field>
         <field name="model">rat.lecturers</field>
         <field name="arch" type="xml">
-            <form string="Rating lecturers">
+            <form string="Rating lecturers" edit="0" create="0">
                 <header>
                 </header>
                 <sheet>
