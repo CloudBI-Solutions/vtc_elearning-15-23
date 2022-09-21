@@ -57,12 +57,12 @@ msgstr ""
 #. module: vtc_elearning
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__student_student__state__cancel
 msgid "Cancel"
-msgstr ""
+msgstr "Hủy"
 
 #. module: vtc_elearning
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_form_view
 msgid "Cancel user"
-msgstr ""
+msgstr "Từ chối tài khoản"
 
 #. module: vtc_elearning
 #: model:ir.actions.act_window,name:vtc_elearning.certificate_student_view_action
@@ -133,7 +133,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_form_view
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_tree_view
 msgid "Confirm"
-msgstr "Đang thực hiện"
+msgstr "Duyệt tài khoản học viên"
 
 #. module: vtc_elearning
 #: model:ir.model,name:vtc_elearning.model_res_partner
@@ -500,7 +500,7 @@ msgstr ""
 #. module: vtc_elearning
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__student_student__state__pending
 msgid "Pending"
-msgstr ""
+msgstr "Chờ duyệt"
 
 #. module: vtc_elearning
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_form_view
@@ -595,12 +595,12 @@ msgstr "Đánh giá hệ thống"
 #. module: vtc_elearning
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__student_student__state__recall
 msgid "Recall"
-msgstr ""
+msgstr "Thu hồi"
 
 #. module: vtc_elearning
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_form_view
 msgid "Recall user"
-msgstr ""
+msgstr "Thu hồi tài khoản"
 
 #. module: vtc_elearning
 #: model:ir.model.fields,field_description:vtc_elearning.field_res_users__role_user
