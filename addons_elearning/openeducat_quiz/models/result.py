@@ -302,6 +302,7 @@ class OpQuizResultLine(models.Model):
     _description = "Quiz Result Line"
 
     name = fields.Html('Question')
+    question_id = fields.Many2one('op.question.bank.line', string='Question')
     question_mark = fields.Float('Actual Marks')
     mark = fields.Float('Received Marks')
     answer = fields.Text('Correct Answer')

@@ -118,6 +118,19 @@ class OpQuiz(models.Model):
         ('channel_slide', 'Channel slide'),
         ('all_employee', 'All employee')], 'Type', default='channel_slide')
 
+    # def create_result(self):
+    #     result = self.env['op.quiz.result'].sudo().search([('quiz_id', '=', self.id), ('user_id', '=', self.env.uid), ('state', '=', 'open')])
+    #     print(result)
+    #     if not result:
+    #         for record in self:
+    #
+    #         # result_api = self.env['op.quiz.result.line'].sudo().create({
+    #         #     'quiz_id': self.id,
+    #         #     'user_id': self.env.uid,
+    #         # })
+
+
+
     @api.constrains('type', 'department_id', 'slide_channel_id')
     def render_employee_participating(self):
         if self.type == 'integration_exam':
@@ -154,6 +167,7 @@ class OpQuiz(models.Model):
     def action_random_question(self):
         self.ensure_one()
         question_list = []
+        print(self.line_ids)
         if self.line_ids:
             for line in self.line_ids:
                 line.unlink()
@@ -169,6 +183,7 @@ class OpQuiz(models.Model):
                 line_data = []
                 correct_ans = ''
                 values = {
+                    'question_id': question.id,
                     'name': question.name,
                     'question_mark': question.mark or 0.0,
                 }
@@ -196,11 +211,11 @@ class OpQuiz(models.Model):
                 question_list.append([0, False, values])
         return question_list
 
-    def get_result_id(self):
+    def get_result_id(self, uid=False):
         self.ensure_one()
         result_pool = self.env['op.quiz.result']
-        open_result = result_pool.search([
-            ('user_id', '=', self.env.uid),
+        open_result = result_pool.sudo().search([
+            ('user_id.id', '=', uid),
             ('quiz_id', '=', self.id),
             ('state', '=', 'open')])
         if open_result:
@@ -221,6 +236,7 @@ class OpQuiz(models.Model):
                 answer_data = []
                 correct_ans = ''
                 values = {
+                    'question_id': line.que_id.id,
                     'name': line.name,
                     'question_mark': line.mark
                 }

@@ -25,6 +25,7 @@ class OpeneducatQuizRender(http.Controller):
         not_attempt_answer = []
         right_answers = []
         result = request.env['op.quiz.result'].browse(int(values['ExamID']))
+        print(result, '222222222222')
         result_line_answer = request.env['op.quiz.result.line.answers']
         for line in result.line_ids:
             if ('question' + str(line.id)) in values:
@@ -116,6 +117,7 @@ class OpeneducatQuizRender(http.Controller):
                 website=True)
     def get_result_overview(self, **post):
         quiz_result = request.env['op.quiz.result']
+        print(quiz_result, '11111')
         user = request.env['res.users'].browse(request.env.uid)
         post['user'] = user
         attempt = quiz_result.sudo().search(
@@ -153,6 +155,7 @@ class OpeneducatQuizRender(http.Controller):
         #
         # print(base_url, 'gneihfgioe')
         quiz_result = request.env['op.quiz.result']
+        print(quiz_result)
         user = request.env['res.users'].browse(request.env.uid)
         post['user'] = user
         attempt = quiz_result.sudo().search(
@@ -170,11 +173,11 @@ class OpeneducatQuizRender(http.Controller):
         post['result_btn'] = 1
 
         exam_auth_required_employee = request.env['op.quiz'].search([
-            ('state', '=', 'open'),
-            ('start_date', '<=', now),
-            ('end_date', '>=', now),
-            ('list_candidates.user_id', '=', user.id),
-            ('auth_required', '=', True),
+            # ('state', '=', 'open'),
+            # ('start_date', '<=', now),
+            # ('end_date', '>=', now),
+            # ('list_candidates.user_id', '=', user.id),
+            # ('auth_required', '=', True),
         ])
 
         exams = exam_auth_required_employee
@@ -202,6 +205,7 @@ class OpeneducatQuizRender(http.Controller):
                 type="http", auth="public", website=True)
     def start_exam(self, quiz):
         exam_link = quiz.redirect_exam()
+        print(exam_link)
         return request.redirect(exam_link)
 
     @http.route('/quiz/submit/<model("op.quiz.result"):result>',
@@ -216,7 +220,7 @@ class OpeneducatQuizRender(http.Controller):
     @http.route('/quiz/rules/<model("op.quiz.result"):result>', type="http",
                 auth="public", website=True)
     def get_quiz_start(self, result, **post):
-
+        print(result)
         exam = result.quiz_id
         if exam.auth_required:
 
@@ -278,6 +282,7 @@ class OpeneducatQuizRender(http.Controller):
         if not result.quiz_id.single_que:
             single_page = 1
         post.update({'single_page': single_page})
+        print(post)
         return http.request.render('openeducat_quiz.quiz_starting_page', post)
 
     # Submit the Single page single question form submition
@@ -285,11 +290,15 @@ class OpeneducatQuizRender(http.Controller):
     @http.route('/quiz/attempt/record', type="http", auth="public",
                 website=True)
     def quiz_result_attempt(self, **kwargs):
-
+        print(kwargs)
+        print(kwargs.get('question'))
+        print(kwargs.get('answer'))
         if kwargs.get('question', False):
             result_line = request.env['op.quiz.result.line']
+            print(result_line, '_______________')
             line = result_line.browse(
                 int(kwargs['question']))
+            print(line, 'lineeeeeeeeeeeeeeeeeeeeeeeeeeeee')
             if 't_spent_time' in kwargs and kwargs['t_spent_time']:
                 if line.result_id.quiz_id.time_config:
                     time_val = kwargs['t_spent_time'].split(':')
@@ -364,6 +373,7 @@ class OpeneducatQuizRender(http.Controller):
     ], type='http', auth='user', website=True)
     def render_quiz(self, result, line=False, spent_time=None, **post):
         exam = result.quiz_id
+        print(post, 'postttttttttttttttttttttttt')
         # result.start_quiz = datetime.now()
         # print(result.start_quiz)
 
@@ -386,6 +396,7 @@ class OpeneducatQuizRender(http.Controller):
         post['user'] = request.env.user
         next_allow = 0
         prev_allow = 0
+        print(line)
         if line:
 
             result_val = result.get_prev_next_result(line.id)
@@ -404,6 +415,7 @@ class OpeneducatQuizRender(http.Controller):
             for qline in result.line_ids:
                 if qline.given_answer:
                     line = qline
+
             if line:
                 result_val = result.get_prev_next_result(line.id)
                 if result_val['next_result']:
@@ -484,6 +496,7 @@ class OpeneducatQuizRender(http.Controller):
             'time_spent_minute': time_spent_minute,
             'time_spent_second': time_spent_second,
         })
+        print(post)
         return request.render("openeducat_quiz.quiz_render_form_view", post)
 
     @http.route('/quiz/<model("op.quiz.result"):result>', type='http',
