@@ -34,6 +34,11 @@ class SlideChannel(models.Model):
             avg_rating_list = [r.star for r in list_star]
             rec.rating_avg = self.average(avg_rating_list) if avg_rating_list else False
 
+    def delete_line_ids(self):
+        for record in self.line_ids:
+            if not record.op_quiz_id:
+                record.delete()
+
 
     course_level_id = fields.Many2one('course.level', string='course level')
     final_quiz_ids = fields.One2many('slide.quiz.line','slide_channel_id', readonly=True)
