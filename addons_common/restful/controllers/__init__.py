@@ -22,3 +22,4 @@ from . import comment_slide
 from . import student_infor
 from . import res_country
 from . import position_student
+from . import rating_system
