@@ -194,7 +194,6 @@ class ElearningController(http.Controller):
             'student_id': student.id,
             'res_model_id': request.env['ir.model']._get_id('slide.channel'),
         })
-        print(rating)
         return valid_response("Bạn đã đánh giá vào khóa học %s." % slide_channel.name)
 
     @validate_token
@@ -381,13 +380,11 @@ class ElearningController(http.Controller):
     @http.route("/api/v1/slide_slide/completed", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False,
                 cors='*')
     def get_completed_slide_slide_partner(self, **payload):
-        print(payload)
         userlogin = request.env['res.users'].sudo().search([('id', '=', payload.get('uid'))])
         slide = request.env['slide.slide'].sudo().search([('id', '=', int(payload.get('slide_id')))])
         slide.sudo().with_context(partner=userlogin.partner_id).action_set_completed()
         slide_partner = request.env['slide.channel.partner'].sudo().search(
             [('partner_id', '=', userlogin.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))])
-        print(slide_partner)
         return valid_response({
             'progress': slide_partner.completion
         })
