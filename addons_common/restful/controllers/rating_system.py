@@ -36,7 +36,7 @@ class StudentInfor(http.Controller):
                     "Missing",
                     "The parameter %s is missing!!!" % field)
         domain = {
-            'user_id.id': payload.get('uid'),
+            'user_id': int(payload.get('uid')),
             'system_onetouch': payload.get('system_onetouch'),
             'rating_lecturers': payload.get('rating_lecturers'),
             'content_slide': payload.get('content_slide'),
