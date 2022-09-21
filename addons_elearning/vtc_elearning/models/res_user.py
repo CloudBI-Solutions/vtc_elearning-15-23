@@ -11,4 +11,3 @@ class ResUsers(models.Model):
                                   ('user', 'User')], string="Role user", default='user')
 
 
-    otp = fields.Integer('Otp')
