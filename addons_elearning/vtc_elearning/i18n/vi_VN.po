@@ -525,6 +525,7 @@ msgid "Position Student"
 msgstr "Chức vụ học viên"
 
 #. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__price_course
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__slide_channel__type_course__price
 msgid "Price"
 msgstr "Trả phí"
@@ -1003,3 +1004,8 @@ msgstr "Cao cấp"
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__slide_channel__level__depth
 msgid "Depth"
 msgstr "Chuyên sâu"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__is_special
+msgid "Course Special"
+msgstr "Khóa học đặc biệt"
