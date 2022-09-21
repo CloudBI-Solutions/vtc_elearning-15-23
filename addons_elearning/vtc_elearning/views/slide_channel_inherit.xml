@@ -47,9 +47,9 @@
                 <field name="model">slide.channel.partner</field>
                 <field name="inherit_id" ref="website_slides.slide_channel_partner_view_tree"/>
                 <field name="arch" type="xml">
-                    <xpath expr="//field[@name='partner_id']" position="attributes">
-                        <attribute name="invisible">1</attribute>
-                    </xpath>
+<!--                    <xpath expr="//field[@name='partner_id']" position="attributes">-->
+<!--                        <attribute name="invisible">1</attribute>-->
+<!--                    </xpath>-->
                     <xpath expr="//field[@name='channel_user_id']" position="attributes">
                         <attribute name="string">Học viên</attribute>
                     </xpath>
@@ -90,6 +90,10 @@
 
                     <xpath expr="//field[@name='tag_ids']" position="attributes">
                          <attribute name="invisible">1</attribute>
+                     </xpath>
+
+                     <xpath expr="//field[@name='type_course']" position="after">
+                         <field name="price_course" attrs="{'invisible': [('type_course', '!=', 'price')]}"></field>
                      </xpath>
 
                 </field>
