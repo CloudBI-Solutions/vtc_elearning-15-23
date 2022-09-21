@@ -167,7 +167,6 @@ class OpQuiz(models.Model):
     def action_random_question(self):
         self.ensure_one()
         question_list = []
-        print(self.line_ids)
         if self.line_ids:
             for line in self.line_ids:
                 line.unlink()

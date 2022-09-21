@@ -155,10 +155,7 @@ class QuizController(http.Controller):
         result.sudo().write({
             'user_id': payload['uid'],
         })
-        print(result)
         for rec in result.line_ids:
-            print(rec.question_id)
-            print(payload['question_id'])
             if rec.question_id.id == int(payload['question_id']):
                 rec.sudo().write({
                 'given_answer': payload.get('answer')

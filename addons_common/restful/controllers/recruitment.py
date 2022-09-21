@@ -65,7 +65,6 @@ class RecruitmentController(http.Controller):
         values = []
         list_job = request.env['hr.job'].sudo().search([('id', '=', payload.get('recruitment_id'))])
         for rec in list_job:
-            # print(rec.city_id)
             data = {'id': rec.id,
                     'name': rec.name_web,
                     'state': rec.state or '',
