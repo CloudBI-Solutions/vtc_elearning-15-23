@@ -11,3 +11,4 @@ from . import rating_system
 from . import rating
 from . import slide_quiz_line
 from . import res_user
+from . import ir_attachment

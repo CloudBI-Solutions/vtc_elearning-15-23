@@ -44,6 +44,7 @@ class QuizController(http.Controller):
                             'answer': [{'answer_name': i.name,'grade': i.grade_id.name} for i in q.line_ids]
                         })
         date = {
+            'id': quiz.id,
             'name': quiz.name,
             'slide_channel_id': quiz.slide_channel_id.id,
             'categ': quiz.categ_id.id,

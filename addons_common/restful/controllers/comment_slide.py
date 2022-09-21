@@ -64,6 +64,7 @@ class CommentSlide(http.Controller):
             'name',
             'slide_id',
             'comment_id',
+            'uid',
         ]
         for field in field_require:
             if field not in payload.keys():
@@ -74,6 +75,7 @@ class CommentSlide(http.Controller):
             'name': payload.get('name'),
             'slide_id': int(payload.get('slide_id')),
             'comment_id': payload.get('comment_id'),
+            'user_id': payload.get('uid'),
         }
         ress = request.env['comment.slide'].sudo().create(domain)
         return valid_response({

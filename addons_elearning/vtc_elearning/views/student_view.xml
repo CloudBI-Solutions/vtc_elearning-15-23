@@ -37,11 +37,12 @@
                  <field name="address"/>
                  <field name="state"/>
                  <field name="user_id" invisible="1"/>
+
                  <button name="active_user"
-                            string="Confirm"
+                            string="Duyệt tài khoản học viên"
                             type="object"
                             class="oe_highlight"
-                            attrs="{'invisible': [('state','!=', 'pending')]}"
+                            attrs="{'invisible': ['|', ('state','!=', 'pending'), ('user_id','=', False)]}"
                     />
              </tree>
          </field>
@@ -60,22 +61,22 @@
                             attrs="{'invisible': [('user_id','!=', False)]}"
                     />
                     <button name="active_user"
-                            string="Confirm"
+                            string="Duyệt tài khoản học viên"
                             type="object"
                             class="oe_highlight"
-                            attrs="{'invisible': [('state','!=', 'pending')]}"
+                            attrs="{'invisible': ['|', ('state','!=', 'pending'), ('user_id','=', False)]}"
                     />
                     <button name="cancel_user"
                             string="Cancel user"
                             type="object"
                             class="btn-warning"
-                            attrs="{'invisible': [('state','!=', 'pending')]}"
+                            attrs="{'invisible': ['|', ('state','!=', 'pending'), ('user_id','=', False)]}"
                     />
                     <button name="recall_user"
                             string="Recall user"
                             type="object"
                             class="oe_highlight"
-                            attrs="{'invisible': [('state','!=', 'confirm')]}"
+                            attrs="{'invisible': ['|', ('state','!=', 'confirm'), ('user_id','=', False)]}"
                     />
                     <field name="state" widget="statusbar"/>
                 </header>
@@ -118,7 +119,7 @@
                             <field name="position" required="1"/>
                             <field name="work_unit" required="1"/>
                             <field name="user_id" readonly="1"/>
-                            <field name="partner_id" widget="many2many_tags"/>
+<!--                            <field name="partner_id" widget="many2many_tags"/>-->
                         </group>
                         <group string="Address">
                             <field name="res_country_state"/>
@@ -177,7 +178,10 @@
                  <field name="login"/>
                  <field name="role_user"/>
                  <field name="res_country_state"/>
-                 <button name="preference_change_password" type="object" string="Change password" class="btn btn-secondary"/>
+                 <button name="%(base.change_password_wizard_action)d"
+                        type="action"
+                        string="Cấp mật khẩu"
+                        class="btn btn-secondary"/>
              </tree>
          </field>
      </record>
