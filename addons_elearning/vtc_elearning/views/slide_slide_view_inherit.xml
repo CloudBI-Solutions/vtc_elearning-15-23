@@ -17,16 +17,16 @@
                        placeholder="Cấp độ học"/>
             </xpath>
             <xpath expr="//sheet//notebook" position="inside">
-                <page name="Quiz Final" string="Quiz Final">
+                <page name="Quiz Final" string="Bài kiểm tra">
                     <group>
                             <field name="final_quiz_ids">
                                 <tree>
                                     <field name="op_quiz_id"/>
-                                    <field name="cost"/>
+                                    <field name="cost" string="Tổng điểm"/>
                                     <field name="start_date"/>
                                     <field name="end_date"/>
-                                    <field name="count_question"/>
-                                    <field name="count_student"/>
+                                    <field name="count_question" string="Tổng câu hỏi"/>
+                                    <field name="count_student" string="Tổng học viên"/>
                                 </tree>
                             </field>
                     </group>
