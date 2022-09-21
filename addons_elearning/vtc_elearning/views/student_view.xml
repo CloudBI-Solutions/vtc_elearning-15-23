@@ -38,10 +38,10 @@
                  <field name="state"/>
                  <field name="user_id" invisible="1"/>
                  <button name="active_user"
-                            string="Confirm"
+                            string="Duyệt tài khoản học viên"
                             type="object"
                             class="oe_highlight"
-                            attrs="{'invisible': [('state','!=', 'pending')]}"
+                            attrs="{'invisible': ['|', ('state','!=', 'pending'), ('user_id','=', False)]}"
                     />
              </tree>
          </field>
