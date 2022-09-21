@@ -73,7 +73,7 @@
             <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <tree string="Quiz">
+                <tree string="Quiz" delete="0">
                     <field name="name"/>
                     <field name="categ_id"/>
                 </tree>

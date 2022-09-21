@@ -18,6 +18,7 @@
         'views/rating_system.xml',
         'views/report_view_inherit.xml',
         'views/menu_action.xml',
+        'views/slide_channel_tag.xml',
     ],
     'demo': [],
     'depends': [

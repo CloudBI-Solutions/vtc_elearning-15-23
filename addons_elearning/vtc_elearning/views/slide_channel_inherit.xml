@@ -86,8 +86,12 @@
 
                      <xpath expr="//field[@name='active']" position="after">
                          <div>
-                         <label for="level" string="Level"/>
-                         <field name="level" style="width: 20%" widget="selection"/>
+                             <label for="level" string="Level"/>
+                             <field name="level" style="width: 20%" widget="selection" />
+                         </div>
+                         <div>
+                             <label for="tag_id" string="Chuyên mục khóa học"/>
+                             <field name="tag_id" options="{'color_field': 'color'}"/>
                          </div>
                      </xpath>
 

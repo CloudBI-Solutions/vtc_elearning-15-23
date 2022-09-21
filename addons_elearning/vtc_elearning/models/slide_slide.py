@@ -1,7 +1,13 @@
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError
+from random import randint
+class Tag(models.Model):
+    _name = 'tag.slide'
 
-
+    name = fields.Char('Name', required=True, translate=True)
+    sequence = fields.Integer('Sequence', default=10, index=True, required=True)
+    color = fields.Integer(
+        string='Color Index', default=lambda self: randint(1, 11), )
 class SlideChannel(models.Model):
     _inherit = 'slide.channel'
 
@@ -46,6 +52,7 @@ class SlideChannel(models.Model):
     count_student = fields.Integer('Student count', compute='calculate_count_student', store=True)
     user_support = fields.Many2many('res.users', string='User support')
     total_time_video = fields.Float(compute='calculate_total_time_video', string='Total time video', store=True)
+    tag_id = fields.Many2one('tag.slide', string='Chuyên mục khóa học')
 
     @api.depends('slide_ids')
     def calculate_total_time_video(self):
