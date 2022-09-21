@@ -6,7 +6,7 @@
             <field name="model">op.question.bank.line</field>
             <field name="type">tree</field>
             <field name="priority" eval="8"/>
-            <field name="arch" type="xml">
+            <field name="arch" type="xml" create="0">
                 <tree string="Question">
                     <field name="name"/>
                     <field name="mark"/>
