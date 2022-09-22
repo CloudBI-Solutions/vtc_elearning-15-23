@@ -62,7 +62,7 @@ class SlideChannel(models.Model):
     def open_website_url(self):
         return {
             'type': 'ir.actions.act_url',
-            'url': "https://daotao.vtcnetviet.com/courses/%s/%s" %(self.name, self.id),
+            'url': "http://daotao.vtcnetviet.com/courses/%s/%s" %(self.name, self.id),
             'target': 'new',
         }
 
