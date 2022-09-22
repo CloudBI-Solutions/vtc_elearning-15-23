@@ -82,21 +82,20 @@ class CourseByIdController(http.Controller):
                 'comment': r.feedback,
             })
         # cấp độ học
-        datas = {
-            'id': list_courses.id,
-            'name': list_courses.name,
-            'description': list_courses.description,
-            'total_student': list_courses.members_count,
-            'total_time': (list_courses.total_time or 0) * 60,
-            'total_time_video': (list_courses.total_time_video or 0) * 60,
-            'total_slides': list_courses.total_slides,
-            'level': list_courses.level,
-            'final': list_courses.final_quiz_ids[0].op_quiz_id.id if list_courses.final_quiz_ids else '',
-            'rating_course': rating_response,
-            'avt_star': list_courses.rating_avg if list_courses.rating_avg != 0 else 'Chưa có đánh giá nào',
-            'process': process.completion if process else 0,
-            'count_star': count_star
-        }
+        datas = {'id': list_courses.id,
+                 'name': list_courses.name,
+                 'description': list_courses.description,
+                 'total_student': list_courses.members_count,
+                 'total_time': list_courses.total_time,
+                 'total_time_video': list_courses.total_time_video,
+                 'total_slides': list_courses.total_slides,
+                 'level': list_courses.level,
+                 'final': list_courses.final_quiz_ids[0].op_quiz_id.id if list_courses.final_quiz_ids else '',
+                 'rating_course': rating_response,
+                 'avt_star': list_courses.rating_avg if list_courses.rating_avg != 0 else 'Chưa có đánh giá nào',
+                 'process': process.completion if process else 0,
+                 'count_star': count_star
+                 }
         # list giảng viên
         list_lecturers = []
         for lecturer in list_courses.lecturers_ids:
