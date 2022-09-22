@@ -39,7 +39,7 @@ class LessonByIdController(http.Controller):
             'mime_type': lesson.mime_type, 'completion_time': lesson.completion_time,
             'date_published': lesson.date_published, 'create_uid': lesson.create_uid, 'description': lesson.description,
             'url': lesson.url or lesson.document_url or False,
-            'duration': lesson.completion_time*60
+            'duration': lesson.completion_time
         }
         quiz = [{'question_id': r.id, "question_name": r.question,
                  "answer": [{'answer_name': rec.text_value, 'is_correct': rec.is_correct, 'comment': rec.comment} for

@@ -6,7 +6,7 @@
         <field name="model">rating.system</field>
          <field eval="8" name="priority"/>
          <field name="arch" type="xml">
-             <tree create="false">
+             <tree create="false" edit="0">
                  <field name="user_id"/>
                  <field name="slide_id" string="Khóa học"/>
                  <field name="system_onetouch" widget="priority"/>
@@ -17,6 +17,7 @@
                  <field name="document_quality" widget="priority"/>
                  <field name="helpful" widget="priority"/>
                  <field name="service_quality" widget="priority"/>
+                 <field name="create_date" string="Survey time"/>
              </tree>
          </field>
      </record>

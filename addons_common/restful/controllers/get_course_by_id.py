@@ -160,12 +160,12 @@ class CourseByIdController(http.Controller):
         values.append(datas)
         return valid_response(values)
 
-    @validate_token
-    @http.route("/api/v1/cource/process", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
-    def get_process_percent_of_course(self, **kwargs):
-        user = request.env['res.users'].sudo().search([('id', '=', kwargs.get('uid'))])
-        slide_partner = request.env['slide.slide.partner'].sudo().search(
-            [('channel_id', '=', kwargs['cource_id']), ('partner_id', '=', user.self.id)])
+    # @validate_token
+    # @http.route("/api/v1/cource/process", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
+    # def get_process_percent_of_course(self, **kwargs):
+    #     user = request.env['res.users'].sudo().search([('id', '=', kwargs.get('uid'))])
+    #     slide_partner = request.env['slide.slide.partner'].sudo().search(
+    #         [('channel_id', '=', kwargs['cource_id']), ('partner_id', '=', user.self.id)])
 
     @http.route("/api/get/lesson_by_id", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_lesson_by_id(self, **payload):
