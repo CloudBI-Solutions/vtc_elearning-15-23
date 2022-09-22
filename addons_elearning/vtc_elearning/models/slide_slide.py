@@ -51,7 +51,7 @@ class SlideChannel(models.Model):
         help='Condition to enroll: everyone, on invite, on payment (sale bridge).')
     count_student = fields.Integer('Student count', compute='calculate_count_student', store=True)
     user_support = fields.Many2many('res.users', string='User support')
-    total_time_video = fields.Float(compute='calculate_total_time_video', string='Total time video', store=True)
+    total_time_video = fields.Float(compute='calculate_total_time_video', string='Total time video')
     tag_id = fields.Many2one('tag.slide', string='Chuyên mục khóa học')
 
     @api.depends('slide_ids')
