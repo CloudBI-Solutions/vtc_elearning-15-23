@@ -167,5 +167,22 @@ class QuizController(http.Controller):
         }
         return valid_response(data_result)
 
+    @validate_token
+    @http.route("/api/get/result_by_user", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
+    def get_result_by_user(self, **kwargs):
+        result = request.env['op.quiz.result'].sudo().search([('user_id.id', '=', kwargs.get('uid'))])
+        print(result)
+        line_ids = []
+        for r in result:
+            data = {
+                'id': r.id,
+                'quizName': r.name,
+                # 'totalTime': r.finish_date - r.create_on,
+                'timeDone': r.finish_date,
+                'questions': r.total_question,
+                'correct': r.total_correct,
+            }
+            line_ids.append(data)
+        return valid_response(line_ids)
 
 
