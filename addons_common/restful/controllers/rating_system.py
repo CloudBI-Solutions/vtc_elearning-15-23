@@ -47,4 +47,4 @@ class StudentInfor(http.Controller):
             'service_quality': payload.get('service_quality'),
         }
         request.env['rating.system'].sudo().create(domain)
-        return invalid_response("Bạn đã ứng tuyển thành công vào vị trí %s." % payload.get('job_name'))
+        return valid_response("ok")
