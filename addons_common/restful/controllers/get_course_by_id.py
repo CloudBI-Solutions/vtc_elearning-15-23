@@ -89,7 +89,7 @@ class CourseByIdController(http.Controller):
 		         'total_time': list_courses.total_time,
 		         'total_time_video': list_courses.total_time_video,
 		         'total_slides': list_courses.total_slides,
-		         'level': list_courses.course_level_id,
+		         'level': list_courses.level,
 		         'final': list_courses.final_quiz_ids[0].op_quiz_id.id if list_courses.final_quiz_ids else '',
 		         'rating_course': rating_response,
 		         'avt_star': list_courses.rating_avg if list_courses.rating_avg != 0 else 'Chưa có đánh giá nào',
