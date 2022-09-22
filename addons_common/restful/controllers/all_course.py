@@ -72,7 +72,7 @@ class AllCoursesController(http.Controller):
                      'level': level,
                      'is_special': rec.is_special,
                      'course_level': course_level,  # cấp độ học
-                     'rating_avg_stars': rec.rating_avg_stars,  # đánh giá trung bình, tự chia cho 5, vd 3/5
+                     'rating_avg_stars': rec.rating_avg if rec.rating_avg != 0 else 'Chưa có đánh giá nào',  # đánh giá trung bình, tự chia cho 5, vd 3/5
                      'total_time': rec.total_time,  # tổng thời lượng khoá học
                      }
 
