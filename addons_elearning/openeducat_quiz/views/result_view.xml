@@ -29,7 +29,7 @@
             <field name="type">form</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="Results" create="0" >
+                <form string="Results" create="0" edit="false">
                     <header>
                         <button string="Done" class="oe_highlight"
                                 states="open" type="object"

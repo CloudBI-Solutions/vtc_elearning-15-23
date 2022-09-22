@@ -23,11 +23,25 @@
         <field name="model">slide.slide</field>
         <field name="inherit_id" ref="website_slides.view_slide_slide_tree"/>
         <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                    <attribute name="create">0</attribute>
+            </xpath>
             <xpath expr="//field[@name='name']" position="attributes">
                     <attribute name="string">Tên nội dung bài học</attribute>
             </xpath>
             <xpath expr="//field[@name='category_id']" position="attributes">
                     <attribute name="string">Chương khóa học</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hieudt_inherit_slide_slide_view_kanban" model="ir.ui.view">
+        <field name="name">hieudt.inherit.slide.slide.view.kanban</field>
+        <field name="model">slide.slide</field>
+        <field name="inherit_id" ref="website_slides.slide_slide_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                    <attribute name="create">0</attribute>
             </xpath>
         </field>
     </record>
