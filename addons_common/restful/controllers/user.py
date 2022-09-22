@@ -67,9 +67,25 @@ class ResUsersController(http.Controller):
 			return config
 		return 'https://test.diligo.vn:15000'
 
-	@http.route("/api/login_with_otp", type="http", auth="public", methods=["POST"], csrf=False, cors="*")
-	def login_with_otp(self, **kwargs):
-		pass
+	@http.route("/api/otp/check", type="http", auth="public", methods=["POST"], csrf=False, cors="*")
+	def check_with_otp(self, **kwargs):
+		otp = int(kwargs.get('otp'))
+		user = request.env['res.users'].sudo().search([('otp', '=', otp)])
+		if not user:
+			return invalid_response('otp không chính xác')
+		return valid_response({
+			'user_id': user.id
+		})
+
+	@http.route("/api/change_new_pass_otp", type='http', auth='public', methods=["POST"], csrf=False, cors="*")
+	def change_new_pass_otp(self, **kwargs):
+		if kwargs.get('user_id_otp'):
+			user = request.env['res.users'].sudo().search([('id','=', kwargs.get('user_id_otp'))])
+			res = request.env.cr.execute(
+				'UPDATE res_users SET password=%s WHERE id=%s',
+				(kwargs.get('newpass'), int(user.id))
+			)
+			return valid_response('Success changed!')
 
 
 	@http.route("/api/resetpassword/send_token_by_email", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
@@ -89,7 +105,6 @@ class ResUsersController(http.Controller):
 		}
 		request.env['mail.mail'].sudo().create(main_content).send()
 		user.otp = otp_num
-		user.otp = False
 		# if self.check(kwargs.get('email_reset')):
 		return valid_response('ok')
 
