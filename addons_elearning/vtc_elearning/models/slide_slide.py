@@ -54,6 +54,14 @@ class SlideChannel(models.Model):
     total_time_video = fields.Float(compute='calculate_total_time_video', string='Total time video')
     tag_id = fields.Many2one('tag.slide', string='Chuyên mục khóa học')
 
+
+    def open_website_url(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'url': "https://daotao.vtcnetviet.com/courses/%s/%s" %(self.name, self.id),
+            'target': 'new',
+        }
+
     @api.depends('slide_ids')
     def calculate_total_time_video(self):
         for record in self:
