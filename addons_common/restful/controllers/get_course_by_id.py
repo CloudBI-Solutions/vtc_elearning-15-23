@@ -85,7 +85,7 @@ class CourseByIdController(http.Controller):
 		datas = {'id': list_courses.id,
 		         'name': list_courses.name,
 		         'description': list_courses.description,
-		         'total_student': list_courses.count_student,
+		         'total_student': list_courses.members_count,
 		         'total_time': list_courses.total_time,
 		         'total_time_video': list_courses.total_time_video,
 		         'total_slides': list_courses.total_slides,
