@@ -57,10 +57,10 @@ class SlideChannel(models.Model):
     @api.depends('slide_ids')
     def calculate_total_time_video(self):
         for record in self:
-            if record.slide_ids:
-                for rec in record.slide_ids:
-                    if rec.slide_type == 'video':
-                        record.total_time_video += rec.completion_time
+            record.total_time_video = 0
+            for rec in record.slide_ids:
+                if rec.slide_type == 'video':
+                    record.total_time_video += rec.completion_time
 
     @api.depends('student_ids')
     def calculate_count_student(self):
