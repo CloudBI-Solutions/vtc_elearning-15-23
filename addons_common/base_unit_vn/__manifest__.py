@@ -16,6 +16,6 @@
         'views/res_country_district_view.xml',
         'views/res_country_ward_view.xml',
         'views/nation_view.xml',
-        # 'views/menu_action.xml',
+        'views/menu_action.xml',
     ],
 }
