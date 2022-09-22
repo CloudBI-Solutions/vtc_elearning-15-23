@@ -17,7 +17,7 @@
                  <field name="document_quality" widget="priority"/>
                  <field name="helpful" widget="priority"/>
                  <field name="service_quality" widget="priority"/>
-                 <field name="create_date"/>
+                 <field name="create_date" string="Survey time"/>
              </tree>
          </field>
      </record>

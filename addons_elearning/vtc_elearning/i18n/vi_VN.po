@@ -1014,3 +1014,8 @@ msgstr "Khóa học đặc biệt"
 #: model:ir.model.fields,field_description:vtc_elearning.field_lecturers__total_course
 msgid "Total course"
 msgstr "Tổng khóa học"
+
+#. module: vtc_elearning
+#: model_terms:ir.ui.view,arch_db:vtc_elearning.rating_system_tree_view
+msgid "Survey time"
+msgstr "Ngày đánh giá"
