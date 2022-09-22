@@ -76,7 +76,7 @@ class CourseByIdController(http.Controller):
                 'customer_name': r.partner_id.name,
                 'avatar': urls.url_join(base_url,
                                         '/web/image?model=student.student&id={}&field=avatar'.format(
-                                            2)),
+                                            r.student_id.id)),
                 'star': r.star,
                 'time': r.create_date,
                 'comment': r.feedback,
