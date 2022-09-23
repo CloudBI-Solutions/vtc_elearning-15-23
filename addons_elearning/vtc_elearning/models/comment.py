@@ -20,7 +20,7 @@ class CommentSlide(models.Model):
     comment_ids = fields.One2many('comment.slide', 'comment_id', string='Comment')
     slide_id = fields.Many2one('slide.slide', string='Course')
     student_id = fields.Many2one('student.student', string='Student')
-    user_id = fields.Many2one(related='student_id.user_id')
+    user_id = fields.Many2one('res.users', string='User')
 
 
 class RatLecturers(models.Model):

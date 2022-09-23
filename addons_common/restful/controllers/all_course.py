@@ -61,6 +61,7 @@ class AllCoursesController(http.Controller):
             # cấp độ học
             # tag_id = rec.tag_ids[0].id
             course_level = rec.course_level_id
+            level = rec.level if rec.level else 'none'
 
             dates = {'id': rec.id,
                      'name': rec.name,
@@ -68,9 +69,12 @@ class AllCoursesController(http.Controller):
                      'image': urls.url_join(base_url,
                                             '/web/image?model=slide.channel&id={0}&field=image_1920'.format(
                                                 rec.id)),
+                     'level': level,
+                     'is_special': rec.is_special,
                      'course_level': course_level,  # cấp độ học
-                     'rating_avg_stars': rec.rating_avg_stars,  # đánh giá trung bình, tự chia cho 5, vd 3/5
+                     'rating_avg_stars': rec.rating_avg if rec.rating_avg != 0 else 'Chưa có đánh giá nào',  # đánh giá trung bình, tự chia cho 5, vd 3/5
                      'total_time': rec.total_time,  # tổng thời lượng khoá học
+                     'total_slides_true': rec.total_slides
                      }
 
             # list giảng viên
@@ -87,14 +91,11 @@ class AllCoursesController(http.Controller):
             slides = []
             category = []
             # print(rec.slide_ids)
-            total_slide = 0
             count_time_slide = 0
             for slide in rec.slide_ids:
                 # print(slide.completion_time)
-                if slide.is_category != True:
-                    total_slide += 1
+                if not slide.is_category:
                     count_time_slide += slide.completion_time
-            dates['total_slide'] = total_slide
             dates['count_time_slide'] = count_time_slide
             #
             #     slide_info = {

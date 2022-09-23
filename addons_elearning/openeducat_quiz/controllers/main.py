@@ -170,11 +170,11 @@ class OpeneducatQuizRender(http.Controller):
         post['result_btn'] = 1
 
         exam_auth_required_employee = request.env['op.quiz'].search([
-            ('state', '=', 'open'),
-            ('start_date', '<=', now),
-            ('end_date', '>=', now),
-            ('list_candidates.user_id', '=', user.id),
-            ('auth_required', '=', True),
+            # ('state', '=', 'open'),
+            # ('start_date', '<=', now),
+            # ('end_date', '>=', now),
+            # ('list_candidates.user_id', '=', user.id),
+            # ('auth_required', '=', True),
         ])
 
         exams = exam_auth_required_employee
@@ -216,7 +216,6 @@ class OpeneducatQuizRender(http.Controller):
     @http.route('/quiz/rules/<model("op.quiz.result"):result>', type="http",
                 auth="public", website=True)
     def get_quiz_start(self, result, **post):
-
         exam = result.quiz_id
         if exam.auth_required:
 
@@ -285,7 +284,6 @@ class OpeneducatQuizRender(http.Controller):
     @http.route('/quiz/attempt/record', type="http", auth="public",
                 website=True)
     def quiz_result_attempt(self, **kwargs):
-
         if kwargs.get('question', False):
             result_line = request.env['op.quiz.result.line']
             line = result_line.browse(
@@ -404,6 +402,7 @@ class OpeneducatQuizRender(http.Controller):
             for qline in result.line_ids:
                 if qline.given_answer:
                     line = qline
+
             if line:
                 result_val = result.get_prev_next_result(line.id)
                 if result_val['next_result']:

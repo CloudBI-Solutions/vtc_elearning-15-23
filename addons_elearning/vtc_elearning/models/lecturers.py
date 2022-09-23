@@ -43,7 +43,6 @@ class Lecturers(models.Model):
                 record.total_student += rec.count_student
     @api.depends('comment_ids')
     def comment_count(self):
-        print('______')
         for record in self:
             comment_ids = self.env['rat.lecturers'].sudo().search([('lecturers_id', '=', record.id)])
             record.evaluate_count = len(comment_ids)

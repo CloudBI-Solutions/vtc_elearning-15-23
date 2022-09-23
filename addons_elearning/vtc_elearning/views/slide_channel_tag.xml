@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        <record id="slide_channel_tag_view_tree" model="ir.ui.view">
+            <field name="name">slide.channel.tag.view.tree</field>
+            <field name="model">tag.slide</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+    
+        <record id="slide_channel_tag_action" model="ir.actions.act_window">
+            <field name="name">Chuyên mục khóa học</field>
+            <field name="res_model">tag.slide</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="slide_channel_tag_menuitem"
+              name="Tag"
+              parent="website_slides.website_slides_menu_configuration"
+              groups="website_slides.group_website_slides_manager"
+              action="slide_channel_tag_action"
+    />
+
+    </data>
+</odoo>

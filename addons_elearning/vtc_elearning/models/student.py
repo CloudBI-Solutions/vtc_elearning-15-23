@@ -35,6 +35,8 @@ class Student(models.Model):
     partner_id = fields.One2many('res.partner', 'student_id', string='Partner')
     state = fields.Selection([('confirm', 'Confirm'), ('pending', 'Pending'), ('cancel', 'Cancel'), ('recall', 'Recall')], string='State', default='pending')
     favorite_course_ids = fields.One2many('favorite.course', 'student_id', string='Favorite course')
+
+
     def active_user(self):
         self.user_id.active = True
         self.state = 'confirm'
@@ -49,6 +51,12 @@ class Student(models.Model):
     @api.model
     def create(self, vals):
         res = super(Student, self).create(vals)
+        partner = self.env['res.partner'].sudo().create({
+            'name': res.name,
+            'student_id': res.id,
+            'email': res.email,
+            'phone': res.phone,
+        })
         return res
 
 
@@ -78,12 +86,23 @@ class ProgressSlide(models.Model):
 class SlideChannelPartner(models.Model):
     _inherit = 'slide.channel.partner'
 
-    student_id = fields.Many2one(related='partner_id.student_id', string="Student")
+    student_id = fields.Many2one('student.student', string="Student")
+    # partner_id = fields.Many2one('res.partner', index=True, required=True, ondelete='cascade')
+
+    @api.onchange('student_id')
+    def onchange_partner_id(self):
+        if self.student_id and self.student_id.partner_id:
+            self.partner_id = self.student_id.partner_id[0]
+        else:
+            self.partner_id = self.env.uid
+
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     student_id = fields.Many2one('student.student', string='Student')
+
 
     # @api.onchange('email')
 class FavoriteCourse(models.Model):

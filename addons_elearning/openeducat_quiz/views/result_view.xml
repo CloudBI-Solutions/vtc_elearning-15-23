@@ -7,7 +7,7 @@
             <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <tree string="Results" default_order="create_date desc">
+                <tree string="Results" default_order="create_date desc" create="0" >
                     <field name="name"/>
                     <field name="quiz_id"/>
                     <field name="categ_id"/>
@@ -29,7 +29,7 @@
             <field name="type">form</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="Results">
+                <form string="Results" create="0" edit="false">
                     <header>
                         <button string="Done" class="oe_highlight"
                                 states="open" type="object"
@@ -59,11 +59,18 @@
                                 <field name="total_question" readonly="1"/>
                                 <field name="total_correct" readonly="1"/>
                                 <field name="total_incorrect" readonly="1"/>
+                                <label for="hr_time_quiz" string="Time Limit"/>
+                                <div>
+                                    <field name="hr_time_quiz" style="width: 30%;"/>
+                                    <label string="Hr" style="width: 8%;" for="hr_time_quiz"/>
+                                    <field name="minute_time_quiz" style="width: 30%;"/>
+                                    <label string="Min" style="width: 20%;" for="minute_time_quiz"/>
+                                </div>
                             </group>
                         </group>
                         <notebook>
                             <page string="Result">
-                                <field name="line_ids" nolabel="1" attrs="{'readonly':[('state','in',['done','cancel'])]}">
+                                <field name="line_ids" readonly="1" nolabel="1" attrs="{'readonly':[('state','in',['done','cancel'])]}">
                                     <tree string="Results">
                                         <field name="name"/>
                                         <field name="answer"/>

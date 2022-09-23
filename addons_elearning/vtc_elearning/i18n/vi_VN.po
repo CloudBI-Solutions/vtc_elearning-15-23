@@ -57,12 +57,12 @@ msgstr ""
 #. module: vtc_elearning
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__student_student__state__cancel
 msgid "Cancel"
-msgstr ""
+msgstr "Hủy"
 
 #. module: vtc_elearning
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_form_view
 msgid "Cancel user"
-msgstr ""
+msgstr "Từ chối tài khoản"
 
 #. module: vtc_elearning
 #: model:ir.actions.act_window,name:vtc_elearning.certificate_student_view_action
@@ -133,7 +133,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_form_view
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_tree_view
 msgid "Confirm"
-msgstr "Đang thực hiện"
+msgstr "Đã duyệt"
 
 #. module: vtc_elearning
 #: model:ir.model,name:vtc_elearning.model_res_partner
@@ -500,7 +500,7 @@ msgstr ""
 #. module: vtc_elearning
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__student_student__state__pending
 msgid "Pending"
-msgstr ""
+msgstr "Chờ duyệt"
 
 #. module: vtc_elearning
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_form_view
@@ -525,6 +525,7 @@ msgid "Position Student"
 msgstr "Chức vụ học viên"
 
 #. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__price_course
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__slide_channel__type_course__price
 msgid "Price"
 msgstr "Trả phí"
@@ -546,6 +547,17 @@ msgstr "Công cộng"
 #: model:ir.model.fields,field_description:vtc_elearning.field_slide_slide__quiz_id
 #: model:ir.model.fields,field_description:vtc_elearning.field_student_student__quiz_ids
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_form_view
+msgid "Quiz"
+msgstr "Bài kiểm tra"
+
+#. module: website_slides
+#. openerp-web
+#: code:addons/website_slides/static/src/js/slides_upload.js:0
+#: model:ir.model.fields.selection,name:website_slides.selection__slide_slide__slide_type__quiz
+#: model:slide.channel.tag,name:website_slides.slide_channel_tag_other_0
+#: model_terms:ir.ui.view,arch_db:website_slides.slide_question_view_form
+#: model_terms:ir.ui.view,arch_db:website_slides.view_slide_slide_form
+#, python-format
 msgid "Quiz"
 msgstr "Bài kiểm tra"
 
@@ -594,12 +606,12 @@ msgstr "Đánh giá hệ thống"
 #. module: vtc_elearning
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__student_student__state__recall
 msgid "Recall"
-msgstr ""
+msgstr "Thu hồi"
 
 #. module: vtc_elearning
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_form_view
 msgid "Recall user"
-msgstr ""
+msgstr "Thu hồi tài khoản"
 
 #. module: vtc_elearning
 #: model:ir.model.fields,field_description:vtc_elearning.field_res_users__role_user
@@ -942,3 +954,156 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.slide_channel_inherit_view_form
 msgid "Đăng lên website"
 msgstr ""
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__not_studied
+msgid "Not studied"
+msgstr "Chưa học"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__studied
+msgid "studying"
+msgstr "Đang học"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__exam
+msgid "Exam"
+msgstr "Làm bài thi"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__done_course
+msgid "Done course"
+msgstr "Hoàn thành khóa học"
+
+#. module: vtc_elearning
+#: model_terms:ir.ui.view,arch_db:vtc_elearning.vtc_elearning_slides_chanel_form_view_inherit
+msgid "Statistical"
+msgstr "Thống kê"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__level
+#: model_terms:ir.ui.view,arch_db:vtc_elearning.vtc_elearning_slides_chanel_form_view_inherit
+msgid "Level"
+msgstr "Cấp độ"
+
+#. module: vtc_elearning
+#: model_terms:ir.ui.view,arch_db:vtc_elearning.vtc_elearning_slides_chanel_kanban_view_inherit
+msgid "Level:"
+msgstr "Cấp độ: "
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__slide_channel__level__basic
+msgid "Basic"
+msgstr "Cơ bản"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__slide_channel__level__common
+msgid "Common"
+msgstr "Phổ thông"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__slide_channel__level__advanced
+msgid "Advanced"
+msgstr "Nâng cao"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__slide_channel__level__high_class
+msgid "High class"
+msgstr "Cao cấp"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__slide_channel__level__depth
+msgid "Depth"
+msgstr "Chuyên sâu"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__is_special
+msgid "Course Special"
+msgstr "Khóa học đặc biệt"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_lecturers__total_course
+msgid "Total course"
+msgstr "Tổng khóa học"
+
+#. module: vtc_elearning
+#: model_terms:ir.ui.view,arch_db:vtc_elearning.rating_system_tree_view
+msgid "Survey time"
+msgstr "Ngày đánh giá"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__content_slide__1
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__document_quality__1
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__helpful__1
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__inspire__1
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__rating_lecturers__1
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__service_quality__1
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__system_onetouch__1
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__teaching_methods__1
+msgid "Bad"
+msgstr "Tệ"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__content_slide__2
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__document_quality__2
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__helpful__2
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__inspire__2
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__rating_lecturers__2
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__service_quality__2
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__system_onetouch__2
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__teaching_methods__2
+msgid "Unsatisfied"
+msgstr "Không hài lòng"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__content_slide__3
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__document_quality__3
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__helpful__3
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__inspire__3
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__rating_lecturers__3
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__service_quality__3
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__system_onetouch__3
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__teaching_methods__3
+msgid "Normal"
+msgstr "Bình thường"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__content_slide__4
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__document_quality__4
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__helpful__4
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__inspire__4
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__rating_lecturers__4
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__service_quality__4
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__system_onetouch__4
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__teaching_methods__4
+msgid "satisfied"
+msgstr "Hài lòng"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__content_slide__5
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__document_quality__5
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__helpful__5
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__inspire__5
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__rating_lecturers__5
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__service_quality__5
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__system_onetouch__5
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__teaching_methods__5
+msgid "Wonderful"
+msgstr "Tuyệt vời"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__content_slide__0
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__document_quality__0
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__helpful__0
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__inspire__0
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__rating_lecturers__0
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__service_quality__0
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__system_onetouch__0
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__teaching_methods__0
+msgid "No rating"
+msgstr "Không có đánh giá"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__count_student
+msgid "Student count"
+msgstr "Tổng số học viên"

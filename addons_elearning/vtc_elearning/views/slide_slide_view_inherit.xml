@@ -17,19 +17,17 @@
                        placeholder="Cấp độ học"/>
             </xpath>
             <xpath expr="//sheet//notebook" position="inside">
-                <page name="Quiz Final" string="Quiz Final">
-                    <group>
-                            <field name="final_quiz_ids">
-                                <tree>
-                                    <field name="op_quiz_id"/>
-                                    <field name="cost"/>
-                                    <field name="start_date"/>
-                                    <field name="end_date"/>
-                                    <field name="count_question"/>
-                                    <field name="count_student"/>
-                                </tree>
-                            </field>
-                    </group>
+                <page name="Quiz Final" string="Bài kiểm tra">
+                    <field name="final_quiz_ids">
+                        <tree delete="1">
+                            <field name="op_quiz_id"/>
+                            <field name="cost" string="Tổng điểm"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="count_question" string="Tổng câu hỏi"/>
+                            <field name="count_student" string="Tổng học viên"/>
+                        </tree>
+                    </field>
                 </page>
             </xpath>
             <xpath expr="//field[@name='user_id']" position="replace">
@@ -94,6 +92,8 @@
 
         </field>
     </record>
+
+
 
 
 

@@ -1,11 +1,33 @@
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError
+from random import randint
+class Tag(models.Model):
+    _name = 'tag.slide'
 
-
+    name = fields.Char('Name', required=True, translate=True)
+    sequence = fields.Integer('Sequence', default=10, index=True, required=True)
+    color = fields.Integer(
+        string='Color Index', default=lambda self: randint(1, 11), )
 class SlideChannel(models.Model):
     _inherit = 'slide.channel'
+    
+    def write(self, vals):
+        print(self.total_slides)
+        return super(SlideChannel, self).write(vals)
 
-    rating_avg = fields.Float('Rating AVG', compute='_compute_rating_avg', store=True)
+    rating_avg = fields.Float('Rating AVG', compute='_compute_rating_avg')
+    is_special = fields.Boolean('Course Special')
+    not_studied = fields.Integer('Not studied', store=True)
+    studied = fields.Integer('studying', store=True)
+    exam = fields.Integer('Exam', store=True)
+    done_course = fields.Integer('Done course', store=True)
+    price_course = fields.Float('Price')
+    level = fields.Selection([
+        ('basic', 'Basic'),
+        ('common', 'Common'),
+        ('advanced', 'Advanced'),
+        ('high_class', 'High class'),
+        ('depth', 'Depth')], string='Level')
 
     def average(self, lst):
         return sum(lst) / len(lst)
@@ -33,6 +55,24 @@ class SlideChannel(models.Model):
         help='Condition to enroll: everyone, on invite, on payment (sale bridge).')
     count_student = fields.Integer('Student count', compute='calculate_count_student', store=True)
     user_support = fields.Many2many('res.users', string='User support')
+    total_time_video = fields.Float(compute='calculate_total_time_video', string='Total time video')
+    tag_id = fields.Many2one('tag.slide', string='Chuyên mục khóa học')
+
+
+    def open_website_url(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'url': "http://daotao.vtcnetviet.com/courses/%s/%s" %(self.name, self.id),
+            'target': 'new',
+        }
+
+    @api.depends('slide_ids')
+    def calculate_total_time_video(self):
+        for record in self:
+            record.total_time_video = 0
+            for rec in record.slide_ids:
+                if rec.slide_type == 'video':
+                    record.total_time_video += rec.completion_time
 
     @api.depends('student_ids')
     def calculate_count_student(self):
@@ -46,10 +86,12 @@ class SlideChannel(models.Model):
         res = super(SlideChannel, self).create(vals)
         res.user_support += res.create_uid
         res.channel_partner_ids = None
+        res.is_published = True
         return res
 
 class SlideSlide(models.Model):
     _inherit = 'slide.slide'
+
 
     def action_set_completed(self):
         if self._context.get('partner'):
@@ -59,3 +101,9 @@ class SlideSlide(models.Model):
         return self._action_set_completed(self.env.user.partner_id)
 
     quiz_id = fields.Many2one('op.quiz', string='Quiz')
+
+    @api.model
+    def create(self, vals):
+        res = super(SlideSlide, self).create(vals)
+        res.is_published = True
+        return res

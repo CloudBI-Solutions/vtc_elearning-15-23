@@ -23,11 +23,12 @@ class QuizController(http.Controller):
     @validate_token
     @http.route("/api/get/quiz_by_id", type="http", auth="public", methods=["GET","OPTIONS"], csrf=False, cors='*')
     def get_quiz_by_id(self, **kwargs):
-        quiz = request.env['op.quiz'].sudo().search([('id','=', int(kwargs.get('quiz_id')))])
+        quiz = request.env['op.quiz'].sudo().search([('id','=', kwargs.get('quiz_id'))])
         line_ids = []
         if quiz.line_ids:
             for r in quiz.line_ids:
                 line_ids.append({
+                    'id': r.id,
                     'question_name': r.name,
                     'mark': r.mark,
                     'answer':[{'answer_name': i.name,'grade': i.grade_id.name}for i in r.line_ids]
@@ -37,11 +38,13 @@ class QuizController(http.Controller):
                 for re in r.bank_id:
                     for q in re.line_ids:
                         line_ids.append({
+                            'id': q.id,
                             'question_name': q.name,
                             'mark': q.mark,
                             'answer': [{'answer_name': i.name,'grade': i.grade_id.name} for i in q.line_ids]
                         })
         date = {
+            'id': quiz.id,
             'name': quiz.name,
             'slide_channel_id': quiz.slide_channel_id.id,
             'categ': quiz.categ_id.id,
@@ -148,56 +151,38 @@ class QuizController(http.Controller):
     @validate_token
     @http.route("/api/v1/quiz/result", type="http", auth="public", methods=["POST"], csrf=False, cors='*')
     def record_result_quiz(self, **payload):
-        field_require = [
-            'quiz_id',
-            'finish_date',
-            'score',
-            'categ_id',
-            'total_correct',
-            'total_incorrect',
-            'line_ids',
-            'total_question',
-        ]
-        for field in field_require:
-            if field not in payload.keys():
-                return invalid_response(
-                    "Missing",
-                    "The parameter %s is missing!!!" % field)
-            quiz = request.env['op.quiz'].sudo().search([('id', '=', payload.get('quiz_id'))])
-        result = request.env['op.quiz.result'].with_user(payload.get('uid')).create({
-            'name': quiz.name,
-            'quiz_id': quiz.id,
-            'user_id': payload.get('uid'),
-            'categ_id': quiz.categ_id.id,
-            'total_marks': quiz.total_marks,
-            'score': payload.get('score'),
-            'finish_date': datetime.now(),
-            # 'total_question': payload.get('total_question'),
-            'total_correct': payload.get('total_correct'),
-            'total_incorrect': payload.get('total_incorrect'),
+        quiz = request.env['op.quiz'].sudo().search([('id', '=', payload['id'])])
+        result = quiz.get_result_id(payload['uid'])
+        result.sudo().write({
+            'user_id': payload['uid'],
         })
-        supervisor = eval(payload.get('line_ids'))
-        result.total_question = len(supervisor)
-        for record in supervisor:
-            if record.get('answer_user') == record.get('answer'):
-                result.total_correct += 1
-                line = request.env['op.quiz.result.line'].sudo().create({
-                    'name': record.get('question'),
-                    'answer': record.get('answer'),
-                    'given_answer': record.get('answer_user'),
-                    'question_mark': record.get('mark'),
-                    'mark': record.get('mark'),
-                    'result_id': result.id,
-                })
-            else:
-                result.total_incorrect += 1
-                line = request.env['op.quiz.result.line'].sudo().create({
-                    'name': record.get('question'),
-                    'answer': record.get('answer'),
-                    'given_answer': record.get('answer_user'),
-                    'question_mark': record.get('mark'),
-                    'mark': 0,
-                    'result_id': result.id,
-                })
+        for rec in result.line_ids:
+            if rec.question_id.id == int(payload['question_id']):
+                rec.sudo().write({
+                'given_answer': payload.get('answer')
+            })
+        data_result = {
+            'total_correct': result.total_correct,
+            'total_incorrect': result.total_incorrect,
+        }
+        return valid_response(data_result)
+
+    @validate_token
+    @http.route("/api/get/result_by_user", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
+    def get_result_by_user(self, **kwargs):
+        result = request.env['op.quiz.result'].sudo().search([('user_id.id', '=', kwargs.get('uid'))])
+        print(result)
+        line_ids = []
+        for r in result:
+            data = {
+                'id': r.id,
+                'quizName': r.name,
+                # 'totalTime': r.finish_date - r.create_on,
+                'timeDone': r.finish_date,
+                'questions': r.total_question,
+                'correct': r.total_correct,
+            }
+            line_ids.append(data)
+        return valid_response(line_ids)
 
 

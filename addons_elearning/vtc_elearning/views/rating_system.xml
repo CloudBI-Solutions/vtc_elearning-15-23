@@ -6,17 +6,18 @@
         <field name="model">rating.system</field>
          <field eval="8" name="priority"/>
          <field name="arch" type="xml">
-             <tree create="false">
+             <tree create="false" edit="0">
                  <field name="user_id"/>
-                 <field name="slide_id"/>
-                 <field name="system_onetouch" widget="priority"/>
-                 <field name="rating_lecturers" widget="priority"/>
-                 <field name="content_slide" widget="priority"/>
-                 <field name="teaching_methods" widget="priority"/>
-                 <field name="inspire" widget="priority"/>
-                 <field name="document_quality" widget="priority"/>
-                 <field name="helpful" widget="priority"/>
-                 <field name="service_quality" widget="priority"/>
+                 <field name="slide_id" readonly="1" string="Khóa học"/>
+                 <field name="system_onetouch" readonly="1" widget="priority"/>
+                 <field name="rating_lecturers" readonly="1" widget="priority"/>
+                 <field name="content_slide" readonly="1" widget="priority"/>
+                 <field name="teaching_methods" readonly="1" widget="priority"/>
+                 <field name="inspire" readonly="1" widget="priority"/>
+                 <field name="document_quality" readonly="1" widget="priority"/>
+                 <field name="helpful" readonly="1" widget="priority"/>
+                 <field name="service_quality" readonly="1" widget="priority"/>
+                 <field name="create_date" string="Survey time"/>
              </tree>
          </field>
      </record>
@@ -25,7 +26,7 @@
         <field name="name">Rating system form view</field>
         <field name="model">rating.system</field>
         <field name="arch" type="xml">
-            <form string="Rating system">
+            <form string="Rating system" edit="0" create="0">
                 <sheet>
                     <div class="oe_title">
                         <h1 class="d-flex">
@@ -37,16 +38,16 @@
                     </div>
                     <group>
                         <group>
-                            <field name="system_onetouch" widget="priority"/>
-                            <field name="rating_lecturers" widget="priority"/>
-                            <field name="content_slide" widget="priority"/>
-                            <field name="teaching_methods" widget="priority"/>
+                            <field name="system_onetouch" readonly="1" widget="priority"/>
+                            <field name="rating_lecturers" readonly="1" widget="priority"/>
+                            <field name="content_slide" readonly="1" widget="priority"/>
+                            <field name="teaching_methods" readonly="1" widget="priority"/>
                         </group>
                         <group>
-                            <field name="inspire" widget="priority"/>
-                            <field name="document_quality" widget="priority"/>
-                            <field name="helpful" widget="priority"/>
-                            <field name="service_quality" widget="priority"/>
+                            <field name="inspire" readonly="1" widget="priority"/>
+                            <field name="document_quality" readonly="1" widget="priority"/>
+                            <field name="helpful" readonly="1" widget="priority"/>
+                            <field name="service_quality" readonly="1" widget="priority"/>
                         </group>
                     </group>
                 </sheet>

@@ -41,6 +41,7 @@
                             <field name="email"/>
                         </group>
                         <group>
+                            <field name="gender"/>
                             <field name="birth"/>
 <!--                            <field name="identity_card"/>-->
 <!--                            <field name="address"/>-->
@@ -76,5 +77,10 @@
               sequence="1"
               parent="lecturers_menu_item"
               action="lecturers_view_action"/>
+
+    <menuitem id="comment_lecturers_menu_item"
+              name="Comment lecturers"
+              parent="lecturers_menu_item"
+              action="comment_lecturers_view_action"/>
 
 </odoo>

@@ -26,7 +26,7 @@
         <field name="model">rat.lecturers</field>
          <field eval="8" name="priority"/>
          <field name="arch" type="xml">
-             <tree string="rating lecturers">
+             <tree string="rating lecturers" edit="0" create="0">
                  <field name="name"/>
                  <field name="rating" widget="priority"/>
                  <field name="lecturers_id"/>
@@ -39,7 +39,7 @@
         <field name="name">Rat lecturers form view</field>
         <field name="model">rat.lecturers</field>
         <field name="arch" type="xml">
-            <form string="Rating lecturers">
+            <form string="Rating lecturers" edit="0" create="0">
                 <header>
                 </header>
                 <sheet>
@@ -58,9 +58,21 @@
         </field>
     </record>
 
-    <menuitem id="comment_lecturers_menu_item"
-              name="Comment lecturers"
-              parent="lecturers_menu_item"
-              action="comment_lecturers_view_action"/>
+<!--    <record id="comment_slide_view_action" model="ir.actions.act_window">-->
+<!--        <field name="name">Comment Slide</field>-->
+<!--        <field name="res_model">comment.slide</field>-->
+<!--        <field name="view_mode">tree,form</field>-->
+<!--    </record>-->
+
+<!--    <menuitem id="comment_lecturers_menu_item"-->
+<!--              name="Comment lecturers"-->
+<!--              parent="vtc_elearning.lecturers_menu_item"-->
+<!--              action="comment_lecturers_view_action"/>-->
+
+<!--    <menuitem id="comment_slide_menu_item"-->
+<!--              name="Comment slide"-->
+<!--              parent="website_slides.website_slides_menu_courses"-->
+<!--              groups="base.group_system"-->
+<!--              action="comment_slide_view_action"/>-->
 
 </odoo>

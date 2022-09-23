@@ -1,15 +1,14 @@
 import logging
 
+from odoo.addons.restful.common import invalid_response
 from odoo.addons.restful.common import (
     valid_response,
 )
 from odoo.addons.restful.controllers.main import (
     validate_token
 )
-
 from werkzeug import urls
 
-from odoo.addons.restful.common import invalid_response
 from odoo import http
 from odoo.http import request
 
@@ -36,10 +35,24 @@ class CourseByIdController(http.Controller):
     @http.route("/api/get/course_by_id", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_course_by_id(self, **payload):
         values = []
-        user_login = request.env['res.users'].sudo().search([('id','=',int(payload.get('uid')))])
+        process = None
         base_url = CourseByIdController.get_url_base(self)
-        list_courses = request.env['slide.channel'].sudo().search([('id', '=', payload.get('course_id'))])
-        ratings = request.env['rating.rating'].sudo().search([('res_id', '=', payload.get('course_id'))])
+        if payload.get('uid'):
+            user_login = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
+            process = request.env['slide.channel.partner'].sudo().search(
+                [('partner_id', '=', user_login.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))])
+        list_courses = request.env['slide.channel'].sudo().search([('id', '=', int(payload.get('course_id')))])
+        ratings = request.env['rating.rating'].sudo().search([('res_id', '=', int(payload.get('course_id')))])
+        count_star = []
+        list_star = [r.star for r in ratings]
+        data_star = {
+            'star_1': list_star.count(1),
+            'star_2': list_star.count(2),
+            'star_3': list_star.count(3),
+            'star_4': list_star.count(4),
+            'star_5': list_star.count(5),
+        }
+        count_star.append(data_star)
         avg_rating = [r.star for r in ratings]
         list_users, list_students, rating_response = [], [], []
         for rec in ratings:
@@ -47,7 +60,6 @@ class CourseByIdController(http.Controller):
         for rec in list_users:
             list_students.append(request.env['student.student'].sudo().search([('user_id', '=', rec.id)]))
         rating_response = []
-        process = request.env['slide.channel.partner'].sudo().search([('partner_id','=',user_login.partner_id.id),('channel_id','=', int(payload.get('course_id')))])
         for r in ratings:
             rating_response.append({
                 'customer_name': r.partner_id.name,
@@ -62,12 +74,16 @@ class CourseByIdController(http.Controller):
         datas = {'id': list_courses.id,
                  'name': list_courses.name,
                  'description': list_courses.description,
-                 'total_student': list_courses.count_student,
-                 'level': list_courses.course_level_id,
-                 'final': list_courses.final_quiz_ids.ids,
+                 'total_student': list_courses.members_count,
+                 'total_time': list_courses.total_time,
+                 'total_time_video': list_courses.total_time_video,
+                 'total_slides': list_courses.total_slides,
+                 'level': list_courses.level,
+                 'final': list_courses.final_quiz_ids[0].op_quiz_id.id if list_courses.final_quiz_ids else '',
                  'rating_course': rating_response,
                  'avt_star': list_courses.rating_avg if list_courses.rating_avg != 0 else 'Chưa có đánh giá nào',
-                 'process': process.completion
+                 'process': process.completion if process else 0,
+                 'count_star': count_star
                  }
         # list giảng viên
         list_lecturers = []
@@ -114,27 +130,31 @@ class CourseByIdController(http.Controller):
                     list_slide_in_cate.append(slide_cate)
             infor_cate['slide'] = list_slide_in_cate
             list_cate.append(infor_cate)
-            # print(c.slide_ids)
+        # print(c.slide_ids)
         datas['category'] = list_cate
         # tổng học viên
 
         # tài liệu
+        attachment = []
         list_attachment_files = request.env['ir.attachment'].sudo().search(
-            [('res_model', '=', 'slide.channel'), ('res_id', '=', list_courses.id)]).ids
+            [('res_model', '=', 'slide.channel'), ('res_id', '=', list_courses.id)])
+        for rec in list_attachment_files:
+            attachment.append({'name': rec.name, 'url': urls.url_join(base_url, self.get_url_attachment(rec.id))})
         # print('list attachment: ', list_attachment_files)
         list_attachment = [urls.url_join(base_url, self.get_url_attachment(att_id)) for att_id in
                            list_attachment_files]
-        datas['files'] = list_attachment
+
+        datas['files'] = attachment
 
         values.append(datas)
         return valid_response(values)
 
-    @validate_token
-    @http.route("/api/v1/cource/process", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
-    def get_process_percent_of_course(self, **kwargs):
-        user = request.env['res.users'].sudo().search([('id', '=', kwargs.get('uid'))])
-        slide_partner = request.env['slide.slide.partner'].sudo().search(
-            [('channel_id', '=', kwargs['cource_id']), ('partner_id', '=', user.self.id)])
+    # @validate_token
+    # @http.route("/api/v1/cource/process", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
+    # def get_process_percent_of_course(self, **kwargs):
+    #     user = request.env['res.users'].sudo().search([('id', '=', kwargs.get('uid'))])
+    #     slide_partner = request.env['slide.slide.partner'].sudo().search(
+    #         [('channel_id', '=', kwargs['cource_id']), ('partner_id', '=', user.self.id)])
 
     @http.route("/api/get/lesson_by_id", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_lesson_by_id(self, **payload):

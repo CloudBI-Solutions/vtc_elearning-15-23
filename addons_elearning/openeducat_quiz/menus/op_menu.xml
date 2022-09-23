@@ -37,6 +37,7 @@
 
         <!-- Quiz -->
         <menuitem id="menu_op_quiz"
+                  name="Bài thi"
                   parent="op_quiz_menu"
                   sequence="10"
                   action="act_open_op_quiz_view"/>

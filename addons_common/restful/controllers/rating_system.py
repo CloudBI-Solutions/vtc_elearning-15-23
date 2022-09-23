@@ -20,15 +20,15 @@ class StudentInfor(http.Controller):
                 csrf=False, cors="*")
     def rating_system(self, **payload):
         field_require = [
-            'user_id',
-            'system_onetouch'
-            'rating_lecturers'
-            'content_slide'
-            'teaching_methods'
-            'inspire'
-            'document_quality'
-            'helpful'
-            'service_quality'
+            'uid',
+            'system_onetouch',
+            'rating_lecturers',
+            'content_slide',
+            'teaching_methods',
+            'inspire',
+            'document_quality',
+            'helpful',
+            'service_quality',
         ]
         for field in field_require:
             if field not in payload.keys():
@@ -36,7 +36,7 @@ class StudentInfor(http.Controller):
                     "Missing",
                     "The parameter %s is missing!!!" % field)
         domain = {
-            'user_id': payload.get('user_id'),
+            'user_id': int(payload.get('uid')),
             'system_onetouch': payload.get('system_onetouch'),
             'rating_lecturers': payload.get('rating_lecturers'),
             'content_slide': payload.get('content_slide'),
@@ -47,4 +47,4 @@ class StudentInfor(http.Controller):
             'service_quality': payload.get('service_quality'),
         }
         request.env['rating.system'].sudo().create(domain)
-        return invalid_response("Bạn đã ứng tuyển thành công vào vị trí %s." % payload.get('job_name'))
+        return valid_response("ok")
