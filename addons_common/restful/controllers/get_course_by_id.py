@@ -44,24 +44,13 @@ class CourseByIdController(http.Controller):
         list_courses = request.env['slide.channel'].sudo().search([('id', '=', int(payload.get('course_id')))])
         ratings = request.env['rating.rating'].sudo().search([('res_id', '=', int(payload.get('course_id')))])
         count_star = []
-        star_1, star_2, star_3, star_4, star_5 = [], [], [], [], []
-        for rec in ratings:
-            if rec.star == 1:
-                star_1.append(rec)
-            if rec.star == 2:
-                star_2.append(rec)
-            if rec.star == 3:
-                star_3.append(rec)
-            if rec.star == 4:
-                star_4.append(rec)
-            if rec.star == 5:
-                star_5.append(rec)
+        list_star = [r.star for r in ratings]
         data_star = {
-            'star_1': len(star_1),
-            'star_2': len(star_2),
-            'star_3': len(star_3),
-            'star_4': len(star_4),
-            'star_5': len(star_5)
+            'star_1': list_star.count(1),
+            'star_2': list_star.count(2),
+            'star_3': list_star.count(3),
+            'star_4': list_star.count(4),
+            'star_5': list_star.count(5),
         }
         count_star.append(data_star)
         avg_rating = [r.star for r in ratings]
