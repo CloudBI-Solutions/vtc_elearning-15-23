@@ -91,6 +91,7 @@ class ResUsersController(http.Controller):
 	@http.route("/api/resetpassword/send_token_by_email", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
 	def send_token_by_email(self, **kwargs):
 		student = request.env['student.student'].sudo().search([('email', '=', kwargs.get('email_reset'))])
+		mail_server = request.env['ir.mail_server'].sudo().search([])
 		user = student.user_id
 		otp_num = []
 		for i in range(6):
@@ -99,7 +100,7 @@ class ResUsersController(http.Controller):
 		otp_num = ''.join(otp_num)
 		main_content = {
 			'subject': _("Thư thay đổi mật khẩu"),
-			'email_from': user.email,
+			'email_from': mail_server.smtp_user,
 			'body_html': 'Nhập mã này để thay đổi mật khẩu: {}'.format(otp_num),
 			'email_to': kwargs.get('email_reset'),
 		}
