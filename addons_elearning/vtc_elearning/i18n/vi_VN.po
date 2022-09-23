@@ -1091,3 +1091,8 @@ msgstr "Tuyệt vời"
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__teaching_methods__0
 msgid "No rating"
 msgstr "Không có đánh giá"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__count_student
+msgid "Student count"
+msgstr "Tổng số học viên"
