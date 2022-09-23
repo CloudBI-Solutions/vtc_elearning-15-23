@@ -550,6 +550,17 @@ msgstr "Công cộng"
 msgid "Quiz"
 msgstr "Bài kiểm tra"
 
+#. module: website_slides
+#. openerp-web
+#: code:addons/website_slides/static/src/js/slides_upload.js:0
+#: model:ir.model.fields.selection,name:website_slides.selection__slide_slide__slide_type__quiz
+#: model:slide.channel.tag,name:website_slides.slide_channel_tag_other_0
+#: model_terms:ir.ui.view,arch_db:website_slides.slide_question_view_form
+#: model_terms:ir.ui.view,arch_db:website_slides.view_slide_slide_form
+#, python-format
+msgid "Quiz"
+msgstr "Bài kiểm tra"
+
 #. module: vtc_elearning
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.slide_channel_inherit_view_form
 msgid "Quiz Final"
