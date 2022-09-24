@@ -1164,3 +1164,14 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.slide_channel_inherit_view_form
 msgid "Đăng lên website"
 msgstr ""
+
+#. module: vtc_elearning
+#: model:ir.ui.menu,name:vtc_elearning.elearning_account_system_menu_item
+msgid "Account system"
+msgstr "Quản lý tài khoản"
+
+#. module: vtc_elearning
+#: model:ir.actions.act_window,name:vtc_elearning.user_system_view_actions
+#: model:ir.ui.menu,name:vtc_elearning.user_system_menu_item
+msgid "User system"
+msgstr "Tài khoản vận hành"
