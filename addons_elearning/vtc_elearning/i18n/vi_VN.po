@@ -71,6 +71,7 @@ msgstr "4 sao"
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__rating_lecturers__5
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__service_quality__5
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__system_onetouch__5
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__teaching_methods__5
 msgid "5 star"
 msgstr "5 sao"
 
