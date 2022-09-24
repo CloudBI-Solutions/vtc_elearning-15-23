@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-24 02:30+0000\n"
-"PO-Revision-Date: 2022-09-24 02:30+0000\n"
+"POT-Creation-Date: 2022-09-24 11:10+0000\n"
+"PO-Revision-Date: 2022-09-24 11:10+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -74,6 +74,11 @@ msgstr "4 sao"
 #: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__teaching_methods__5
 msgid "5 star"
 msgstr "5 sao"
+
+#. module: vtc_elearning
+#: model:ir.ui.menu,name:vtc_elearning.elearning_account_system_menu_item
+msgid "Account system"
+msgstr "Quản lý tài khoản"
 
 #. module: vtc_elearning
 #: model:ir.model.fields,field_description:vtc_elearning.field_lecturers__address
@@ -287,6 +292,7 @@ msgstr ""
 #: model_terms:ir.actions.act_window,help:vtc_elearning.rating_system_view_action
 #: model_terms:ir.actions.act_window,help:vtc_elearning.student_view_action
 #: model_terms:ir.actions.act_window,help:vtc_elearning.user_student_view_action
+#: model_terms:ir.actions.act_window,help:vtc_elearning.user_system_view_actions
 msgid "Create a course"
 msgstr ""
 
@@ -1077,6 +1083,12 @@ msgid "User support"
 msgstr "Người vận hành"
 
 #. module: vtc_elearning
+#: model:ir.actions.act_window,name:vtc_elearning.user_system_view_actions
+#: model:ir.ui.menu,name:vtc_elearning.user_system_menu_item
+msgid "User system"
+msgstr "Tài khoản vận hành"
+
+#. module: vtc_elearning
 #: model:ir.model,name:vtc_elearning.model_res_users
 msgid "Users"
 msgstr "Người dùng"
@@ -1086,11 +1098,6 @@ msgstr "Người dùng"
 #, python-format
 msgid "Vui lòng nhập email để được tạo tài khoản học trực tuyến."
 msgstr ""
-
-#. module: vtc_elearning
-#: model:ir.model.fields.selection,name:vtc_elearning.selection__rating_system__teaching_methods__5
-msgid "Wonderful"
-msgstr "Tuyệt vời"
 
 #. module: vtc_elearning
 #: model:ir.model.fields,field_description:vtc_elearning.field_student_student__work_unit
@@ -1165,14 +1172,3 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.slide_channel_inherit_view_form
 msgid "Đăng lên website"
 msgstr ""
-
-#. module: vtc_elearning
-#: model:ir.ui.menu,name:vtc_elearning.elearning_account_system_menu_item
-msgid "Account system"
-msgstr "Quản lý tài khoản"
-
-#. module: vtc_elearning
-#: model:ir.actions.act_window,name:vtc_elearning.user_system_view_actions
-#: model:ir.ui.menu,name:vtc_elearning.user_system_menu_item
-msgid "User system"
-msgstr "Tài khoản vận hành"
