@@ -101,7 +101,10 @@ class ResUsersController(http.Controller):
 		main_content = {
 			'subject': _("Thư thay đổi mật khẩu"),
 			'email_from': mail_server.smtp_user,
-			'body_html': 'Nhập mã này để thay đổi mật khẩu: {}'.format(otp_num),
+			'body_html': '<p> Chào {},</p> Chúng tôi vừa nhận được yêu cầu cấp lại mật khẩu cho tài khoản của bạn trên '
+						 'Website One Touch. Hệ thống đã cấp lại mật khẩu mới cho bạn: {}. '
+						 '<p>+ Vui lòng bỏ qua thư này nếu bạn không gửi yêu cầu đến chúng tôi</p>'
+						 '<p>+ Email cập nhật mật khẩu chỉ có giá trị trong 3 ngày</p>'.format(student.name, otp_num),
 			'email_to': kwargs.get('email_reset'),
 		}
 		request.env['mail.mail'].sudo().create(main_content).send()
