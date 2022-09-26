@@ -33,6 +33,7 @@ class CourseByIdController(http.Controller):
     def get_course_by_id(self, **payload):
         values = []
         process = None
+        user_login = None
         base_url = CourseByIdController.get_url_base(self)
         list_courses = request.env['slide.channel'].sudo().search([('id', '=', int(payload.get('course_id')))])
         ratings = request.env['rating.rating'].sudo().search([('res_id', '=', int(payload.get('course_id')))])
@@ -46,12 +47,6 @@ class CourseByIdController(http.Controller):
             'star_5': list_star.count(5),
         }
         count_star.append(data_star)
-        avg_rating = [r.star for r in ratings]
-        list_users, list_students, rating_response = [], [], []
-        for rec in ratings:
-            list_users.append(request.env['res.users'].sudo().search([('partner_id', '=', rec.partner_id.id)]))
-        for rec in list_users:
-            list_students.append(request.env['student.student'].sudo().search([('user_id', '=', rec.id)]))
         rating_response = []
         for r in ratings:
             rating_response.append({
@@ -75,7 +70,7 @@ class CourseByIdController(http.Controller):
                  'final': list_courses.final_quiz_ids[0].op_quiz_id.id if list_courses.final_quiz_ids else '',
                  'rating_course': rating_response,
                  'avt_star': list_courses.rating_avg if list_courses.rating_avg != 0 else 'Chưa có đánh giá nào',
-                 'process': process.completion if process else 0,
+                 'process': process.completion if process and process.completion > 0 else 0,
                  'count_star': count_star
                  }
         # list giảng viên
@@ -127,6 +122,7 @@ class CourseByIdController(http.Controller):
                 'name': c.name,
             }
             list_slide_in_cate = []
+            slide_cate = {}
             for s in c.slide_ids:
                 if s.slide_type in ['document', 'video', 'quiz']:
                     slide_cate = {

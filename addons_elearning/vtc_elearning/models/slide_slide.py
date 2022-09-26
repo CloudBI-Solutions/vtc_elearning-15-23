@@ -10,10 +10,7 @@ class Tag(models.Model):
         string='Color Index', default=lambda self: randint(1, 11), )
 class SlideChannel(models.Model):
     _inherit = 'slide.channel'
-    
-    def write(self, vals):
-        print(self.total_slides)
-        return super(SlideChannel, self).write(vals)
+
 
     rating_avg = fields.Float('Rating AVG', compute='_compute_rating_avg')
     is_special = fields.Boolean('Course Special')
@@ -92,6 +89,11 @@ class SlideChannel(models.Model):
 class SlideSlide(models.Model):
     _inherit = 'slide.slide'
 
+    file_upload = fields.Binary('Video upload', attachment=True)
+    type_video = fields.Selection([
+        ('url', 'Get video Url'),
+        ('vimeo', 'Get video from Vimeo'),
+        ('upload', 'Get video by upload from device')], string='Type video')
 
     def action_set_completed(self):
         if self._context.get('partner'):

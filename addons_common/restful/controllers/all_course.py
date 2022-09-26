@@ -90,21 +90,10 @@ class AllCoursesController(http.Controller):
             # thông tin tab nội dung
             slides = []
             category = []
-            # print(rec.slide_ids)
             count_time_slide = 0
             for slide in rec.slide_ids:
-                # print(slide.completion_time)
                 if not slide.is_category:
                     count_time_slide += slide.completion_time
             dates['count_time_slide'] = count_time_slide
-            #
-            #     slide_info = {
-            #         'name': slide.name,
-            #         'slide_type': slide.slide_type,
-            #         'completion_time': slide.completion_time,
-            #     }
-            #     slides.append(slide_info)
-            # dates['slides'] = slides
-            # print(dates)
             values.append(dates)
         return valid_response(values)
