@@ -46,10 +46,10 @@ class ResUsersController(http.Controller):
 		# pass the regular expression
 		# and the string into the fullmatch() method
 		if re.fullmatch(regex, email):
-			print("Valid Email")
+			return True
 
 		else:
-			print("Invalid Email")
+			return False
 
 	def _crypt_context(self):
 		""" Passlib CryptContext instance used to encrypt and verify
@@ -90,7 +90,11 @@ class ResUsersController(http.Controller):
 
 	@http.route("/api/resetpassword/send_token_by_email", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
 	def send_token_by_email(self, **kwargs):
+		if not self.check(kwargs.get('email_reset')):
+			return invalid_response('Email không đúng định dạng!')
 		student = request.env['student.student'].sudo().search([('email', '=', kwargs.get('email_reset'))])
+		if not student:
+			return invalid_response('Không có tài khoản nào được liên kết với email này, vui lòng liên hệ quản trị viên để được hỗ trợ!')
 		mail_server = request.env['ir.mail_server'].sudo().search([('active', '=', True)], limit=1,
 																  order='sequence DESC')
 		user = student.user_id

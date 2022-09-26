@@ -1,7 +1,7 @@
 
 
 from odoo import fields, models, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 class Student(models.Model):
@@ -28,7 +28,7 @@ class Student(models.Model):
                                         domain="[('country_id', '=', 'VN')]")
     res_country_ward = fields.Many2one('res.country.ward', string='Country ward')
     res_country_district = fields.Many2one('res.country.district', string='Country district')
-    user_id = fields.Many2one('res.users', string='User')
+    user_id = fields.Many2one('res.users', string='User', copy=False)
     progress_ids = fields.One2many('progress.slide', 'student_id', string='Progress')
     comment_slide_ids = fields.One2many('comment.slide', 'student_id', string='Comment slide')
     comment_source_ids = fields.One2many('comment.course', 'student_id', string='Comment source')
@@ -36,6 +36,10 @@ class Student(models.Model):
     state = fields.Selection([('confirm', 'Confirm'), ('pending', 'Pending'), ('cancel', 'Cancel'), ('recall', 'Recall')], string='State', default='pending')
     favorite_course_ids = fields.One2many('favorite.course', 'student_id', string='Favorite course')
 
+
+    _sql_constraints = [
+        ('user_id_uniq', 'unique (user_id)', 'The user responsble must be unique!')
+    ]
 
     def active_user(self):
         self.user_id.active = True
@@ -61,19 +65,31 @@ class Student(models.Model):
 
 
     def check_email_login_user(self):
+        # user_types_category = self.env.ref('base.module_category_user_type', raise_if_not_found=False)
+        # user_types_groups = self.env['res.groups'].search(
+        #     [('category_id', '=', user_types_category.id),]) if user_types_category else False
+        # print(user_types_groups)
+        group_public = self.env.ref('base.group_public')
         if self.email:
             user = self.env['res.users'].search([('login', '=', self.email)])
             if user:
-                raise ValueError('Email đã được đăng ký tài khoản, vui lòng nhập email mới để được tạo tài khoản học trực tuyến.')
+                raise ValidationError(_('Email đã được đăng ký tài khoản, vui lòng nhập email mới để được tạo tài khoản học trực tuyến.'))
             self.user_id = self.env['res.users'].sudo().create({
                 'name': self.name,
                 'login': self.email,
                 'password': '1',
                 'active': False,
+                'groups_id': [0, 0, group_public.id],
+                'share': False
             })
         else:
             raise UserError(_('Vui lòng nhập email để được tạo tài khoản học trực tuyến.'))
 
+    def unlink(self):
+        for rec in self:
+            user = self.env['res.users'].search([('id','=', rec.user_id.id)])
+            user.unlink()
+        return super(Student, self).unlink()
 
 class ProgressSlide(models.Model):
     _name = 'progress.slide'

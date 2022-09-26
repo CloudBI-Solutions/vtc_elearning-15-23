@@ -53,12 +53,6 @@ class CourseByIdController(http.Controller):
             'star_5': list_star.count(5),
         }
         count_star.append(data_star)
-        avg_rating = [r.star for r in ratings]
-        list_users, list_students, rating_response = [], [], []
-        for rec in ratings:
-            list_users.append(request.env['res.users'].sudo().search([('partner_id', '=', rec.partner_id.id)]))
-        for rec in list_users:
-            list_students.append(request.env['student.student'].sudo().search([('user_id', '=', rec.id)]))
         rating_response = []
         for r in ratings:
             rating_response.append({
