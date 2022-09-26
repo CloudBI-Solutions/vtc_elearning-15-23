@@ -4,9 +4,6 @@ from odoo.addons.restful.common import invalid_response
 from odoo.addons.restful.common import (
     valid_response,
 )
-from odoo.addons.restful.controllers.main import (
-    validate_token
-)
 from werkzeug import urls
 
 from odoo import http
@@ -37,10 +34,6 @@ class CourseByIdController(http.Controller):
         values = []
         process = None
         base_url = CourseByIdController.get_url_base(self)
-        if payload.get('uid'):
-            user_login = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
-            process = request.env['slide.channel.partner'].sudo().search(
-                [('partner_id', '=', user_login.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))])
         list_courses = request.env['slide.channel'].sudo().search([('id', '=', int(payload.get('course_id')))])
         ratings = request.env['rating.rating'].sudo().search([('res_id', '=', int(payload.get('course_id')))])
         count_star = []
@@ -96,7 +89,18 @@ class CourseByIdController(http.Controller):
         datas['lecturers'] = list_lecturers
 
         # thông tin tab nội dung
+        data_progress = []
+        if payload.get('uid'):
 
+            user_login = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
+            process = request.env['slide.channel.partner'].sudo().search(
+                [('partner_id', '=', user_login.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))])
+            for rec in process.line_ids:
+                lesson_infor = {
+                    'id': rec.slide_id.id,
+                    'progress': rec.progress,
+                }
+                data_progress.append(lesson_infor)
         cate = request.env['slide.slide'].sudo().search(
             [('is_category', '=', True), ('channel_id', '=', list_courses.id)])
         slide = request.env['slide.slide'].sudo().search(
@@ -110,6 +114,10 @@ class CourseByIdController(http.Controller):
                     'slide_type': s.slide_type,
                     'completion_time': s.completion_time,
                 }
+                for data in data_progress:
+                    if s.id == data.get('id'):
+                        slide_infor['progress'] = data.get('progress')
+                    # print(data)
                 list_slide.append(slide_infor)
             datas['slide'] = list_slide
         list_cate = []
@@ -127,6 +135,9 @@ class CourseByIdController(http.Controller):
                         'slide_type': s.slide_type,
                         'completion_time': s.completion_time,
                     }
+                    for data in data_progress:
+                        if s.id == data.get('id'):
+                            slide_cate['progress'] = data.get('progress')
                     list_slide_in_cate.append(slide_cate)
             infor_cate['slide'] = list_slide_in_cate
             list_cate.append(infor_cate)
