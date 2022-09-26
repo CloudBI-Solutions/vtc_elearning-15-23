@@ -109,7 +109,7 @@ class ResUsersController(http.Controller):
 			'body_html': '<p> Chào {},</p> Chúng tôi vừa nhận được yêu cầu cấp lại mật khẩu cho tài khoản của bạn trên '
 						 'Website One Touch. Hệ thống đã cấp lại mật khẩu mới cho bạn: {}. '
 						 '<p>+ Vui lòng bỏ qua thư này nếu bạn không gửi yêu cầu đến chúng tôi</p>'
-						 '<p>+ Email cập nhật mật khẩu chỉ có giá trị trong 3 ngày</p>'.format(student.name, otp_num),
+						 '<p>+ Email cập nhật mật khẩu chỉ có giá trị trong 3 ngày</p>''<img style="width: 850px" src="http://daotao.vtcnetviet.com/static/media/Main-banner-1902-x-666.8.347d5894397cb6a07e61.jpg"/>'.format(student.name, otp_num),
 			'email_to': kwargs.get('email_reset'),
 		}
 		request.env['mail.mail'].sudo().create(main_content).send()

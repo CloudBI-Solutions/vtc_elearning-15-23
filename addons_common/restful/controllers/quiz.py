@@ -31,7 +31,7 @@ class QuizController(http.Controller):
                     'id': r.id,
                     'question_name': r.name,
                     'mark': r.mark,
-                    'answer':[{'answer_name': i.name,'grade': i.grade_id.name}for i in r.line_ids]
+                    'answer':[{'id': i.id, 'answer_name': i.name,'grade': i.grade_id.name}for i in r.line_ids]
                 })
         if quiz.config_ids:
             for r in quiz.config_ids:
@@ -41,7 +41,7 @@ class QuizController(http.Controller):
                             'id': q.id,
                             'question_name': q.name,
                             'mark': q.mark,
-                            'answer': [{'answer_name': i.name,'grade': i.grade_id.name} for i in q.line_ids]
+                            'answer': [{'id': i.id, 'answer_name': i.name,'grade': i.grade_id.name} for i in q.line_ids]
                         })
         date = {
             'id': quiz.id,

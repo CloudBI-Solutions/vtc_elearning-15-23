@@ -89,6 +89,10 @@ class SlideChannel(models.Model):
 class SlideSlide(models.Model):
     _inherit = 'slide.slide'
 
+    type_video = fields.Selection([
+        ('url', 'Get video Url'),
+        ('vimeo', 'Get video from Vimeo'),
+        ('upload', 'Get video by upload from device')], string='Type video')
 
     def action_set_completed(self):
         if self._context.get('partner'):

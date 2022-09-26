@@ -72,6 +72,10 @@
             <xpath expr="//div[@name='button_box']" position="attributes">
                     <attribute name="invisible">1</attribute>
             </xpath>
+
+             <xpath expr="//field[@name='slide_type']" position="after">
+                    <field name="type_video" attrs="{'invisible': [('slide_type', '!=', 'video')]}"/>
+            </xpath>
         </field>
     </record>
 
