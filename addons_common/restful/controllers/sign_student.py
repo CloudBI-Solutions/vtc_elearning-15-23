@@ -21,11 +21,14 @@ class SignStudent(http.Controller):
     @http.route("/api/v1/sign/student", type='http', auth="public", methods=["POST", "OPTIONS"],
                 csrf=False, cors="*")
     def sign_student(self, **payload):
+        group_public = self.env.ref('base.group_public')
         domain = {
             'name': payload.get('login'),
             'login': payload.get('login'),
             'password': payload.get('password'),
-            'active': 'False'
+            'active': 'False',
+            'groups_id': [0, 0, group_public.id],
+            'share': False
         }
         user = request.env['res.users'].sudo().create(domain)
         vals = {

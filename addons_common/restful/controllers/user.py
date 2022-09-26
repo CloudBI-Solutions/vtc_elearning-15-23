@@ -46,10 +46,10 @@ class ResUsersController(http.Controller):
 		# pass the regular expression
 		# and the string into the fullmatch() method
 		if re.fullmatch(regex, email):
-			print("Valid Email")
+			return True
 
 		else:
-			print("Invalid Email")
+			return False
 
 	def _crypt_context(self):
 		""" Passlib CryptContext instance used to encrypt and verify
@@ -90,8 +90,13 @@ class ResUsersController(http.Controller):
 
 	@http.route("/api/resetpassword/send_token_by_email", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
 	def send_token_by_email(self, **kwargs):
+		if not self.check(kwargs.get('email_reset')):
+			return invalid_response('Email không đúng định dạng!')
 		student = request.env['student.student'].sudo().search([('email', '=', kwargs.get('email_reset'))])
-		mail_server = request.env['ir.mail_server'].sudo().search([])
+		if not student:
+			return invalid_response('Không có tài khoản nào được liên kết với email này, vui lòng liên hệ quản trị viên để được hỗ trợ!')
+		mail_server = request.env['ir.mail_server'].sudo().search([('active', '=', True)], limit=1,
+																  order='sequence DESC')
 		user = student.user_id
 		otp_num = []
 		for i in range(6):
@@ -101,7 +106,10 @@ class ResUsersController(http.Controller):
 		main_content = {
 			'subject': _("Thư thay đổi mật khẩu"),
 			'email_from': mail_server.smtp_user,
-			'body_html': 'Nhập mã này để thay đổi mật khẩu: {}'.format(otp_num),
+			'body_html': '<p> Chào {},</p> Chúng tôi vừa nhận được yêu cầu cấp lại mật khẩu cho tài khoản của bạn trên '
+						 'Website One Touch. Hệ thống đã cấp lại mật khẩu mới cho bạn: {}. '
+						 '<p>+ Vui lòng bỏ qua thư này nếu bạn không gửi yêu cầu đến chúng tôi</p>'
+						 '<p>+ Email cập nhật mật khẩu chỉ có giá trị trong 3 ngày</p>'.format(student.name, otp_num),
 			'email_to': kwargs.get('email_reset'),
 		}
 		request.env['mail.mail'].sudo().create(main_content).send()

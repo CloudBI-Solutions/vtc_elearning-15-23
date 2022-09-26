@@ -10,10 +10,7 @@ class Tag(models.Model):
         string='Color Index', default=lambda self: randint(1, 11), )
 class SlideChannel(models.Model):
     _inherit = 'slide.channel'
-    
-    def write(self, vals):
-        print(self.total_slides)
-        return super(SlideChannel, self).write(vals)
+
 
     rating_avg = fields.Float('Rating AVG', compute='_compute_rating_avg')
     is_special = fields.Boolean('Course Special')

@@ -1,8 +1,7 @@
 
 
 from odoo import fields, models, api, _
-from odoo.exceptions import UserError, ValidationError
-import re
+from odoo.exceptions import UserError
 
 
 class Student(models.Model):
@@ -29,7 +28,7 @@ class Student(models.Model):
                                         domain="[('country_id', '=', 'VN')]")
     res_country_ward = fields.Many2one('res.country.ward', string='Country ward')
     res_country_district = fields.Many2one('res.country.district', string='Country district')
-    user_id = fields.Many2one('res.users', string='User')
+    user_id = fields.Many2one('res.users', string='User', copy=False)
     progress_ids = fields.One2many('progress.slide', 'student_id', string='Progress')
     comment_slide_ids = fields.One2many('comment.slide', 'student_id', string='Comment slide')
     comment_source_ids = fields.One2many('comment.course', 'student_id', string='Comment source')
@@ -75,32 +74,6 @@ class Student(models.Model):
         else:
             raise UserError(_('Vui lòng nhập email để được tạo tài khoản học trực tuyến.'))
 
-    @api.constrains('phone', 'email')
-    def check_phone_and_email(self):
-        # check email
-        if '@' not in self.email:
-            raise ValidationError(_('Vui lòng nhập email có định dạng "@".'))
-
-        # check phone
-        if self.phone[0:3] == '+84':
-            print('+84')
-            if len(self.phone[3:]) != 9:
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
-            if re.findall("\D", self.phone[3:]):
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
-
-        elif self.phone[0:2] == '84':
-            if len(self.phone[2:]) != 9:
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
-            if re.findall("\D", self.phone[2:]):
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
-
-        else:
-            print('self.phone', self.phone)
-            if len(self.phone) != 10:
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
-            if re.findall("\D", self.phone[3:]):
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
 
 class ProgressSlide(models.Model):
     _name = 'progress.slide'
