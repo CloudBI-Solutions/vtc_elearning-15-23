@@ -460,6 +460,21 @@ msgid "Gender"
 msgstr "Giới tính"
 
 #. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__slide_slide__type_video__url
+msgid "Get video Url"
+msgstr "Up video bằng URL"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__slide_slide__type_video__upload
+msgid "Get video by upload from device"
+msgstr "Up video từ thiết bị"
+
+#. module: vtc_elearning
+#: model:ir.model.fields.selection,name:vtc_elearning.selection__slide_slide__type_video__vimeo
+msgid "Get video from Vimeo"
+msgstr "Up video từ Vimeo"
+
+#. module: vtc_elearning
 #: model:ir.model.fields,field_description:vtc_elearning.field_rating_system__helpful
 msgid "Helpful"
 msgstr "Sự hữu ích"
@@ -1010,6 +1025,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:vtc_elearning.field_slide_channel__type_course
 msgid "Type course"
 msgstr "Hình thức"
+
+#. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_slide__type_video
+msgid "Type video"
+msgstr "Loại video"
 
 #. module: vtc_elearning
 #: model_terms:ir.ui.view,arch_db:vtc_elearning.student_form_view
