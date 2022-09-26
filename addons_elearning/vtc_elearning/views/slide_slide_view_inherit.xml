@@ -77,7 +77,7 @@
                     <field name="type_video" attrs="{'invisible': [('slide_type', '!=', 'video')]}"/>
             </xpath>
 
-            <xpath expr="//field[@name='url']" position="before ">
+            <xpath expr="//field[@name='url']" position="before">
                 <field name="file_upload" attrs="{'invisible': [('type_video', '!=', 'upload')]}"/>
             </xpath>
         </field>
