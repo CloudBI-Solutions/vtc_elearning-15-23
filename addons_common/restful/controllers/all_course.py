@@ -46,6 +46,7 @@ class AllCoursesController(http.Controller):
                     'course_level': course_level,  # cấp độ học
                     'rating_avg_stars': rec.rating_avg,  # đánh giá trung bình, tự chia cho 5, vd 3/5
                     'total_time': rec.total_time,
+                    'tag_id':rec.tag_id
                     }
             vals.append(data)
         for i in range(len(partner_channel)):
@@ -74,7 +75,8 @@ class AllCoursesController(http.Controller):
                      'course_level': course_level,  # cấp độ học
                      'rating_avg_stars': rec.rating_avg if rec.rating_avg != 0 else 'Chưa có đánh giá nào',  # đánh giá trung bình, tự chia cho 5, vd 3/5
                      'total_time': rec.total_time,  # tổng thời lượng khoá học
-                     'total_slides_true': rec.total_slides
+                     'total_slides_true': rec.total_slides,
+                     'tag_id': rec.tag_id
                      }
 
             # list giảng viên
