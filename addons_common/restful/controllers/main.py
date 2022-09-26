@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 
 def validate_token(func):
     """."""
-    print("restful")
+    # print("restful")
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
         print('wrap')
