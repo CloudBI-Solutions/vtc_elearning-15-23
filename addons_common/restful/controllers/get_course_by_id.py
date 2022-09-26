@@ -77,7 +77,7 @@ class CourseByIdController(http.Controller):
                  'final': list_courses.final_quiz_ids[0].op_quiz_id.id if list_courses.final_quiz_ids else '',
                  'rating_course': rating_response,
                  'avt_star': list_courses.rating_avg if list_courses.rating_avg != 0 else 'Chưa có đánh giá nào',
-                 'process': process.completion if process.completion else 0,
+                 'process': process.completion if process else 0,
                  'count_star': count_star
                  }
         # list giảng viên
@@ -121,7 +121,7 @@ class CourseByIdController(http.Controller):
                         'name': s.name,
                         'slide_type': s.slide_type,
                         'completion_time': s.completion_time,
-                        'completed_slide_of_user': True if user_login.partner_id.id in s.partner_ids.ids else False
+                        'completed_slide_of_user': True if user_login and user_login.partner_id.id in s.partner_ids.ids else False
                     }
                     list_slide_in_cate.append(slide_cate)
             infor_cate['slide'] = list_slide_in_cate
