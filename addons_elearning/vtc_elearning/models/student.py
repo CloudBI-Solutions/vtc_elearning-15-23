@@ -4,7 +4,6 @@ from odoo import fields, models, api, _
 from odoo.exceptions import UserError, ValidationError
 import re
 
-
 class Student(models.Model):
     _name = 'student.student'
     _description = 'Student'
@@ -101,12 +100,12 @@ class Student(models.Model):
                 raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
             if re.findall("\D", self.phone[3:]):
                 raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
+
     def unlink(self):
         for rec in self:
             user = self.env['res.users'].search([('id', '=', rec.user_id.id)])
             user.unlink()
         return super(Student, self).unlink()
-
 
 class ProgressSlide(models.Model):
     _name = 'progress.slide'
