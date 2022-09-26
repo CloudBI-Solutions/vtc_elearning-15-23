@@ -89,6 +89,7 @@ class SlideChannel(models.Model):
 class SlideSlide(models.Model):
     _inherit = 'slide.slide'
 
+    file_upload = fields.Binary('Video upload', attachment=True)
     type_video = fields.Selection([
         ('url', 'Get video Url'),
         ('vimeo', 'Get video from Vimeo'),

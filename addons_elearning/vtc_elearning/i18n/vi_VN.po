@@ -1114,6 +1114,11 @@ msgid "Users"
 msgstr "Người dùng"
 
 #. module: vtc_elearning
+#: model:ir.model.fields,field_description:vtc_elearning.field_slide_slide__file_upload
+msgid "Video upload"
+msgstr "Video tải lên"
+
+#. module: vtc_elearning
 #: code:addons/vtc_elearning/models/student.py:0
 #, python-format
 msgid "Vui lòng nhập email để được tạo tài khoản học trực tuyến."
