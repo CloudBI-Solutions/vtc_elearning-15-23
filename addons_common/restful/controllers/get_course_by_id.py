@@ -165,6 +165,7 @@ class CourseByIdController(http.Controller):
             'progress': progress.progress,
             'is_done': 'False',
         }
+        print(lesson.slide_type)
         if lesson.slide_type == 'video':
             data['url'] = lesson.url
             data['duration'] = lesson.completion_time

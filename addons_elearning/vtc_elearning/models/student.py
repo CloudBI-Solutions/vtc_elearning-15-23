@@ -2,7 +2,7 @@
 
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError, ValidationError
-
+import re
 
 class Student(models.Model):
     _name = 'student.student'
@@ -37,10 +37,6 @@ class Student(models.Model):
     favorite_course_ids = fields.One2many('favorite.course', 'student_id', string='Favorite course')
 
 
-    _sql_constraints = [
-        ('user_id_uniq', 'unique (user_id)', 'The user responsble must be unique!')
-    ]
-
     def active_user(self):
         self.user_id.active = True
         self.state = 'confirm'
@@ -65,29 +61,49 @@ class Student(models.Model):
 
 
     def check_email_login_user(self):
-        # user_types_category = self.env.ref('base.module_category_user_type', raise_if_not_found=False)
-        # user_types_groups = self.env['res.groups'].search(
-        #     [('category_id', '=', user_types_category.id),]) if user_types_category else False
-        # print(user_types_groups)
-        group_public = self.env.ref('base.group_public')
         if self.email:
             user = self.env['res.users'].search([('login', '=', self.email)])
             if user:
-                raise ValidationError(_('Email đã được đăng ký tài khoản, vui lòng nhập email mới để được tạo tài khoản học trực tuyến.'))
+                raise ValueError('Email đã được đăng ký tài khoản, vui lòng nhập email mới để được tạo tài khoản học trực tuyến.')
             self.user_id = self.env['res.users'].sudo().create({
                 'name': self.name,
                 'login': self.email,
                 'password': '1',
                 'active': False,
-                'groups_id': [0, 0, group_public.id],
-                'share': False
             })
         else:
             raise UserError(_('Vui lòng nhập email để được tạo tài khoản học trực tuyến.'))
 
+    @api.constrains('phone', 'email')
+    def check_phone_and_email(self):
+        # check email
+        if '@' not in self.email:
+            raise ValidationError(_('Vui lòng nhập email có định dạng "@".'))
+
+        # check phone
+        if self.phone[0:3] == '+84':
+            print('+84')
+            if len(self.phone[3:]) != 9:
+                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
+            if re.findall("\D", self.phone[3:]):
+                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
+
+        elif self.phone[0:2] == '84':
+            if len(self.phone[2:]) != 9:
+                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
+            if re.findall("\D", self.phone[2:]):
+                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
+
+        else:
+            print('self.phone', self.phone)
+            if len(self.phone) != 10:
+                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
+            if re.findall("\D", self.phone[3:]):
+                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
+
     def unlink(self):
         for rec in self:
-            user = self.env['res.users'].search([('id','=', rec.user_id.id)])
+            user = self.env['res.users'].search([('id', '=', rec.user_id.id)])
             user.unlink()
         return super(Student, self).unlink()
 

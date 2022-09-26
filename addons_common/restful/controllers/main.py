@@ -14,9 +14,10 @@ _logger = logging.getLogger(__name__)
 
 def validate_token(func):
     """."""
-
+    # print("restful")
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
+        print('wrap')
         """."""
         access_token = kwargs.get('uid') or kwargs.get('res_id')
         if not access_token:
