@@ -1,8 +1,8 @@
 
 
 from odoo import fields, models, api, _
-from odoo.exceptions import UserError, ValidationError
-import re
+from odoo.exceptions import UserError
+
 
 class Student(models.Model):
     _name = 'student.student'
@@ -28,7 +28,7 @@ class Student(models.Model):
                                         domain="[('country_id', '=', 'VN')]")
     res_country_ward = fields.Many2one('res.country.ward', string='Country ward')
     res_country_district = fields.Many2one('res.country.district', string='Country district')
-    user_id = fields.Many2one('res.users', string='User', copy=False)
+    user_id = fields.Many2one('res.users', string='User')
     progress_ids = fields.One2many('progress.slide', 'student_id', string='Progress')
     comment_slide_ids = fields.One2many('comment.slide', 'student_id', string='Comment slide')
     comment_source_ids = fields.One2many('comment.course', 'student_id', string='Comment source')
@@ -70,42 +70,12 @@ class Student(models.Model):
                 'login': self.email,
                 'password': '1',
                 'active': False,
+                'student_id': self.id,
+                'self': self.partner_id,
             })
         else:
             raise UserError(_('Vui lòng nhập email để được tạo tài khoản học trực tuyến.'))
 
-    @api.constrains('phone', 'email')
-    def check_phone_and_email(self):
-        # check email
-        if '@' not in self.email:
-            raise ValidationError(_('Vui lòng nhập email có định dạng "@".'))
-
-        # check phone
-        if self.phone[0:3] == '+84':
-            print('+84')
-            if len(self.phone[3:]) != 9:
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
-            if re.findall("\D", self.phone[3:]):
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
-
-        elif self.phone[0:2] == '84':
-            if len(self.phone[2:]) != 9:
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
-            if re.findall("\D", self.phone[2:]):
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
-
-        else:
-            print('self.phone', self.phone)
-            if len(self.phone) != 10:
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
-            if re.findall("\D", self.phone[3:]):
-                raise ValidationError(_('Số điện thoại của bạn sai định dạng. Vui lòng kiểm tra lại số điện thoại.'))
-
-    def unlink(self):
-        for rec in self:
-            user = self.env['res.users'].search([('id', '=', rec.user_id.id)])
-            user.unlink()
-        return super(Student, self).unlink()
 
 class ProgressSlide(models.Model):
     _name = 'progress.slide'
@@ -119,7 +89,17 @@ class SlideChannelPartner(models.Model):
     _inherit = 'slide.channel.partner'
 
     student_id = fields.Many2one('student.student', string="Student")
+    line_ids = fields.One2many('slide.channel.partner.line', 'slide_channel_partner_id', string='Line')
     # partner_id = fields.Many2one('res.partner', index=True, required=True, ondelete='cascade')
+
+    @api.constrains('channel_id')
+    def gender_line_ids(self):
+        for record in self:
+            record.line_ids = None
+            for rec in record.channel_id.slide_ids:
+                record.line_ids += self.env['slide.channel.partner.line'].sudo().create({
+                    'slide_id': rec.id,
+                })
 
     @api.onchange('student_id')
     def onchange_partner_id(self):
@@ -136,7 +116,6 @@ class ResPartner(models.Model):
     student_id = fields.Many2one('student.student', string='Student')
 
 
-    # @api.onchange('email')
 class FavoriteCourse(models.Model):
     _name = 'favorite.course'
     _description = 'Favorite course'
@@ -144,3 +123,10 @@ class FavoriteCourse(models.Model):
     slide_channel_id = fields.Many2one('slide.channel', string='Slide channel')
     student_id = fields.Many2one('student.student', string='Student')
 
+class SlideChannelPartnerLine(models.Model):
+    _name = 'slide.channel.partner.line'
+    _description = 'Slide channel partner line'
+
+    slide_channel_partner_id = fields.Many2one('slide.channel.partner')
+    progress = fields.Float('Progress')
+    slide_id = fields.Many2one('slide.slide', string='Slide')
