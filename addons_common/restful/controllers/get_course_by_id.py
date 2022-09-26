@@ -71,7 +71,8 @@ class CourseByIdController(http.Controller):
                  'rating_course': rating_response,
                  'avt_star': list_courses.rating_avg if list_courses.rating_avg != 0 else 'Chưa có đánh giá nào',
                  'process': process.completion if process and process.completion > 0 else 0,
-                 'count_star': count_star
+                 'count_star': count_star,
+                 'tag_id': list_courses.tag_id
                  }
         # list giảng viên
         list_lecturers = []
