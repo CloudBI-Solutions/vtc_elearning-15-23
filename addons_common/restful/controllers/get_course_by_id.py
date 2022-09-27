@@ -87,7 +87,6 @@ class CourseByIdController(http.Controller):
         # thông tin tab nội dung
         data_progress = []
         if payload.get('uid'):
-
             user_login = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
             process = request.env['slide.channel.partner'].sudo().search(
                 [('partner_id', '=', user_login.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))])
@@ -101,6 +100,7 @@ class CourseByIdController(http.Controller):
             [('is_category', '=', True), ('channel_id', '=', list_courses.id)])
         slide = request.env['slide.slide'].sudo().search(
             [('channel_id', '=', list_courses.id), ('is_category', '=', False)])
+        print(data_progress)
         if slide:
             list_slide = []
             for s in slide:

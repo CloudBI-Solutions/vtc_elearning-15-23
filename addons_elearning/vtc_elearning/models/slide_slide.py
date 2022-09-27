@@ -12,6 +12,7 @@ class SlideChannel(models.Model):
     _inherit = 'slide.channel'
 
 
+    is_outstanding_channel = fields.Boolean('Khóa học đặc biệt')
     rating_avg = fields.Float('Rating AVG', compute='_compute_rating_avg')
     is_special = fields.Boolean('Course Special')
     not_studied = fields.Integer('Not studied', store=True)
