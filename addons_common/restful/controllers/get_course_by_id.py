@@ -100,7 +100,6 @@ class CourseByIdController(http.Controller):
             [('is_category', '=', True), ('channel_id', '=', list_courses.id)])
         slide = request.env['slide.slide'].sudo().search(
             [('channel_id', '=', list_courses.id), ('is_category', '=', False)])
-        print(data_progress)
         if slide:
             list_slide = []
             for s in slide:
@@ -109,6 +108,7 @@ class CourseByIdController(http.Controller):
                     'name': s.name,
                     'slide_type': s.slide_type,
                     'completion_time': s.completion_time,
+                    'completed_slide_of_user': True if user_login.partner_id.id in s.partner_ids.ids else False
                 }
                 for data in data_progress:
                     if s.id == data.get('id'):
@@ -131,7 +131,9 @@ class CourseByIdController(http.Controller):
                         'name': s.name,
                         'slide_type': s.slide_type,
                         'completion_time': s.completion_time,
+                        'completed_slide_of_user': True if user_login.partner_id.id in s.partner_ids.ids else False
                     }
+
                     for data in data_progress:
                         if s.id == data.get('id'):
                             slide_cate['progress'] = data.get('progress')
