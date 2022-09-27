@@ -447,7 +447,9 @@ export class GraphModel extends Model {
                                     const selected = fields[fieldName].selection.find(
                                         (s) => s[0] === val
                                     );
-                                    label = selected[1];
+                                    if (selected == 'undefined'){
+                                        label = selected[1];
+                                    }
                                 } else {
                                     label = val;
                                 }

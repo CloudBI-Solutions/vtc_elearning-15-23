@@ -78,7 +78,14 @@ class AllCoursesController(http.Controller):
 			         'total_time': rec.total_time,  # tổng thời lượng khoá học
 			         'total_slides_true': rec.total_slides,
 			         'tag_id': rec.tag_id,
-			         'create_date': rec.create_date
+			         'create_date': rec.create_date,
+			         'type_cource':rec.type_cource,
+			         'start_date':rec.start_date,
+			         'end_date': rec.end_date,
+			         'allow_comment':rec.allow_comment,
+			         'is_special': rec.is_special,
+			         'channel_type':rec.channel_type,
+			         'enroll': rec.enroll
 			         }
 
 			# list giảng viên
