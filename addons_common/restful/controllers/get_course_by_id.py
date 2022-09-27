@@ -35,7 +35,7 @@ class CourseByIdController(http.Controller):
         process = None
         user_login = None
         base_url = CourseByIdController.get_url_base(self)
-        list_courses = request.env['slide.channel'].sudo().search([('id', '=', int(payload.get('course_id')))])
+        list_courses = request.env['slide.channel'].sudo().search([('id', '=', int(payload.get('course_id'))),('is_published','=',True)])
         ratings = request.env['rating.rating'].sudo().search([('res_id', '=', int(payload.get('course_id')))])
         count_star = []
         list_star = [r.star for r in ratings]
