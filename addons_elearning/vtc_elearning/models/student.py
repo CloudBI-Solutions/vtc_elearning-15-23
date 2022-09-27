@@ -26,8 +26,8 @@ class Student(models.Model):
     work_unit = fields.Char('Work unit')
     res_country_state = fields.Many2one('res.country.state', string='Country state',
                                         domain="[('country_id', '=', 'VN')]")
-    res_country_ward = fields.Many2one('res.country.ward', string='Country ward')
-    res_country_district = fields.Many2one('res.country.district', string='Country district')
+    res_country_ward = fields.Many2one('res.country.ward', string='Country ward', domain="[('district_id', '=', res_country_district)]")
+    res_country_district = fields.Many2one('res.country.district', string='Country district', domain="[('state_id', '=', res_country_state)]")
     user_id = fields.Many2one('res.users', string='User')
     progress_ids = fields.One2many('progress.slide', 'student_id', string='Progress')
     comment_slide_ids = fields.One2many('comment.slide', 'student_id', string='Comment slide')
