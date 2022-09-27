@@ -79,7 +79,7 @@ class AllCoursesController(http.Controller):
 			         'total_slides_true': rec.total_slides,
 			         'tag_id': rec.tag_id,
 			         'create_date': rec.create_date,
-			         'type_cource':rec.type_cource,
+			         'type_cource':rec.type_course,
 			         'start_date':rec.start_date,
 			         'end_date': rec.end_date,
 			         'allow_comment':rec.allow_comment,
