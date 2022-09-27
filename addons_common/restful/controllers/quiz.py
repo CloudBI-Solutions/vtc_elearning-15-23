@@ -43,7 +43,7 @@ class QuizController(http.Controller):
                             'mark': q.mark,
                             'answer': [{'id': i.id, 'answer_name': i.name,'grade': i.grade_id.name} for i in q.line_ids]
                         })
-        date = {
+        data = {
             'id': quiz.id,
             'name': quiz.name,
             'slide_channel_id': quiz.slide_channel_id.id,
@@ -54,8 +54,23 @@ class QuizController(http.Controller):
             'line_ids': line_ids,
             'time_limit_hr': quiz.time_limit_hr if quiz.time_limit_hr else False,
             'time_limit_minute': quiz.time_limit_minute if quiz.time_limit_minute else False,
+            'config': {
+                        'single_que': quiz.single_que,
+                        'prev_allow': quiz.prev_allow,
+                        'prev_readonly': quiz.prev_readonly,
+                        'no_of_attempt': quiz.no_of_attempt,
+                        'que_required': quiz.que_required,
+                        'auth_required': quiz.auth_required,
+                        'show_result': quiz.show_result,
+                        'right_ans': quiz.right_ans,
+                        'wrong_ans': quiz.wrong_ans,
+                        'not_attempt_ans': quiz.not_attempt_ans,
+                        'time_config': quiz.time_config,
+                        'time_limit_hr': quiz.time_limit_hr,
+                        'time_limit_minute': quiz.time_limit_minute,
+                    }
         }
-        return valid_response(date)
+        return valid_response(data)
 
     @validate_token
     @http.route("/api/v1/quiz", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
