@@ -80,6 +80,9 @@
             <xpath expr="//field[@name='url']" position="before">
                 <field name="file_upload" attrs="{'invisible': [('type_video', '!=', 'upload')]}"/>
             </xpath>
+            <xpath expr="//field[@name='is_preview']" position="after">
+                <field name="post_to_website" string="Có đăng lên website không?"/>
+            </xpath>
         </field>
     </record>
 
@@ -101,7 +104,17 @@
         </field>
     </record>
 
+    <record id="invisible_ora_in_slide_slide_view_form" model="ir.ui.view">
+        <field name="name">invisible_ora_in_slide_slide_view_form</field>
+        <field name="model">slide.slide</field>
+        <field name="inherit_id" ref="website_ora_elearning.view_slide_slide_form_inherit_ora"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='ora']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+            </xpath>
 
+        </field>
+    </record>
 
 
 

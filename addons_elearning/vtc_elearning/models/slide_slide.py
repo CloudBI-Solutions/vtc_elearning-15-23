@@ -90,11 +90,31 @@ class SlideChannel(models.Model):
 class SlideSlide(models.Model):
     _inherit = 'slide.slide'
 
+    def _my_new_selection(self):
+        lst = [('infographic', 'Đồ hoạ thông tin'), ('webpage', 'Trang web'), ('presentation', 'Bài thuyết trình'),
+               ('document', 'Tài liệu'), ('video', 'Video'), ('quiz', 'Bài kiểm tra')]
+        try:
+            lst.remove(
+                [item for item in lst if item[0] == 'infographic'][
+                    0])
+            lst.remove(
+                [item for item in lst if item[0] == 'webpage'][
+                    0])
+            lst.remove(
+                [item for item in lst if item[0] == 'presentation'][
+                    0])
+        except IndexError as e:
+            pass
+        return lst
+
     file_upload = fields.Binary('Video upload', attachment=True)
     type_video = fields.Selection([
         ('url', 'Get video Url'),
         ('vimeo', 'Get video from Vimeo'),
         ('upload', 'Get video by upload from device')], string='Type video')
+
+    post_to_website = fields.Boolean(string='Post to website?')
+    slide_type = fields.Selection(_my_new_selection,)
 
     def action_set_completed(self):
         if self._context.get('partner'):
