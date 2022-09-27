@@ -38,7 +38,7 @@ class CourseByIdController(http.Controller):
         if payload.get('uid'):
             user_login = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
             process = request.env['slide.channel.partner'].sudo().search(
-                [('partner_id', '=', user_login.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))])
+                [('partner_id', '=', user_login.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))], limit=1)
             for rec in process.line_ids:
                 lesson_infor = {
                     'id': rec.slide_id.id,
