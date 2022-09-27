@@ -34,6 +34,17 @@ class CourseByIdController(http.Controller):
         values = []
         process = None
         user_login = None
+        data_progress = []
+        if payload.get('uid'):
+            user_login = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
+            process = request.env['slide.channel.partner'].sudo().search(
+                [('partner_id', '=', user_login.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))])
+            for rec in process.line_ids:
+                lesson_infor = {
+                    'id': rec.slide_id.id,
+                    'progress': rec.progress,
+                }
+                data_progress.append(lesson_infor)
         base_url = CourseByIdController.get_url_base(self)
         list_courses = request.env['slide.channel'].sudo().search([('id', '=', int(payload.get('course_id'))),('is_published','=',True)])
         ratings = request.env['rating.rating'].sudo().search([('res_id', '=', int(payload.get('course_id')))])
@@ -85,17 +96,6 @@ class CourseByIdController(http.Controller):
         datas['lecturers'] = list_lecturers
 
         # thông tin tab nội dung
-        data_progress = []
-        if payload.get('uid'):
-            user_login = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
-            process = request.env['slide.channel.partner'].sudo().search(
-                [('partner_id', '=', user_login.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))])
-            for rec in process.line_ids:
-                lesson_infor = {
-                    'id': rec.slide_id.id,
-                    'progress': rec.progress,
-                }
-                data_progress.append(lesson_infor)
         cate = request.env['slide.slide'].sudo().search(
             [('is_category', '=', True), ('channel_id', '=', list_courses.id)])
         slide = request.env['slide.slide'].sudo().search(
