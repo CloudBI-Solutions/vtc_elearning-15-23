@@ -34,8 +34,19 @@ class CourseByIdController(http.Controller):
         values = []
         process = None
         user_login = None
+        data_progress = []
+        if payload.get('uid'):
+            user_login = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
+            process = request.env['slide.channel.partner'].sudo().search(
+                [('partner_id', '=', user_login.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))], limit=1)
+            for rec in process.line_ids:
+                lesson_infor = {
+                    'id': rec.slide_id.id,
+                    'progress': rec.progress,
+                }
+                data_progress.append(lesson_infor)
         base_url = CourseByIdController.get_url_base(self)
-        list_courses = request.env['slide.channel'].sudo().search([('id', '=', int(payload.get('course_id')))])
+        list_courses = request.env['slide.channel'].sudo().search([('id', '=', int(payload.get('course_id'))),('is_published','=',True)])
         ratings = request.env['rating.rating'].sudo().search([('res_id', '=', int(payload.get('course_id')))])
         count_star = []
         list_star = [r.star for r in ratings]
@@ -85,22 +96,10 @@ class CourseByIdController(http.Controller):
         datas['lecturers'] = list_lecturers
 
         # thông tin tab nội dung
-        data_progress = []
-        if payload.get('uid'):
-            user_login = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
-            process = request.env['slide.channel.partner'].sudo().search(
-                [('partner_id', '=', user_login.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))])
-            for rec in process.line_ids:
-                lesson_infor = {
-                    'id': rec.slide_id.id,
-                    'progress': rec.progress,
-                }
-                data_progress.append(lesson_infor)
         cate = request.env['slide.slide'].sudo().search(
             [('is_category', '=', True), ('channel_id', '=', list_courses.id)])
         slide = request.env['slide.slide'].sudo().search(
             [('channel_id', '=', list_courses.id), ('is_category', '=', False)])
-        print(data_progress)
         if slide:
             list_slide = []
             for s in slide:
@@ -109,6 +108,7 @@ class CourseByIdController(http.Controller):
                     'name': s.name,
                     'slide_type': s.slide_type,
                     'completion_time': s.completion_time,
+                    'completed_slide_of_user': True if user_login is not None and user_login.partner_id.id in s.partner_ids.ids else False
                 }
                 for data in data_progress:
                     if s.id == data.get('id'):
@@ -131,7 +131,9 @@ class CourseByIdController(http.Controller):
                         'name': s.name,
                         'slide_type': s.slide_type,
                         'completion_time': s.completion_time,
+                        'completed_slide_of_user': True if user_login is not None and user_login.partner_id.id in s.partner_ids.ids else False
                     }
+
                     for data in data_progress:
                         if s.id == data.get('id'):
                             slide_cate['progress'] = data.get('progress')

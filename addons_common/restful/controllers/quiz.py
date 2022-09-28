@@ -25,7 +25,7 @@ class QuizController(http.Controller):
     def get_quiz_by_id(self, **kwargs):
         quiz = request.env['op.quiz'].sudo().search([('id','=', kwargs.get('quiz_id'))])
         line_ids = []
-        if quiz.line_ids:
+        if quiz.line_ids and quiz.quiz_config != 'quiz_bank_random':
             for r in quiz.line_ids:
                 line_ids.append({
                     'id': r.id,
@@ -33,7 +33,7 @@ class QuizController(http.Controller):
                     'mark': r.mark,
                     'answer':[{'id': i.id, 'answer_name': i.name,'grade': i.grade_id.name}for i in r.line_ids]
                 })
-        if quiz.config_ids:
+        if quiz.config_ids and quiz.quiz_config == 'quiz_bank_random':
             for r in quiz.config_ids:
                 for re in r.bank_id:
                     for q in re.line_ids:
@@ -43,7 +43,7 @@ class QuizController(http.Controller):
                             'mark': q.mark,
                             'answer': [{'id': i.id, 'answer_name': i.name,'grade': i.grade_id.name} for i in q.line_ids]
                         })
-        date = {
+        data = {
             'id': quiz.id,
             'name': quiz.name,
             'slide_channel_id': quiz.slide_channel_id.id,
@@ -54,8 +54,23 @@ class QuizController(http.Controller):
             'line_ids': line_ids,
             'time_limit_hr': quiz.time_limit_hr if quiz.time_limit_hr else False,
             'time_limit_minute': quiz.time_limit_minute if quiz.time_limit_minute else False,
+            'config': {
+                        'single_que': quiz.single_que,
+                        'prev_allow': quiz.prev_allow,
+                        'prev_readonly': quiz.prev_readonly,
+                        'no_of_attempt': quiz.no_of_attempt,
+                        'que_required': quiz.que_required,
+                        'auth_required': quiz.auth_required,
+                        'show_result': quiz.show_result,
+                        'right_ans': quiz.right_ans,
+                        'wrong_ans': quiz.wrong_ans,
+                        'not_attempt_ans': quiz.not_attempt_ans,
+                        'time_config': quiz.time_config,
+                        'time_limit_hr': quiz.time_limit_hr,
+                        'time_limit_minute': quiz.time_limit_minute,
+                    }
         }
-        return valid_response(date)
+        return valid_response(data)
 
     @validate_token
     @http.route("/api/v1/quiz", type="http", auth="public", methods=["GET"], csrf=False, cors='*')
@@ -171,7 +186,6 @@ class QuizController(http.Controller):
     @http.route("/api/get/result_by_user", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_result_by_user(self, **kwargs):
         result = request.env['op.quiz.result'].sudo().search([('user_id.id', '=', kwargs.get('uid'))])
-        print(result)
         line_ids = []
         for r in result:
             data = {
