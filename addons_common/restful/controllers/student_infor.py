@@ -31,7 +31,7 @@ class StudentInfor(http.Controller):
 		user = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
 		student = request.env['student.student'].sudo().search([('user_id', '=', user.id)])
 		if not student:
-			return invalid_response("Tạo tài khoản user cho thằng student này!")
+			return invalid_response("Kiểm tra xem người đang đăng nhập đã là student chưa, nếu có rồi thì kiểm tra xem trong thằng student này đã có tài khoản chưa")
 		# cấp độ học
 		datas = {'id': user.id,
 		         'name': user.name,
