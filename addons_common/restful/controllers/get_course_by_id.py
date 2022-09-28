@@ -108,7 +108,7 @@ class CourseByIdController(http.Controller):
                     'name': s.name,
                     'slide_type': s.slide_type,
                     'completion_time': s.completion_time,
-                    'completed_slide_of_user': True if user_login.partner_id.id in s.partner_ids.ids else False
+                    'completed_slide_of_user': True if user_login is not None and user_login.partner_id.id in s.partner_ids.ids else False
                 }
                 for data in data_progress:
                     if s.id == data.get('id'):
@@ -131,7 +131,7 @@ class CourseByIdController(http.Controller):
                         'name': s.name,
                         'slide_type': s.slide_type,
                         'completion_time': s.completion_time,
-                        'completed_slide_of_user': True if user_login.partner_id.id in s.partner_ids.ids else False
+                        'completed_slide_of_user': True if user_login is not None and user_login.partner_id.id in s.partner_ids.ids else False
                     }
 
                     for data in data_progress:
