@@ -36,6 +36,8 @@ class Student(models.Model):
     state = fields.Selection([('confirm', 'Confirm'), ('pending', 'Pending'), ('cancel', 'Cancel'), ('recall', 'Recall')], string='State', default='pending')
     favorite_course_ids = fields.One2many('favorite.course', 'student_id', string='Favorite course')
 
+    _sql_constraints = [('user_id_uniq', 'unique (user_id)', "user_id already exists !")]
+
     @api.onchange('res_country_state')
     def _onchange_res_country_state(self):
         print('self.state', self.res_country_state)
