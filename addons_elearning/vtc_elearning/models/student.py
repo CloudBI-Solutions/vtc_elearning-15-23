@@ -1,7 +1,7 @@
 
 
 from odoo import fields, models, api, _
-from odoo.exceptions import UserError, ValueError
+from odoo.exceptions import UserError, ValidationError
 
 
 class Student(models.Model):
@@ -76,7 +76,7 @@ class Student(models.Model):
         if self.email:
             user = self.env['res.users'].search([('login', '=', self.email)])
             if user:
-                raise ValueError('Email đã được đăng ký tài khoản, vui lòng nhập email mới để được tạo tài khoản học trực tuyến.')
+                raise ValidationError('Email đã được đăng ký tài khoản, vui lòng nhập email mới để được tạo tài khoản học trực tuyến.')
             self.user_id = self.env['res.users'].sudo().create({
                 'name': self.name,
                 'login': self.email,
