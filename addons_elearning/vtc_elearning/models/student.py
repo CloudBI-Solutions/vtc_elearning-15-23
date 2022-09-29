@@ -1,7 +1,7 @@
 
 
 from odoo import fields, models, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValueError
 
 
 class Student(models.Model):
