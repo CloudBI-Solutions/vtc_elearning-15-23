@@ -54,6 +54,7 @@ class HelpdeskController(http.Controller):
             'area_type_maintenance_request': int(payload.get('area_type_maintenance_request')),
             'category_id': int(payload.get('cate')),
         })
+        print(helpdesk)
         return invalid_response("ok")
 
     @validate_token

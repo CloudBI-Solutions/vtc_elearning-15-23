@@ -14,35 +14,18 @@ _logger = logging.getLogger(__name__)
 
 def validate_token(func):
     """."""
-
+    # print("restful")
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
         """."""
-        headers = request.httprequest.headers
-        print(headers)
-        print(kwargs)
-        access_token = get_access_token(headers, kwargs)
-        print(access_token)
+        access_token = kwargs.get('uid') or kwargs.get('res_id')
         if not access_token:
             return invalid_response("access_token_not_found", "missing access token in request header", 401)
-        access_token_data = (
-            request.env["api.access_token"].sudo().search([("token", "=", access_token)], order="id DESC", limit=1)
-        )
-
-        if access_token_data.find_one_or_create_token(user_id=access_token_data.user_id.id) != access_token:
-            return invalid_response("access_token", "token seems to have expired or invalid", 401)
-
-        request.session.session_token = access_token_data.user_id._compute_session_token(request.session.sid)
-        # self.env.user._compute_session_token(request.session.sid)
-        request.session.uid = access_token_data.user_id.id
-        request.uid = access_token_data.user_id.id
         return func(self, *args, **kwargs)
-
     return wrap
 
 
 _routes = ["/api/<model>", "/api/<model>/<id>", "/api/<model>/<id>/<action>"]
-
 
 def get_access_token(headers, params):
     if headers.get('access_token'):
@@ -69,11 +52,11 @@ class APIController(http.Controller):
         self._model = "ir.model"
 
     @validate_token
-    @http.route(_routes, type="http", auth="public", methods=["GET"], csrf=False)
+    @http.route(_routes, type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
     def get(self, model=None, id=None, **payload):
         try:
             ioc_name = model
-            model = request.env[self._model].search([("model", "=", model)], limit=1)
+            model = request.env[self._model].sudo().search([("model", "=", model)], limit=1)
             if model:
                 domain, fields, offset, limit, order = extract_arguments(**payload)
                 data = request.env[model.model].search_read(
@@ -97,7 +80,7 @@ class APIController(http.Controller):
             return invalid_response("Access error", "Error: %s" % e.name)
 
     @validate_token
-    @http.route(_routes, type="http", auth="public", methods=["POST"], csrf=False)
+    @http.route(_routes, type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors="*")
     def post(self, model=None, id=None, **payload):
         """Create a new record.
         Basic sage:
@@ -159,7 +142,7 @@ class APIController(http.Controller):
         return invalid_response("invalid object model", "The model %s is not available in the registry." % model, )
 
     @validate_token
-    @http.route(_routes, type="http", auth="public", methods=["PUT"], csrf=False)
+    @http.route(_routes, type="http", auth="public", methods=["PUT","OPTIONS"], csrf=False, cors="*")
     def put(self, model=None, id=None, **payload):
         """."""
         values = {}
@@ -189,7 +172,7 @@ class APIController(http.Controller):
             return valid_response(record.read())
 
     @validate_token
-    @http.route(_routes, type="http", auth="public", methods=["DELETE"], csrf=False)
+    @http.route(_routes, type="http", auth="public", methods=["DELETE","OPTIONS"], csrf=False, cors="*")
     def delete(self, model=None, id=None, **payload):
         """."""
         try:
@@ -209,7 +192,7 @@ class APIController(http.Controller):
             return valid_response("record %s has been successfully deleted" % record.id)
 
     @validate_token
-    @http.route(_routes, type="http", auth="public", methods=["PATCH"], csrf=False)
+    @http.route(_routes, type="http", auth="public", methods=["PATCH","OPTIONS"], csrf=False, cors="*")
     def patch(self, model=None, id=None, action=None, **payload):
         """."""
         args = []
