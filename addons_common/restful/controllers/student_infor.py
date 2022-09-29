@@ -2,6 +2,7 @@ import logging
 
 from odoo.addons.restful.common import (
     valid_response,
+    invalid_response
 )
 from odoo.addons.restful.controllers.main import (
     validate_token
@@ -27,8 +28,12 @@ class StudentInfor(http.Controller):
     def get_infor_student_by_id(self, **payload):
         values = []
         base_url = StudentInfor.get_url_base(self)
-        user = request.env['res.users'].sudo().search([('id','=', int(payload.get('uid')))])
+        print(request.uid)
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
         student = request.env['student.student'].sudo().search([('user_id', '=', user.id)])
+        if not student:
+            return invalid_response(
+                "Kiểm tra xem người đang đăng nhập đã là student chưa, nếu có rồi thì kiểm tra xem trong thằng student này đã có tài khoản chưa")
         # cấp độ học
         datas = {'id': user.id,
                  'name': user.name,
@@ -47,5 +52,4 @@ class StudentInfor(http.Controller):
                                           'name': student.res_country_district.name} or '',
                  }
         values.append(datas)
-        print(values)
         return valid_response(values)

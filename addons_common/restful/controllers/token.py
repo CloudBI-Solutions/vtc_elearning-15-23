@@ -8,7 +8,7 @@ import werkzeug.wrappers
 import werkzeug.wrappers
 import werkzeug.wsgi
 from odoo.addons.restful.common import invalid_response, valid_response
-from werkzeug import urls
+
 from odoo import http
 from odoo.exceptions import AccessDenied, AccessError
 from odoo.http import request
@@ -98,17 +98,6 @@ class AccessToken(http.Controller):
 
         # Generate tokens
         access_token = _token.find_one_or_create_token(user_id=uid, create=True)
-        partner = request.env.user.partner_id.id
-        cource_partner = request.env['slide.channel.partner'].sudo().search([('partner_id', '=', partner)])
-        list_cource = list(set([r for r in cource_partner.channel_id]))
-        cource_join = []
-        for rec in cource_partner:
-            data = {
-                'id': rec.channel_id.id,
-                'progress': rec.completion
-            }
-            cource_join.append(data)
-
         return werkzeug.wrappers.Response(
             status=200,
             content_type="application/json; charset=utf-8",
@@ -125,29 +114,24 @@ class AccessToken(http.Controller):
                     'go_to_backend': base_url + '/web',
                     "company_name": request.env.user.company_name,
                     "currency": request.env.user.currency_id.name,
-                    # "company_name": request.env.user.company_name,
                     "country": request.env.user.country_id.name,
                     "contact_address": request.env.user.contact_address,
                     "customer_rank": request.env.user.customer_rank,
-                    'cource_join': cource_join,
-                    'avatar': urls.url_join(base_url, '/web/image?model=res.users&id={}&field=avatar_128'.format(
-                        uid)) if uid else ''
                 }
             ),
         )
 
+    @http.route(["/api/auth/token"], methods=["DELETE"], type="http", auth="none", csrf=False, cors="*")
+    def delete(self, **post):
+        """Delete a given token"""
+        token = request.env["api.access_token"]
+        access_token = post.get("access_token")
 
-@http.route(["/api/auth/token"], methods=["DELETE"], type="http", auth="none", csrf=False, cors="*")
-def delete(self, **post):
-    """Delete a given token"""
-    token = request.env["api.access_token"]
-    access_token = post.get("access_token")
-
-    access_token = token.search([("token", "=", access_token)], limit=1)
-    if not access_token:
-        error = "Access token is missing in the request header or invalid token was provided"
-        return invalid_response(400, error)
-    for token in access_token:
-        token.unlink()
-    # Successful response:
-    return valid_response([{"message": "access token %s successfully deleted" % (access_token,), "delete": True}])
+        access_token = token.search([("token", "=", access_token)], limit=1)
+        if not access_token:
+            error = "Access token is missing in the request header or invalid token was provided"
+            return invalid_response(400, error)
+        for token in access_token:
+            token.unlink()
+        # Successful response:
+        return valid_response([{"message": "access token %s successfully deleted" % (access_token,), "delete": True}])

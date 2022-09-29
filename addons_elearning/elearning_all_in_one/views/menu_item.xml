@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="admin_system_menuitem"
+              name="Menu item"
+              parent="base.menu_administration"
+              groups="base.group_system"
+              sequence="4"
+    />
+        <menuitem id="base.menu_board_root"
+                  name="Dashboards"
+                  sequence="260"
+                  parent="admin_system_menuitem"
+                  groups="base.group_user"/>
+
+        <menuitem id="utm.menu_link_tracker_root"
+                  name="Link Tracker"
+                  sequence="270"
+                  parent="admin_system_menuitem"
+                  groups="base.group_no_one"/>
+
+</odoo>

@@ -36,6 +36,8 @@ class Student(models.Model):
     state = fields.Selection([('confirm', 'Confirm'), ('pending', 'Pending'), ('cancel', 'Cancel'), ('recall', 'Recall')], string='State', default='pending')
     favorite_course_ids = fields.One2many('favorite.course', 'student_id', string='Favorite course')
 
+    _sql_constraints = [('user_id_uniq', 'unique (user_id)', "user_id already exists !")]
+
     @api.onchange('res_country_state')
     def _onchange_res_country_state(self):
         if self.res_country_state:
@@ -101,6 +103,25 @@ class SlideChannelPartner(models.Model):
     student_id = fields.Many2one('student.student', string="Student")
     line_ids = fields.One2many('slide.channel.partner.line', 'slide_channel_partner_id', string='Line')
     # partner_id = fields.Many2one('res.partner', index=True, required=True, ondelete='cascade')
+    
+    def write(self, vals):
+        if 'channel_id' in vals and 'partner_id' in vals:
+            check = self._check_contrains(vals['channel_id'], vals['partner_id'])
+            if check:
+                raise UserError(_('Học viên này đang học khóa học này'))
+        return super(SlideChannelPartner, self).write(vals)
+
+    @api.model
+    def create(self, vals_list):
+        if 'channel_id' in vals_list and 'partner_id' in vals_list:
+            check = self._check_contrains(vals_list['channel_id'], vals_list['partner_id'])
+            if check:
+                raise UserError(_('Học viên này đang học khóa học này'))
+        return super(SlideChannelPartner, self).create(vals_list)
+
+    def _check_contrains(self, channel_id,partner_id):
+        slidechannel = self.env['slide.channel.partner'].search([('channel_id','=',channel_id), ('partner_id','=', partner_id)])
+        return slidechannel
 
     @api.constrains('channel_id')
     def gender_line_ids(self):
