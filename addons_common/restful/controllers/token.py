@@ -100,6 +100,7 @@ class AccessToken(http.Controller):
         access_token = _token.find_one_or_create_token(user_id=uid, create=True)
         partner = request.env.user.partner_id.id
         cource_partner = request.env['slide.channel.partner'].sudo().search([('partner_id', '=', partner)])
+        student = request.env['student.student'].sudo().search([('user_id', '=', uid)])
         list_cource = list(set([r for r in cource_partner.channel_id]))
         cource_join = []
         for rec in cource_partner:
@@ -130,8 +131,8 @@ class AccessToken(http.Controller):
                     "contact_address": request.env.user.contact_address,
                     "customer_rank": request.env.user.customer_rank,
                     'cource_join': cource_join,
-                    'avatar': urls.url_join(base_url, '/web/image?model=res.users&id={}&field=avatar_128'.format(
-                        uid)) if uid else ''
+                    'avatar': urls.url_join(base_url, '/web/image?model=student.student&id={}&field=avatar'.format(
+                        student.id)) if student else ''
                 }
             ),
         )
