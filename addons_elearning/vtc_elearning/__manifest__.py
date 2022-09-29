@@ -19,7 +19,7 @@
         'views/report_view_inherit.xml',
         'views/menu_action.xml',
         'views/slide_channel_tag.xml',
-
+        'views/product_template.xml',
     ],
     'demo': [],
     'depends': [
