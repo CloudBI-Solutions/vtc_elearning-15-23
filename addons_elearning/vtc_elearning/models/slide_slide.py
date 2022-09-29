@@ -1,6 +1,7 @@
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError
 from random import randint
+from datetime import datetime
 class Tag(models.Model):
     _name = 'tag.slide'
 
@@ -55,7 +56,9 @@ class SlideChannel(models.Model):
     user_support = fields.Many2many('res.users', string='User support')
     total_time_video = fields.Float(compute='calculate_total_time_video', string='Total time video')
     tag_id = fields.Many2one('tag.slide', string='Chuyên mục khóa học')
+    course_code = fields.Char(string='Mã khoá học')
 
+    _sql_constraints = [('course_code_uniq', 'unique (course_code)', 'Course have unique code.'),]
 
     def open_website_url(self):
         return {
@@ -81,11 +84,47 @@ class SlideChannel(models.Model):
 
     @api.model
     def create(self, vals):
+        now = datetime.now()
+        vals['course_code'] = 'VTC' + now.strftime('%d%m%Y%H%M%S')
+        if 'type_course' in vals and vals['type_course'] == 'price':
+            product_value = {
+                'name': vals['name'] if 'name' in vals else '',
+                'detailed_type': 'service',
+                'default_code': vals['course_code'],
+            }
+            if 'price_course' in vals:
+                product_value['list_price'] = vals['price_course']
+            self.env['product.template'].create(product_value)
+
         res = super(SlideChannel, self).create(vals)
         res.user_support += res.create_uid
         res.channel_partner_ids = None
         res.is_published = True
         return res
+
+    def write(self, vals):
+        # trường hợp khoá học trả phí và sửa tt khác
+        if self.type_course == 'price':
+            product = self.env['product.template'].search([('default_code', '=', self.course_code)])
+            product_value = {}
+            if 'name' in vals:
+                product_value['name'] = vals['name']
+            if 'price_course' in vals:
+                product_value['list_price'] = vals['price_course']
+            product.write(product_value)
+
+        # trường hợp khoá học sửa từ miễn phí sang trả phí
+        if 'type_course' in vals and vals['type_course'] == 'price':
+            # tạo mới product
+            product_value = {
+                'name': vals['name'] if 'name' in vals else self.name,
+                'detailed_type': 'service',
+                'default_code': self.course_code,
+                'list_price': vals['price_course'] if 'price_course' in vals else self.price_course,
+            }
+            self.env['product.template'].create(product_value)
+
+        return super(SlideChannel, self).write(vals)
 
 class SlideSlide(models.Model):
     _inherit = 'slide.slide'
