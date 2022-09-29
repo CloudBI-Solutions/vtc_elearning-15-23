@@ -19,7 +19,10 @@ def validate_token(func):
     def wrap(self, *args, **kwargs):
         """."""
         headers = request.httprequest.headers
+        print(headers)
+        print(kwargs)
         access_token = get_access_token(headers, kwargs)
+        print(access_token)
         if not access_token:
             return invalid_response("access_token_not_found", "missing access token in request header", 401)
         access_token_data = (
