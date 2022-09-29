@@ -26,7 +26,7 @@ class HelpdeskController(http.Controller):
         return 'https://test.diligo.vn:15000'
 
     @validate_token
-    @http.route("/api/v1/helpdesk/create_helpdesk", type="json", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/helpdesk/create_helpdesk", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
     def post_helpdesk(self, **payload):
         print(request.uid)
         values = {}
