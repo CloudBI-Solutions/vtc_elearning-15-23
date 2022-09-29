@@ -29,7 +29,7 @@ class StudentInfor(http.Controller):
         values = []
         base_url = StudentInfor.get_url_base(self)
         print(request.uid)
-        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
+        user = request.env['res.users'].sudo().search([('id', '=', payload.get('uid'))])
         student = request.env['student.student'].sudo().search([('user_id', '=', user.id)])
         if not student:
             return invalid_response(
