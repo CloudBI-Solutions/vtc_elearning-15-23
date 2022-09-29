@@ -38,14 +38,12 @@ class Student(models.Model):
 
     @api.onchange('res_country_state')
     def _onchange_res_country_state(self):
-        print('self.state', self.res_country_state)
         if self.res_country_state:
             self.res_country_district = ''
             self.res_country_ward = ''
 
     @api.onchange('res_country_district')
     def _onchange_res_country_district(self):
-        print('self.district', self.res_country_district)
         if self.res_country_district:
             self.res_country_ward = ''
 
