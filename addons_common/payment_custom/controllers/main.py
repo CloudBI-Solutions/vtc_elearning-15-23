@@ -25,18 +25,29 @@ _logger = logging.getLogger(__name__)
 
 class MainPayment(http.Controller):
 
-
+	# @validate_token
 	@http.route("/api/momo/payment/atm", type='http', auth="public", methods=["POST"],
 	            csrf=False, cors="*")
-	def test_api_paymentqr(self, **kwargs):
+	def momo_api_paymentqr(self, **kwargs):
+		field_requied = [
+			'sale_id',
+			'uid'
+		]
+		order = request.env['account.move'].sudo().search([('id', '=', int(4))])
+		response = self.redirect_to_momo(order=order)
+		return werkzeug.utils.redirect(response.json()['payUrl'])
+
+	def redirect_to_momo(self, order):
 		endpoint = "https://test-payment.momo.vn/v2/gateway/api/create"
-		accessKey = "F8BBA842ECF85"
-		secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
-		orderInfo = "pay with MoMo"
-		partnerCode = "MOMO"
-		redirectUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b"
-		ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b"
-		amount = "50000"
+		accessKey = request.env['ir.config_parameter'].sudo().get_param('momo_accessKey')
+		secretKey = request.env['ir.config_parameter'].sudo().get_param('momo_secretKey')
+		orderInfo = str(order.name)
+		partnerCode = request.env['ir.config_parameter'].sudo().get_param('momo_partnerCode')
+		redirectUrl = "http://localhost:8073/api/payment/succsess/{}".format(order.name)
+		ipnUrl = "http://localhost:8073/api/payment/succsess/{}".format(order.name)
+		amount_order = str(order.amount_total)
+		amount = amount_order[:-2]
+		amount = str(amount)
 		orderId = str(uuid.uuid4())
 		requestId = str(uuid.uuid4())
 		extraData = ""  # pass empty value or Encode base64 JsonString
@@ -94,4 +105,4 @@ class MainPayment(http.Controller):
 		# f.close()
 		print("--------------------JSON response----------------\n")
 		print(response.json())
-		return werkzeug.utils.redirect(response.json()['payUrl'])
+		return response
