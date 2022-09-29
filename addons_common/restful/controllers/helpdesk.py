@@ -26,7 +26,7 @@ class HelpdeskController(http.Controller):
         return 'https://test.diligo.vn:15000'
 
     @validate_token
-    @http.route("/api/v1/helpdesk/create_helpdesk", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/helpdesk/create_helpdesk", type="json", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
     def post_helpdesk(self, **payload):
         print(request.uid)
         values = {}
@@ -48,7 +48,7 @@ class HelpdeskController(http.Controller):
         print(student)
         helpdesk = request.env['sci.maintenance.request'].with_user(SUPERUSER_ID).create({
             'name': payload.get('title'),
-            'user_request': student.id,
+            'student_id': student.id,
             'type': 'onetouch',
             'type_maintenance_request': int(payload.get('type_maintenance_request')),
             'area_type_maintenance_request': int(payload.get('area_type_maintenance_request')),
