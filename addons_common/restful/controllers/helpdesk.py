@@ -29,7 +29,6 @@ class HelpdeskController(http.Controller):
     @http.route("/api/v1/helpdesk/create_helpdesk", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
     def post_helpdesk(self, **payload):
         print(request.uid)
-        # user = request.env['res.users'].sudo().search([('id', '=', payload.get('uid'))])
         values = {}
         for k, v in payload.items():
             values[k] = v
@@ -45,9 +44,11 @@ class HelpdeskController(http.Controller):
                 return invalid_response(
                     "Missing",
                     "The parameter %s is missing!!!" % field)
+        student = request.env['student.student'].sudo().search([('user_id', '=', request.uid)])
+        print(student)
         helpdesk = request.env['sci.maintenance.request'].with_user(SUPERUSER_ID).create({
             'name': payload.get('title'),
-            'user_request': request.uid,
+            'user_request': student.id,
             'type': 'onetouch',
             'type_maintenance_request': int(payload.get('type_maintenance_request')),
             'area_type_maintenance_request': int(payload.get('area_type_maintenance_request')),

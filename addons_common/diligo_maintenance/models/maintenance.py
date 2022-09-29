@@ -135,15 +135,18 @@ class SCIMaintenanceRequest(models.Model):
     reason_change = fields.Char('Lí do thay đổi người phụ trách')
     completed_process = fields.Integer('Completed process')
     deadline = fields.Datetime('Deadline')
-    user_request = fields.Many2one('res.users', string='Học viên yêu cầu', states={'new': [('readonly', False)]},
+    student_id = fields.Many2one('student.student', string='Học viên yêu cầu', states={'new': [('readonly', False)]},
                                    readonly=True)
     work_unit = fields.Char('Đơn vị công tác')
-    position = fields.Many2one('position', string='Vị trí')
+    position = fields.Many2one('position', string='Vị trí', related='student_id.position')
     res_country_state = fields.Many2one('res.country.state', string='Country state',
+                                        related='student_id.res_country_state',
                                         domain="[('country_id', '=', 'VN')]")
     res_country_ward = fields.Many2one('res.country.ward', string='Country ward',
+                                       related='student_id.res_country_ward',
                                        domain="[('district_id', '=', res_country_district)]")
     res_country_district = fields.Many2one('res.country.district', string='Country district',
+                                           related='student_id.res_country_district',
                                            domain="[('state_id', '=', res_country_state)]")
 
     @api.constrains('the_average_time', 'request_date')
@@ -158,7 +161,7 @@ class SCIMaintenanceRequest(models.Model):
             if attendee.message_partner_ids:
                 attendee.mail_tz = attendee.message_partner_ids[0].tz
             else:
-                attendee.mail_tz = attendee.user_request.tz
+                attendee.mail_tz = attendee.student_id.user_id.tz
 
     @api.depends('result_id')
     def _compute_send_mail(self):
@@ -166,12 +169,12 @@ class SCIMaintenanceRequest(models.Model):
             template = record.result_id.template_id
             record.template_id = template
 
-    @api.onchange('user_request')
-    def onchange_user_request(self):
+    @api.onchange('student_id')
+    def onchange_student_id(self):
         for rec in self:
-            if rec.user_request:
-                rec.email = rec.user_request.email
-                rec.phone = rec.user_request.phone
+            if rec.student_id:
+                rec.email = rec.student_id.email
+                rec.phone = rec.student_id.phone
 
     @api.depends('schedule_date')
     def _compute_status(self):

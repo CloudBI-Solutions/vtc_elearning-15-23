@@ -82,7 +82,7 @@
                         <group string="Người gửi yêu cầu">
                             <field name="code" readonly="1"/>
 <!--                            <field name="person_name" options="{'no_create': True, 'no_open': True}"/>-->
-                            <field name="user_request" options="{'no_create': True, 'no_open': True}" required="1"/>
+                            <field name="student_id" options="{'no_create': True, 'no_open': True}" required="1"/>
                             <field name="email" readonly="1" force_save="1" required="1"/>
                             <field name="phone"/>
                             <field name="maintenance_type" invisible="1"/>
@@ -106,7 +106,7 @@
                             <field name="reason_change" attrs="{'invisible' :[('reason_change', '=', False )]}"/>
                             <field name="schedule_date" invisible="1"/>
                         </group>
-                        <group string="Thông tin người gửi yêu cầu" attrs="{'invisible': [('user_request', '=', False)]}">
+                        <group string="Thông tin người gửi yêu cầu" attrs="{'invisible': [('student_id', '=', False)]}">
                             <field name="position" readonly="1"/>
                             <field name="work_unit" readonly="1"/>
                             <field name="res_country_state" readonly="1" string="Tỉnh thành"/>
