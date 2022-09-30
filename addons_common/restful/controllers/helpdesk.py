@@ -55,7 +55,7 @@ class HelpdeskController(http.Controller):
             'category_id': int(payload.get('cate')),
         })
         print(helpdesk)
-        return invalid_response("ok")
+        return valid_response("ok")
 
     @validate_token
     @http.route("/api/v1/type_maintenance_request", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
