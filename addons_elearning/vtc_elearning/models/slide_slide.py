@@ -1,7 +1,13 @@
-from odoo import fields, models, api, _
-from odoo.exceptions import UserError
-from random import randint
 from datetime import datetime
+from random import randint
+
+import boto3
+from dateutil.relativedelta import relativedelta
+
+from odoo import fields, models, api, _
+from odoo.exceptions import UserError, ValidationError, _logger
+
+
 class Tag(models.Model):
     _name = 'tag.slide'
 
@@ -9,9 +15,10 @@ class Tag(models.Model):
     sequence = fields.Integer('Sequence', default=10, index=True, required=True)
     color = fields.Integer(
         string='Color Index', default=lambda self: randint(1, 11), )
+
+
 class SlideChannel(models.Model):
     _inherit = 'slide.channel'
-
 
     is_outstanding_channel = fields.Boolean('Khóa học đặc biệt')
     rating_avg = fields.Float('Rating AVG', compute='_compute_rating_avg')
@@ -33,13 +40,12 @@ class SlideChannel(models.Model):
 
     def _compute_rating_avg(self):
         for rec in self:
-            list_star = self.env['rating.rating'].search([('res_id','=',rec.id)])
+            list_star = self.env['rating.rating'].search([('res_id', '=', rec.id)])
             avg_rating_list = [r.star for r in list_star]
             rec.rating_avg = self.average(avg_rating_list) if avg_rating_list else False
 
-
     course_level_id = fields.Many2one('course.level', string='course level')
-    final_quiz_ids = fields.One2many('slide.quiz.line','slide_channel_id', readonly=True)
+    final_quiz_ids = fields.One2many('slide.quiz.line', 'slide_channel_id', readonly=True)
     student_ids = fields.Many2many('student.student', string='Student')
     lecturers_ids = fields.Many2many('lecturers', string='Lecturers')
     start_date = fields.Date('Start date')
@@ -58,12 +64,12 @@ class SlideChannel(models.Model):
     tag_id = fields.Many2one('tag.slide', string='Chuyên mục khóa học')
     course_code = fields.Char(string='Mã khoá học')
 
-    _sql_constraints = [('course_code_uniq', 'unique (course_code)', 'Course have unique code.'),]
+    _sql_constraints = [('course_code_uniq', 'unique (course_code)', 'Course have unique code.'), ]
 
     def open_website_url(self):
         return {
             'type': 'ir.actions.act_url',
-            'url': "http://daotao.vtcnetviet.com/courses/%s/%s" %(self.name, self.id),
+            'url': "http://daotao.vtcnetviet.com/courses/%s/%s" % (self.name, self.id),
             'target': 'new',
         }
 
@@ -126,6 +132,7 @@ class SlideChannel(models.Model):
 
         return super(SlideChannel, self).write(vals)
 
+
 class SlideSlide(models.Model):
     _inherit = 'slide.slide'
 
@@ -149,11 +156,62 @@ class SlideSlide(models.Model):
     file_upload = fields.Binary('Video upload', attachment=True)
     type_video = fields.Selection([
         ('url', 'Get video Url'),
-        ('vimeo', 'Get video from Vimeo'),
+        ('Cloud', 'Get video from Cloud'),
         ('upload', 'Get video by upload from device')], string='Type video')
 
     post_to_website = fields.Boolean(string='Post to website?')
-    slide_type = fields.Selection(_my_new_selection,)
+    slide_type = fields.Selection(_my_new_selection, )
+    file_name = fields.Char('File Name', required=True, readonly=True)
+    download_link = fields.Char('Download Link', readonly=True, compute='_compute_download_link')
+    bucket_name = fields.Char(string="Bucket Name", readonly=True, required=True)
+    content_type = fields.Char(string="Content Type", readonly=True)
+    key = fields.Char(string="File Path", readonly=True, required=True)
+    content_length = fields.Float(string="Content Length", readonly=True, required=True)
+    directory = fields.Selection(selection=[('images', 'Images'),
+                                            ('videos', 'Videos'),
+                                            ('audio', 'Audio'),
+                                            ('documents', 'Documents'),
+                                            ('others', 'Others')], default='others', required=True, readonly=True)
+    expire_time = fields.Datetime(string="Expire Times")
+
+    def upload_video_slide(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_url',
+            'name': "Upload slide",
+            'target': 'new',
+            'url': '/upload/slide/%s' % self.id
+        }
+
+    def generate_presigned_url(self, cron_mode=False):
+        s3_expire_time = self.env['ir.config_parameter'].sudo().get_param('s3_expire_time', 3600 * 3600 * 2)
+        self_ids = self.env['slide.slide'].search([]) if cron_mode is True else self
+        for r in self_ids:
+            try:
+                s3client = boto3.client('s3', endpoint_url='https://ss-hn.fptvds.vn',
+                                        aws_access_key_id='vtcnetviet@A2022!',
+                                        aws_secret_access_key='a6I6aPf8BRp0kGW2F3h8sC9fDodMUmgQiqRBydAi')
+                url = s3client.generate_presigned_url(
+                    ClientMethod='get_object',
+                    Params={
+                        'Bucket': r.bucket_name,
+                        'Key': r.key,
+                        'ResponseContentType': r.content_type,
+                    },
+                    ExpiresIn=float(s3_expire_time)
+                )
+                domain = {
+                    'expire_time': datetime.now() + relativedelta(seconds=float(s3_expire_time)),
+                }
+                if r.slide_type == 'video':
+                    domain['url'] = url
+                else:
+                    domain['document_url'] = url
+                r.write(domain)
+            except Exception as e:
+                if not cron_mode:
+                    raise ValidationError(_(f'Error! Can not generate S3 pre signed url. {e}'))
+                _logger.error(f'Error! Can not generate S3 pre signed url. {e}')
 
     def action_set_completed(self):
         if self._context.get('partner'):

@@ -107,6 +107,7 @@
                     </div>
                     <group>
                         <group string="Contact">
+                            <input id="upload_files" type="file" name="avatar" class="required" widget="binary"/>
                             <field name="phone" required="1"/>
                             <field name="email" required="1"/>
                         </group>
