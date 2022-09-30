@@ -161,12 +161,12 @@ class SlideSlide(models.Model):
 
     post_to_website = fields.Boolean(string='Post to website?')
     slide_type = fields.Selection(_my_new_selection, )
-    file_name = fields.Char('File Name', required=True, readonly=True)
+    file_name = fields.Char('File Name', readonly=True)
     download_link = fields.Char('Download Link', readonly=True, compute='_compute_download_link')
-    bucket_name = fields.Char(string="Bucket Name", readonly=True, required=True)
+    bucket_name = fields.Char(string="Bucket Name", readonly=True)
     content_type = fields.Char(string="Content Type", readonly=True)
-    key = fields.Char(string="File Path", readonly=True, required=True)
-    content_length = fields.Float(string="Content Length", readonly=True, required=True)
+    key = fields.Char(string="File Path", readonly=True)
+    content_length = fields.Float(string="Content Length", readonly=True)
     directory = fields.Selection(selection=[('images', 'Images'),
                                             ('videos', 'Videos'),
                                             ('audio', 'Audio'),
