@@ -8,7 +8,7 @@ import werkzeug.wrappers
 import werkzeug.wrappers
 import werkzeug.wsgi
 from odoo.addons.restful.common import invalid_response, valid_response
-
+from werkzeug import urls
 from odoo import http
 from odoo.exceptions import AccessDenied, AccessError
 from odoo.http import request
@@ -28,18 +28,14 @@ class AccessToken(http.Controller):
     @http.route("/api/auth/token", methods=["POST"], type="http", auth="none", csrf=False, cors="*")
     def token(self, **post):
         """The token URL to be used for getting the access_token:
-
         Args:
             **post must contain login and password.
         Returns:
-
             returns https response code 404 if failed error message in the body in json format
             and status code 202 if successful with the access_token.
         Example:
            import requests
-
            headers = {'content-type': 'text/plain', 'charset':'utf-8'}
-
            data = {
                'login': 'admin',
                'password': 'admin',
@@ -98,6 +94,18 @@ class AccessToken(http.Controller):
 
         # Generate tokens
         access_token = _token.find_one_or_create_token(user_id=uid, create=True)
+        partner = request.env.user.partner_id.id
+        cource_partner = request.env['slide.channel.partner'].sudo().search([('partner_id', '=', partner)])
+        student = request.env['student.student'].sudo().search([('user_id', '=', uid)])
+        list_cource = list(set([r for r in cource_partner.channel_id]))
+        cource_join = []
+        for rec in cource_partner:
+            data = {
+                'id': rec.channel_id.id,
+                'progress': rec.completion
+            }
+            cource_join.append(data)
+
         return werkzeug.wrappers.Response(
             status=200,
             content_type="application/json; charset=utf-8",
@@ -114,12 +122,17 @@ class AccessToken(http.Controller):
                     'go_to_backend': base_url + '/web',
                     "company_name": request.env.user.company_name,
                     "currency": request.env.user.currency_id.name,
+                    # "company_name": request.env.user.company_name,
                     "country": request.env.user.country_id.name,
                     "contact_address": request.env.user.contact_address,
                     "customer_rank": request.env.user.customer_rank,
+                    'cource_join': cource_join,
+                    'avatar': urls.url_join(base_url, '/web/image?model=student.student&id={}&field=avatar'.format(
+                        student.id)) if student else ''
                 }
             ),
         )
+
 
     @http.route(["/api/auth/token"], methods=["DELETE"], type="http", auth="none", csrf=False, cors="*")
     def delete(self, **post):
