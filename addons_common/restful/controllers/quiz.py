@@ -90,7 +90,7 @@ class QuizController(http.Controller):
                     'total_marks': rec.quiz_config or '',
                     'start_date': rec.start_date or '',
                     'total_result_user': request.env['op.quiz.result'].search_count([('quiz_id', '=', rec.id),
-                                                                                     ('user_id', '=', int(payload.get('uid')))]),
+                                                                                     ('user_id', '=', request.uid)]),
                     'end_date': rec.end_date or '',
                     'quiz_title': rec.quiz_html or '',
                     'quiz_description': rec.description or '',
@@ -167,9 +167,9 @@ class QuizController(http.Controller):
     @http.route("/api/v1/quiz/result", type="http", auth="public", methods=["POST"], csrf=False, cors='*')
     def record_result_quiz(self, **payload):
         quiz = request.env['op.quiz'].sudo().search([('id', '=', payload['id'])])
-        result = quiz.get_result_id(payload['uid'])
+        result = quiz.get_result_id(request.uid)
         result.sudo().write({
-            'user_id': payload['uid'],
+            'user_id': request.uid,
         })
         for rec in result.line_ids:
             if rec.question_id.id == int(payload['question_id']):
@@ -185,7 +185,7 @@ class QuizController(http.Controller):
     @validate_token
     @http.route("/api/get/result_by_user", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
     def get_result_by_user(self, **kwargs):
-        result = request.env['op.quiz.result'].sudo().search([('user_id.id', '=', kwargs.get('uid'))])
+        result = request.env['op.quiz.result'].sudo().search([('user_id.id', '=', request.uid)])
         line_ids = []
         for r in result:
             data = {

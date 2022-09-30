@@ -35,8 +35,12 @@ class CourseByIdController(http.Controller):
         process = None
         user_login = None
         data_progress = []
-        if payload.get('uid'):
-            user_login = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
+        if request.httprequest.headers.get('Authorization'):
+            access_token = request.httprequest.headers.get('Authorization')
+            access_token_data = (
+                request.env["api.access_token"].sudo().search([("token", "=", access_token)], order="id DESC", limit=1)
+            )
+            user_login = request.env['res.users'].sudo().search([('id', '=', access_token_data.user_id.id)])
             process = request.env['slide.channel.partner'].sudo().search(
                 [('partner_id', '=', user_login.partner_id.id), ('channel_id', '=', int(payload.get('course_id')))], limit=1)
             for rec in process.line_ids:
