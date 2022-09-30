@@ -1,0 +1,41 @@
+
+.o_kanban_tags {
+    display: initial !important;
+}
+
+#o_employee_right {
+    padding-left: 0 !important;
+    margin-right: 0 !important;;
+    border-left: 0 !important;;
+}
+
+/*.crm_lead_note2_ids th[data-name = "create_date"] {
+    max-width: 10% !important;
+    !*width: 150px !important;*!
+    !*min-width: 150px !important;*!
+}
+
+.crm_lead_note2_ids th[data-name = "create_uid"] {
+    max-width: 10% !important;
+    !*width: 150px !important;*!
+    !*min-width: 150px !important;*!
+}*/
+
+.crm_lead_note2_ids_short th[data-name = "name"] {
+    max-width: 480px !important;
+    /*width: 150px !important;*/
+    /*min-width: 150px !important;*/
+}
+
+
+.crm_lead_note2_ids th[data-name = "name"] {
+    max-width: 75% !important;
+    min-width: 50% !important;
+    /*width: 150px !important;*/
+    /*min-width: 150px !important;*/
+}
+
+
+.crmf99_crm_lead th[data-name ="latest_note_id"] {
+    min-width: 150px !important;
+}
