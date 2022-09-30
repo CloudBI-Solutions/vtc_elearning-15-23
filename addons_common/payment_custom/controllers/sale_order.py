@@ -41,7 +41,7 @@ class SaleController(http.Controller):
 					"The parameter %s is missing!!!" % field)
 		courses = request.env['slide.channel'].sudo().search([('id', '=', int(kwargs.get('course_ids')))])
 		user_login = request.env['res.users'].sudo().search([('id', '=', kwargs.get('uid'))])
-		product = request.env['product.product'].sudo().search([('default_code', '=', courses.cource_referen)])
+		product = request.env['product.product'].sudo().search([('default_code', '=', courses.course_code)])
 		order_line = {
 			'product_id': product.id,
 			'product_uom_qty': 1,
@@ -63,8 +63,11 @@ class SaleController(http.Controller):
 			'message': 'Đơn hàng của bạn đã tạo thành công!'
 		})
 
-	@http.route("/api/payment/succsess/<string:orderCode>", type='http', auth="public", methods=["GET"],
+	@http.route("/api/payment/succsess/<int:id>", type='http', auth="public", methods=["GET"],
 	            csrf=False, cors="*")
-	def payment_confirm_succsess(self, orderCode):
-		print(orderCode)
-		return valid_response('ok')
+	def payment_confirm_succsess(self, id):
+		invoice = request.env['account.move'].sudo().search([('id','=', int(id))])
+		request.env['account.payment.register'].with_context(active_model='account.move', active_ids=invoice.ids).sudo().create({
+			'payment_date': invoice.date,
+		})._create_payments()
+		return valid_response('Bạn đã thanh toán thành công!')

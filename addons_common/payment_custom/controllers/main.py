@@ -41,11 +41,11 @@ class MainPayment(http.Controller):
 		endpoint = "https://test-payment.momo.vn/v2/gateway/api/create"
 		accessKey = request.env['ir.config_parameter'].sudo().get_param('momo_accessKey')
 		secretKey = request.env['ir.config_parameter'].sudo().get_param('momo_secretKey')
-		orderInfo = str(order.name)
+		orderInfo = str(order.payment_reference)
 		partnerCode = request.env['ir.config_parameter'].sudo().get_param('momo_partnerCode')
-		redirectUrl = "http://localhost:8073/api/payment/succsess/{}".format(order.name)
-		ipnUrl = "http://localhost:8073/api/payment/succsess/{}".format(order.name)
-		amount_order = str(order.amount_total)
+		redirectUrl = "http://localhost:8073/api/payment/succsess/{}".format(order.id)
+		ipnUrl = "http://localhost:8073/api/payment/succsess/{}".format(order.id)
+		amount_order = str(order.amount_residual)
 		amount = amount_order[:-2]
 		amount = str(amount)
 		orderId = str(uuid.uuid4())
