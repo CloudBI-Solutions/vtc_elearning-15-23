@@ -13,7 +13,7 @@ class IoTBoxHttpRequest(http.HttpRequest):
             # fails as the header is rejected and none of the devices can be used.
             headers = {
                 'Access-Control-Max-Age': 60 * 60 * 24,
-                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Debug-Mode'
+                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Debug-Mode, Access-Control-Allow-Headers'
             }
             return http.Response(status=200, headers=headers)
         return super(IoTBoxHttpRequest, self).dispatch()
