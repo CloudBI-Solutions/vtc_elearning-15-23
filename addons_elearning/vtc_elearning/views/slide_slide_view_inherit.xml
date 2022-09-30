@@ -67,14 +67,14 @@
         <field name="inherit_id" ref="website_slides.view_slide_slide_form"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='quiz']" position="attributes">
-                    <attribute name="string">Bài tập</attribute>
+                <attribute name="string">Bài tập</attribute>
             </xpath>
             <xpath expr="//div[@name='button_box']" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                <attribute name="invisible">1</attribute>
             </xpath>
 
-             <xpath expr="//field[@name='slide_type']" position="after">
-                    <field name="type_video" attrs="{'invisible': [('slide_type', '!=', 'video')]}"/>
+            <xpath expr="//field[@name='slide_type']" position="after">
+                <field name="type_video" attrs="{'invisible': [('slide_type', '!=', 'video')]}"/>
             </xpath>
 
             <xpath expr="//field[@name='url']" position="before">
@@ -82,6 +82,15 @@
             </xpath>
             <xpath expr="//field[@name='is_preview']" position="after">
                 <field name="post_to_website" string="Có đăng lên website không?"/>
+                <field name="bucket_name" attrs="{'invisible': [('type_video', '!=', 'upload')]}"/>
+                <field name="key" attrs="{'invisible': [('type_video', '!=', 'upload')]}"/>
+                <field name="content_length" attrs="{'invisible': [('type_video', '!=', 'upload')]}"/>
+            </xpath>
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="upload_video_slide" string="Upload nội dung" type="object" class="oe_highlight"/>
+                    <button name="generate_presigned_url" string="url" type="object" class="oe_highlight"/>
+                </header>
             </xpath>
         </field>
     </record>
@@ -92,13 +101,13 @@
         <field name="inherit_id" ref="website_slides.slide_question_view_tree_report"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='attempts_count']" position="attributes">
-                    <attribute name="string">Số lượt làm</attribute>
+                <attribute name="string">Số lượt làm</attribute>
             </xpath>
             <xpath expr="//field[@name='attempts_avg']" position="attributes">
-                    <attribute name="string">Số lượt làm trung bình</attribute>
+                <attribute name="string">Số lượt làm trung bình</attribute>
             </xpath>
             <xpath expr="//field[@name='attempts_avg']" position="attributes">
-                    <attribute name="string">Số lượt làm đã xong</attribute>
+                <attribute name="string">Số lượt làm đã xong</attribute>
             </xpath>
 
         </field>
@@ -110,12 +119,11 @@
         <field name="inherit_id" ref="website_ora_elearning.view_slide_slide_form_inherit_ora"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='ora']" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                <attribute name="invisible">1</attribute>
             </xpath>
 
         </field>
     </record>
-
 
 
 </odoo>

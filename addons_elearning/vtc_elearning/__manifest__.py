@@ -20,6 +20,7 @@
         'views/menu_action.xml',
         'views/slide_channel_tag.xml',
         'views/product_template.xml',
+        'views/upload_template.xml',
     ],
     'demo': [],
     'depends': [
@@ -29,6 +30,10 @@
         'rating',
         'contacts',
     ],
+    'assets': {
+            'web.assets_backend': [
+                'vtc_elearning/static/src/js/custom.js',
+            ]},
     'images':[
 
     ],
