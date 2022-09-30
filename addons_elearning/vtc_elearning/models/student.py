@@ -1,5 +1,4 @@
 
-
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError, ValidationError
 
@@ -73,6 +72,7 @@ class Student(models.Model):
 
 
     def check_email_login_user(self):
+        group_public = self.env.ref('base.group_public')
         if self.email:
             user = self.env['res.users'].search([('login', '=', self.email)])
             if user:
@@ -84,6 +84,8 @@ class Student(models.Model):
                 'active': False,
                 'student_id': self.id,
                 'self': self.partner_id,
+                'groups_id': [0, 0, group_public.id],
+                'share': False
             })
         else:
             raise UserError(_('Vui lòng nhập email để được tạo tài khoản học trực tuyến.'))
@@ -103,7 +105,7 @@ class SlideChannelPartner(models.Model):
     student_id = fields.Many2one('student.student', string="Student")
     line_ids = fields.One2many('slide.channel.partner.line', 'slide_channel_partner_id', string='Line')
     # partner_id = fields.Many2one('res.partner', index=True, required=True, ondelete='cascade')
-    
+
     def write(self, vals):
         if 'channel_id' in vals and 'partner_id' in vals:
             check = self._check_contrains(vals['channel_id'], vals['partner_id'])
@@ -119,8 +121,8 @@ class SlideChannelPartner(models.Model):
                 raise UserError(_('Học viên này đang học khóa học này'))
         return super(SlideChannelPartner, self).create(vals_list)
 
-    def _check_contrains(self, channel_id,partner_id):
-        slidechannel = self.env['slide.channel.partner'].search([('channel_id','=',channel_id), ('partner_id','=', partner_id)])
+    def _check_contrains(self, channel_id ,partner_id):
+        slidechannel = self.env['slide.channel.partner'].search([('channel_id' ,'=' ,channel_id), ('partner_id' ,'=', partner_id)])
         return slidechannel
 
     @api.constrains('channel_id')
