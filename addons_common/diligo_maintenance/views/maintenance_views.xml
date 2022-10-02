@@ -274,10 +274,10 @@
                 <field name="name" string="Chủ đề"/>
                 <field name="code"/>
                 <field name="request_date" groups="base.group_no_one"/>
-                <field name="person_name"/>
+                <field name="student_id"/>
                 <field name="phone"/>
                 <field name="category_id" groups="diligo_maintenance.group_equipment_manager"/>
-                <field name="emp_id"/>
+                <field name="user_support"/>
                 <field name="state"/>
                 <field name="close_date"/>
             </tree>
