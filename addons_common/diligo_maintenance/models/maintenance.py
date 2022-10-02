@@ -136,7 +136,7 @@ class SCIMaintenanceRequest(models.Model):
     completed_process = fields.Integer('Completed process')
     deadline = fields.Datetime('Deadline')
     student_id = fields.Many2one('student.student', string='Học viên yêu cầu', states={'new': [('readonly', False)]},
-                                   readonly=True)
+                                 readonly=True)
     work_unit = fields.Char('Đơn vị công tác')
     position = fields.Many2one('position', string='Vị trí', related='student_id.position')
     res_country_state = fields.Many2one('res.country.state', string='Country state',
@@ -225,9 +225,16 @@ class SCIMaintenanceRequest(models.Model):
         if vals.get('emp_id'):
             vals['state'] = 'doing'
         vals['code'] = self.env['ir.sequence'].next_by_code('maintenance.code.action')
-        print(vals)
+        # print(vals)
         request = super(SCIMaintenanceRequest, self).create(vals)
-        print(request)
+        if request.student_id:
+            request.email = request.student_id.email
+            request.phone = request.student_id.phone
+            request.position = request.student_id.position
+            request.work_unit = request.student_id.work_unit
+            request.res_country_state = request.student_id.res_country_state
+            request.res_country_district = request.student_id.res_country_district
+            request.res_country_ward = request.student_id.res_country_ward
         request.portal_access_key = randint(1000000000, 2000000000)
         survey_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         request.survey_url = survey_url + "/support/survey/" + request.portal_access_key
@@ -251,16 +258,9 @@ class SCIMaintenanceRequest(models.Model):
             self.base_url = survey_url + '/web#id=%d&view_type=form&model=%s' % (self.id, self._name)
 
             template = self.env.ref('diligo_maintenance.email_template_data_maintenance_receive')
-            template2 = self.env.ref('diligo_maintenance.email_template_data_maintenance_new')
             for record in self:
                 self.env['mail.thread'].message_post_with_template(
                     template.id,
-                    res_id=record.id,
-                    model=record._name,
-                    composition_mode='comment',
-                )
-                self.env['mail.thread'].message_post_with_template(
-                    template2.id,
                     res_id=record.id,
                     model=record._name,
                     composition_mode='comment',
