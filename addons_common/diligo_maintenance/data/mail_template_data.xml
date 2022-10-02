@@ -158,7 +158,7 @@
                                 <b>
                                     <t t-out="object.name or ''"></t>
                                 </b>
-                                đã được tạo trên hệ thống IT Helpdesk mang mã số:
+                                đã được tạo trên hệ thống hỗ trợ mang mã số:
                                 <b>
                                     <t t-out="object.code or ''"></t>
                                 </b>
@@ -178,16 +178,16 @@
                                 <br/>
                                 Trân trọng cảm ơn anh/chị!
                                 <div style="color: grey;">
-                                    <t t-if="object.emp_id">
+                                    <t t-if="object.user_support">
                                         ---------------
                                         <br/>
-                                        <strong t-out="object.emp_id.name or ''"></strong>
+                                        <strong t-out="object.user_support.name or ''"></strong>
                                         <br/>
                                         Email:
-                                        <t t-out="object.emp_id.work_email or ''"></t>
+                                        <t t-out="object.user_support.login or ''"></t>
                                         <br/>
                                         Phone:
-                                        <t t-out="object.emp_id.mobile_phone or ''"></t>
+                                        <t t-out="object.user_support.phone or ''"></t>
                                     </t>
                                     <t t-else="">
                                         ---------------
@@ -234,7 +234,7 @@
                                     <a t-att-href="object.survey_url">Click vào đây</a>
                                 </b>
                                 để đánh giá chất lượng dịch vụ
-                                của phòng/ban
+                                của phòng
                                 <b>
                                     <t t-out="object.category_id.name or ''"></t>
                                 </b>
@@ -244,13 +244,13 @@
                                     <t t-if="object.emp_id">
                                         ---------------
                                         <br/>
-                                        <strong t-out="object.emp_id.name or ''"></strong>
+                                        <strong t-out="object.user_support.name or ''"></strong>
                                         <br/>
                                         Email:
-                                        <t t-out="object.emp_id.work_email or ''"></t>
+                                        <t t-out="object.user_support.login or ''"></t>
                                         <br/>
                                         Phone:
-                                        <t t-out="object.emp_id.mobile_phone or ''"></t>
+                                        <t t-out="object.user_support.phone or ''"></t>
                                     </t>
                                     <t t-else="">
                                         ---------------
