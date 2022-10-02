@@ -132,7 +132,7 @@ class ResUsersController(http.Controller):
 			return invalid_response('The new password and its confirmation must be identical.')
 
 		request.env.cr.execute(
-			"SELECT COALESCE(password, '') FROM res_users WHERE id={}".format(int(kwargs.get('uid'))))
+			"SELECT COALESCE(password, '') FROM res_users WHERE id={}".format(request.uid))
 		[hashed] = request.env.cr.fetchone()
 		valid, replacement = self._crypt_context().verify_and_update(kwargs.get('password'), hashed)
 
@@ -142,7 +142,7 @@ class ResUsersController(http.Controller):
 		if valid:
 			res = request.env.cr.execute(
 				'UPDATE res_users SET password=%s WHERE id=%s',
-				(kwargs.get('newpass'), int(kwargs.get('uid')))
+				(kwargs.get('newpass'), int(request.uid))
 			)
 
 		return valid_response('Success changed!')

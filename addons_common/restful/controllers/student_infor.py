@@ -26,10 +26,10 @@ class StudentInfor(http.Controller):
     @validate_token
     @http.route("/api/get/infor_student", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
     def get_infor_student_by_id(self, **payload):
+        print(request.uid)
         values = []
         base_url = StudentInfor.get_url_base(self)
-        print(request.uid)
-        user = request.env['res.users'].sudo().search([('id', '=', payload.get('uid'))])
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
         student = request.env['student.student'].sudo().search([('user_id', '=', user.id)])
         if not student:
             return invalid_response(

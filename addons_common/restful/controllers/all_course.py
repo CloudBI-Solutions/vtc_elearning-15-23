@@ -20,13 +20,13 @@ class AllCoursesController(http.Controller):
 		config = request.env['ir.config_parameter'].sudo().get_param('web.base.url')
 		if config:
 			return config
-		return 'https://test.diligo.vn:15000'
+		return 'https://test.diligo.vn:1500git'
 
 	@validate_token
 	@http.route("/api/get_course_by_user", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
 	def get_course_by_user(self, **kwargs):
 		base_url = AllCoursesController.get_url_base(self)
-		user_login = request.env['res.users'].sudo().search([('id', '=', int(kwargs.get('uid')))])
+		user_login = request.env['res.users'].sudo().search([('id', '=', request.uid)])
 		partner_channel = request.env['slide.channel.partner'].sudo().search(
 			[('partner_id', '=', user_login.partner_id.id)])
 		all_courses = [r.channel_id for r in partner_channel]
@@ -56,8 +56,9 @@ class AllCoursesController(http.Controller):
 	@http.route("/api/all_courses", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
 	def get_all_courses(self, **payload):
 		values = []
+		token = request.httprequest.headers.get('Authorization')
 		base_url = AllCoursesController.get_url_base(self)
-		all_courses = request.env['slide.channel'].search([('is_published', '=', True), ('visibility', '=', 'members')]) if payload.get('uid') else request.env['slide.channel'].search(
+		all_courses = request.env['slide.channel'].search([('is_published', '=', True), ('visibility', '=', 'members')]) if token else request.env['slide.channel'].search(
 			[('is_published', '=', True), ('visibility', '=', 'public')])  # .sudo()
 		for rec in all_courses:
 			# cấp độ học
@@ -72,7 +73,6 @@ class AllCoursesController(http.Controller):
 			                                '/web/image?model=slide.channel&id={0}&field=image_1920'.format(
 				                                rec.id)),
 			         'level': level,
-			         'is_special': rec.is_special,
 			         'course_level': course_level,  # cấp độ học
 			         'rating_avg_stars': rec.rating_avg if rec.rating_avg != 0 else 'Chưa có đánh giá nào',  # đánh giá trung bình, tự chia cho 5, vd 3/5
 			         'total_time': rec.total_time,  # tổng thời lượng khoá học

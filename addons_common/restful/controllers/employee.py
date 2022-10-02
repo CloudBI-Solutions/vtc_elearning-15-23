@@ -33,7 +33,7 @@ class EmployeeController(http.Controller):
         base_url = EmployeeController.get_url_base(self)
         values = []
         list_employee = request.env['hr.employee'].sudo().search(
-            [('user_id', '=', payload.get('uid'))])  #
+            [('user_id', '=', request.uid)])  #
         # data = {}
         for rec in list_employee:
             data = {

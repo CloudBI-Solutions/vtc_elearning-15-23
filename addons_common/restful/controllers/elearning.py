@@ -170,7 +170,7 @@ class ElearningController(http.Controller):
                     "The parameter %s is missing!!!" % field)
         headers = request.httprequest.headers
         slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['course_id'])])
-        user = request.env['res.users'].sudo().search([('id', '=', int(payload.get('uid')))])
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
         if user.self not in slide_channel.channel_partner_ids.partner_id:
             channel_partner = request.env['slide.channel.partner'].with_user(SUPERUSER_ID).create({
                 'channel_id': slide_channel.id,
@@ -183,7 +183,7 @@ class ElearningController(http.Controller):
                 cors='*')
     def update_rating_slide_channel(self, **payload):
         slide_channel = request.env['slide.channel'].sudo().search([('id', '=', payload['course_id'])])
-        user = request.env['res.users'].sudo().search([('id', '=', payload.get('uid'))])
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
         student = request.env['student.student'].sudo().search([('user_id', '=', user.id)])
         rating = request.env['rating.rating'].sudo().create({
             'res_id': slide_channel.id,
@@ -380,7 +380,7 @@ class ElearningController(http.Controller):
     @http.route("/api/v1/slide_slide/completed", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False,
                 cors='*')
     def get_completed_slide_slide_partner(self, **payload):
-        userlogin = request.env['res.users'].sudo().search([('id', '=', payload.get('uid'))])
+        userlogin = request.env['res.users'].sudo().search([('id', '=', request.uid)])
         slide = request.env['slide.slide'].sudo().search([('id', '=', int(payload.get('slide_id')))])
         slide.sudo().with_context(partner=userlogin.partner_id).action_set_completed()
         slide_partner = request.env['slide.channel.partner'].sudo().search(

@@ -57,6 +57,7 @@ class CommentSlide(http.Controller):
             values.append(data)
         return valid_response(values)
 
+    @validate_token
     @http.route("/api/v1/add-comment-slide", type='http', auth="public", methods=["POST", "OPTIONS"], website=True,
                 csrf=False, cors="*")
     def add_comment_slide_by_id(self, **payload):
@@ -64,7 +65,6 @@ class CommentSlide(http.Controller):
             'name',
             'slide_id',
             'comment_id',
-            'uid',
         ]
         for field in field_require:
             if field not in payload.keys():
@@ -75,7 +75,7 @@ class CommentSlide(http.Controller):
             'name': payload.get('name'),
             'slide_id': int(payload.get('slide_id')),
             'comment_id': payload.get('comment_id'),
-            'user_id': payload.get('uid'),
+            'user_id': request.uid,
         }
         ress = request.env['comment.slide'].sudo().create(domain)
         return valid_response({
