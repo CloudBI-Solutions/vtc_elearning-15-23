@@ -26,7 +26,8 @@ class HelpdeskController(http.Controller):
         return 'https://test.diligo.vn:15000'
 
     @validate_token
-    @http.route("/api/v1/helpdesk/create_helpdesk", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/helpdesk/create_helpdesk", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False,
+                cors='*', website=True)
     def post_helpdesk(self, **payload):
         print(request.uid)
         values = {}
@@ -58,7 +59,8 @@ class HelpdeskController(http.Controller):
         return valid_response("ok")
 
     @validate_token
-    @http.route("/api/v1/type_maintenance_request", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors='*')
+    @http.route("/api/v1/type_maintenance_request", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False,
+                cors='*')
     def get_type_maintenance_request(self, **payload):
         values = []
         data = request.env['type.maintenance.request'].sudo().search([('type', '=', 'onetouch')])
