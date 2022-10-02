@@ -214,7 +214,7 @@ class SCIMaintenanceRequest(models.Model):
     @api.model
     def create(self, vals):
         # context: no_log, because subtype already handle this
-        if vals.get('emp_id'):
+        if vals.get('user_support'):
             vals['state'] = 'doing'
         vals['code'] = self.env['ir.sequence'].next_by_code('maintenance.code.action')
         # print(vals)
@@ -239,7 +239,7 @@ class SCIMaintenanceRequest(models.Model):
         self.completed_process = 0
 
     def write(self, vals):
-        if vals.get('emp_id'):
+        if vals.get('user_support'):
             vals['state'] = 'doing'
         super(SCIMaintenanceRequest, self).write(vals)
 
