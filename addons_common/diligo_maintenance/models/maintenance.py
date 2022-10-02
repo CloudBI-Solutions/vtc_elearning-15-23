@@ -200,8 +200,7 @@ class SCIMaintenanceRequest(models.Model):
     def _onchange_category_id(self):
         if self.category_id.department_id:
             return {
-                'domain': {'emp_id': [('department_id', 'child_of', self.category_id.department_id.id)],
-                           'maintenance_team_id': [('maintenance_category_id', '=', self.category_id.id)]}
+                'domain': {'user_support': [('id', 'child_of', self.category_id.user_ids.ids)]}
             }
 
     @api.onchange('maintenance_team_id')
