@@ -158,7 +158,7 @@ class SlideSlide(models.Model):
         ('url', 'Get video Url'),
         ('Cloud', 'Get video from Cloud'),
         ('upload', 'Get video by upload from device')], string='Type video')
-
+    # channel_id = fields.Many2one('slide.channel', string="Course", required=False)
     post_to_website = fields.Boolean(string='Post to website?')
     slide_type = fields.Selection(_my_new_selection, )
     file_name = fields.Char('File Name', readonly=True)
@@ -175,13 +175,14 @@ class SlideSlide(models.Model):
     expire_time = fields.Datetime(string="Expire Times")
 
     def upload_video_slide(self):
-        self.ensure_one()
+        print(self)
         return {
             'type': 'ir.actions.act_url',
             'name': "Upload slide",
             'target': 'new',
             'url': '/upload/slide/%s' % self.id
         }
+
 
     def generate_presigned_url(self, cron_mode=False):
         s3_expire_time = self.env['ir.config_parameter'].sudo().get_param('s3_expire_time', 3600 * 3600 * 2)

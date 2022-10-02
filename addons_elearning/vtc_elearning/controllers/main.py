@@ -174,6 +174,7 @@ class S3MediaUpload(http.Controller):
             else:
                 domain['slide_type'] = 'document'
             slide.update(domain)
+            slide.generate_presigned_url()
         # return request.redirect('/hoya/media_upload_form/success?title=%s&message=%s' % (title, message))
 
 

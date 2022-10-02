@@ -75,6 +75,7 @@
 
             <xpath expr="//field[@name='slide_type']" position="after">
                 <field name="type_video" attrs="{'invisible': [('slide_type', '!=', 'video')]}"/>
+<!--                <field name="channel_id" required="0" />-->
             </xpath>
 
             <xpath expr="//field[@name='url']" position="before">
