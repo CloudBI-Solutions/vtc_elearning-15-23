@@ -277,7 +277,7 @@
                 <field name="student_id"/>
                 <field name="phone"/>
                 <field name="category_id" groups="diligo_maintenance.group_equipment_manager"/>
-                <field name="user_support"/>
+                <field name="user_support" string="Người phụ trách"/>
                 <field name="state"/>
                 <field name="close_date"/>
             </tree>
