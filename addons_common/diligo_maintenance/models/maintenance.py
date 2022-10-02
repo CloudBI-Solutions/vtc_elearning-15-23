@@ -26,20 +26,11 @@ class MaintenanceEquipmentCategory(models.Model):
     note = fields.Text('Comments', translate=True)
     maintenance_ids = fields.One2many('sci.maintenance.request', 'category_id', copy=False)
     maintenance_count = fields.Integer(string="Maintenance Count", compute='_compute_maintenance_count')
-
-    # team_ids = fields.One2many('sci.maintenance.team', 'maintenance_category_id', string='Family',
-    #                            help='Family Information')
-    # team_count = fields.Integer(compute='_compute_team_count')
+    user_ids = fields.Many2many('res.users', string='User support')
 
     @api.onchange('department_id')
     def _onchange_department(self):
         self.name = self.department_id.name
-
-    # count of all custody contracts
-    # def _compute_team_count(self):
-    #     for each in self:
-    #         custody_ids = self.env['sci.maintenance.team'].search([('maintenance_category_id', '=', each.id)])
-    #         each.team_count = len(custody_ids)
 
     def _compute_maintenance_count(self):
         maintenance_data = self.env['sci.maintenance.request'].read_group([('category_id', 'in', self.ids)],
@@ -148,6 +139,7 @@ class SCIMaintenanceRequest(models.Model):
     res_country_district = fields.Many2one('res.country.district', string='Country district',
                                            related='student_id.res_country_district',
                                            domain="[('state_id', '=', res_country_state)]")
+    user_support = fields.Many2one('res.users', string='User support')
 
     @api.constrains('the_average_time', 'request_date')
     def get_deadline(self):
