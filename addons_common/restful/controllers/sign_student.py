@@ -10,8 +10,10 @@ from odoo.addons.restful.controllers.main import (
 from werkzeug import urls
 
 from odoo.addons.restful.common import invalid_response
-from odoo import http, SUPERUSER_ID
+from odoo import http, SUPERUSER_ID, _
 from odoo.http import request
+import base64
+import json
 
 _logger = logging.getLogger(__name__)
 
@@ -47,22 +49,22 @@ class SignStudent(http.Controller):
         request.env['student.student'].sudo().create(vals)
         return valid_response("Bạn đã đăng kí thành công !")
 
-    @http.route("/api/update-infor-student", type='http', auth="public", methods=["POST", "OPTIONS"],
+    @validate_token
+    @http.route("/api/update-avt-student", type='http', auth="public", methods=["POST", "OPTIONS"],
                 csrf=False, cors="*")
-    def update_infor_student(self, **payload):
-        field_require = [
-            'login',
-            'password',
-        ]
-        for field in field_require:
-            if field not in payload.keys():
-                return invalid_response(
-                    "Missing",
-                    "The parameter %s is missing!!!" % field)
-        domain = {
-            'name': payload.get('login'),
-            'login': payload.get('login'),
-            'password': '1'
-        }
-        user = request.env['res.users'].with_user(SUPERUSER_ID).create(domain)
-        return valid_response("Cập nhập thành công!")
+    def update_infor_student(self, **kwargs):
+        user = request.env['res.users'].sudo().search([('id', '=', request.uid)])
+        data_model = request.env['student.student'].search([('user_id', '=', user.id)])
+        FileStorage = kwargs.get('file')
+        FileExtension = FileStorage.filename.split('.')[-1].lower()
+        ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'png', 'gif']
+        if FileExtension not in ALLOWED_IMAGE_EXTENSIONS:
+            return json.dumps({'status': 400, 'message': _("Only allowed image file with extension: %s" % (",".join(ALLOWED_IMAGE_EXTENSIONS)))})
+        try:
+            FileData = FileStorage.read()
+            file_base64 = base64.b64encode(FileData)
+            data_model.avatar = file_base64
+            return json.dumps({'status': 200, 'message': _("Success")})
+        except Exception as e:
+            print(e)
+            return invalid_response01(e)
