@@ -154,6 +154,7 @@ class HelpdeskController(http.Controller):
         field_require = [
             'comment',
             'rating',
+            'request_id',
         ]
         for field in field_require:
             if field not in payload.keys():
