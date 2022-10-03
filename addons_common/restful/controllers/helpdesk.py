@@ -154,14 +154,14 @@ class HelpdeskController(http.Controller):
         field_require = [
             'comment',
             'rating',
-            'request_id',
+            'code',
         ]
         for field in field_require:
             if field not in payload.keys():
                 return invalid_response(
                     "Missing",
                     "The parameter %s is missing!!!" % field)
-        support_request = request.env['sci.maintenance.request'].sudo().search([('id', '=', payload.get('request_id'))])
+        support_request = request.env['sci.maintenance.request'].sudo().search([('id', '=', payload.get('code'))])
         if support_request:
             support_request.write({
                 'support_rating': payload.get('rating'),
