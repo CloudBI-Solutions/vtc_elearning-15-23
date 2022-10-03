@@ -228,7 +228,12 @@
                                 <b>
                                     <t t-out="object.name or ''"></t>
                                 </b>
-                                của anh/chị đã được chuyên viên kỹ thuật hoàn thành,
+                                của anh/chị đã được chuyên viên kỹ thuật hoàn thành.
+                                <br/>
+                                <b>
+                                    <t t-out="object.operations_description or ''"></t>
+                                </b>
+                                <br/>
                                 anh/chị vui lòng truy cập link:
                                 <b>
                                     <a t-att-href="object.survey_url">Click vào đây</a>
