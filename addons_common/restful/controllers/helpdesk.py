@@ -144,7 +144,7 @@ class HelpdeskController(http.Controller):
 
         get_helpdesk.update(values)
 
-    @validate_token
+    # @validate_token
     @http.route("/api/reply-rating", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False,
                 cors='*', website=True)
     def post_rating_system_support(self, **payload):
@@ -161,7 +161,7 @@ class HelpdeskController(http.Controller):
                 return invalid_response(
                     "Missing",
                     "The parameter %s is missing!!!" % field)
-        support_request = request.env['sci.maintenance.request'].sudo().search([('id', '=', payload.get('code'))])
+        support_request = request.env['sci.maintenance.request'].sudo().search([('code', '=', payload.get('code'))])
         if support_request:
             support_request.write({
                 'support_rating': payload.get('rating'),
