@@ -163,7 +163,7 @@
                                     <t t-out="object.code or ''"></t>
                                 </b>
                                 ,
-                                phòng/ban hỗ trợ
+                                phòng
                                 <b>
                                     <t t-out="object.category_id.name or ''"></t>
                                 </b>
@@ -234,7 +234,7 @@
                                     <a t-att-href="object.survey_url">Click vào đây</a>
                                 </b>
                                 để đánh giá chất lượng dịch vụ
-                                của phòng
+                                của
                                 <b>
                                     <t t-out="object.category_id.name or ''"></t>
                                 </b>
