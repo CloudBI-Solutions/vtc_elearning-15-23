@@ -227,8 +227,8 @@ class SCIMaintenanceRequest(models.Model):
             request.res_country_district = request.student_id.res_country_district
             request.res_country_ward = request.student_id.res_country_ward
         request.portal_access_key = randint(1000000000, 2000000000)
-        survey_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        request.survey_url = survey_url + "/support/survey/" + request.portal_access_key
+        # survey_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        request.survey_url = 'http://daotao.vtcnetviet.com/support/%s' %request.code
         if request.the_average_time:
             request.completed_process = request.the_average_time
 
