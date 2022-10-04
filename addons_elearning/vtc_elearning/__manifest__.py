@@ -6,6 +6,7 @@
     'summary': "Allows users to upload videos to your website",
     'license':'LGPL-3',
     'data': [
+        'data/data.xml',
         'security/ir.model.access.csv',
         'views/certificate_view.xml',
         'views/slide_slide_view_inherit.xml',
@@ -21,6 +22,7 @@
         'views/slide_channel_tag.xml',
         'views/product_template.xml',
         'views/upload_template.xml',
+        'views/approve_request_views.xml'
     ],
     'demo': [],
     'depends': [
@@ -29,6 +31,7 @@
         'base_unit_vn',
         'rating',
         'contacts',
+        'approvals'
     ],
     'assets': {
             'web.assets_backend': [

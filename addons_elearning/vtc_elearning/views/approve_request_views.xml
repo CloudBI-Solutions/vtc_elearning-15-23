@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="request_approval_inherit_view" model="ir.ui.view">
+        <field name="name">request.approval.inherit.view</field>
+        <field name="model">approval.request</field>
+        <field name="inherit_id" ref="approvals.approval_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='is_manager_approver']" position="after">
+                <field name="is_change_info_student" invisible="1"/>
+            </xpath>
+            <xpath expr="//notebook//page[@name='approvers']" position="after">
+                <page string="Details info change" name="changeinfostudent" attrs="{'invisible': [('is_change_info_student', '=', False)]}">
+                    <group>
+                        <group>
+                            <field name="old_name"/>
+                            <field name="old_birth"/>
+                            <field name="old_phone"/>
+                        </group>
+                        <group>
+                            <field name="new_name"/>
+                            <field name="new_birth"/>
+                            <field name="new_phone"/>
+                    </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
