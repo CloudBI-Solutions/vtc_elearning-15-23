@@ -117,7 +117,7 @@ class ResUsersController(http.Controller):
 		# if self.check(kwargs.get('email_reset')):
 		return valid_response('ok')
 
-	@validate_token
+	# @validate_token
 	@http.route("/api/v1/reset_password", type="http", auth="public", methods=["POST"], csrf=False, cors='*')
 	def reset_password_user(self, **kwargs):
 		fields = [{'name': 'old_pwd', 'value': 'admin'}, {'name': 'new_password', 'value': '12'}, {'name': 'confirm_pwd', 'value': '12'}]

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="approval_category_data_info_student" model="approval.category">
+            <field name="name">Thay đổi thông tin học viên</field>
+            <field name="sequence">80</field>
+        </record>
+    </data>
+</odoo>

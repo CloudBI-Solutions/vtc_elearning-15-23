@@ -117,7 +117,7 @@ class AccessToken(http.Controller):
                     "company_id": request.env.user.company_id.id if uid else None,
                     "company_ids": request.env.user.company_ids.ids if uid else None,
                     "partner_id": request.env.user.partner_id.id,
-                    "name": request.env.user.name,
+                    "name": student.name,
                     "access_token": access_token,
                     'go_to_backend': base_url + '/web',
                     "company_name": request.env.user.company_name,

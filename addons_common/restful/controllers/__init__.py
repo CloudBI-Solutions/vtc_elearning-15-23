@@ -12,7 +12,7 @@ from . import get_course_by_id
 from . import get_lesson_by_id
 from . import helpdesk
 # from . import kpis
-from . import main, token
+from . import main
 from . import position_student
 # from . import project
 from . import quiz

@@ -28,7 +28,7 @@ class LessonByIdController(http.Controller):
             attachment_id) + "&filename_field=name&field=datas&download=true"
 
     @validate_token
-    @http.route("/api/update/lession/process", type="http", auth="public", methods=["GET", "OPTIONS"], csrf=False, cors="*")
+    @http.route("/api/update/lession/process", type="http", auth="public", methods=["POST", "OPTIONS"], csrf=False, cors="*")
     def update_lession_process(self, **kwargs):
         print('2')
         return valid_response('ok')
