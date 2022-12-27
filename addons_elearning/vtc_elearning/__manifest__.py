@@ -33,10 +33,6 @@
         'contacts',
         'approvals'
     ],
-    'assets': {
-            'web.assets_backend': [
-                'vtc_elearning/static/src/js/custom.js',
-            ]},
     'images':[
 
     ],
